@@ -9,17 +9,17 @@ maintained by the **VeritasChain Standards Organization (VSO)**.
 
 ---
 
-## 📄 Documents
+## Documents
 
 ### ✔ Normative Specification (English)
-- `VCP-Specification-v1_0_en.md` — **authoritative reference document**
+- [`VCP-Specification-v1_0_en.md`](./VCP-Specification-v1_0_en.md) — authoritative reference document
 
 ### ✔ Human-Friendly HTML Overview
-- `VCP-Specification-v1_0-styled.html`
+- [`VCP-Specification-v1_0-styled.html`](./VCP-Specification-v1_0-styled.html)
 
-### ✔ Other languages (coming soon)
-- Japanese (ja)
-- Chinese Simplified (zh-CN)
+### ✔ Other languages
+- Japanese (ja): [`VCP-Specification-v1_0-ja.md`](./VCP-Specification-v1_0-ja.md)
+- Chinese Simplified (zh-CN): [`VCP-Specification-v1_0-zh.md`](./VCP-Specification-v1_0-zh.md)
 
 ---
 
