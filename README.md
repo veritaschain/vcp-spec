@@ -60,7 +60,7 @@ See `LICENSE` for full text.
 
 **VeritasChain Standards Organization (VSO)**  
 Website: https://veritaschain.org  
-Email: standards@veritaschain.org  
+Email: info@veritaschain.org  
 GitHub: https://github.com/veritaschain
 
 ---
