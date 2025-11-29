@@ -15,8 +15,6 @@ curl -O https://raw.githubusercontent.com/veritaschain/vcp-spec/main/examples/py
 python quickstart.py
 ```
 
-📚 **Full Guide:** [docs/QUICKSTART.md](./docs/QUICKSTART.md)
-
 The **VeritasChain Protocol (VCP)** is a global open standard for  
 **immutable, verifiable, cryptographically-secured audit trails**  
 in algorithmic and AI-driven trading systems.
