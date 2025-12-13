@@ -3,6 +3,13 @@
 
 # VeritasChain Protocol (VCP) — Specification v1.0
 
+## Academic Reference (Preprint)
+
+Kamimura, T. (2025).  
+*Hybrid Post-Quantum Signatures for Tamper-Evident Audit Trails:  
+Formal Security Analysis and Design Trade-offs.*  
+Zenodo. https://doi.org/10.5281/zenodo.17920524
+
 ## ⚡ Quick Start (5 Minutes)
 
 Try VCP without installing any SDK:
