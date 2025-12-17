@@ -50,6 +50,23 @@ This directory includes the following official documents:
 
 ---
 
+## Implementation Guidance (Non-Normative)
+
+In addition to the normative scoring criteria, this benchmark provides
+informational implementation guidance describing common technical
+approaches for improving assessment scores.
+
+- **IMPROVEMENT.md** — Non-normative guidance on how organizations may
+  achieve higher scores through various technical approaches.
+- This guidance is **not a requirement**, **not an endorsement**, and
+  **multiple implementations are valid**.
+- References to specific specifications (including VCP) are provided
+  as **example implementation profiles only**.
+
+→ See: [IMPROVEMENT.md](./IMPROVEMENT.md)
+
+---
+
 ## Theoretical Foundation
 
 The benchmark is grounded in open cryptographic principles and cross-jurisdictional regulatory analysis.
@@ -79,3 +96,4 @@ This paper introduces the *Verification Paradox* and demonstrates why proprietar
 - License: **CC BY 4.0 International**
 
 Feedback from audit, assurance, compliance, and regulatory professionals — including critical perspectives — is welcome.
+
