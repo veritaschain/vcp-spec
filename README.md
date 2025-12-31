@@ -20,9 +20,11 @@ This repository is maintained by the
 
 The **canonical (normative) specification** of VCP is located under:
 
+```text
 /spec/
- ├─ v1.0/
- └─ v1.1/
+├─ v1.0/
+└─ v1.1/
+```
 
 - Each version directory contains the authoritative specification (`SPEC.md`)
 - Files outside `/spec/` are **non-normative**
