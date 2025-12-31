@@ -20,7 +20,6 @@ This repository is maintained by the
 
 The **canonical (normative) specification** of VCP is located under:
 
-```text
 /spec/
  ├─ v1.0/
  └─ v1.1/
