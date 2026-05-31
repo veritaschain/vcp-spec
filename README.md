@@ -1,4 +1,4 @@
-![VCP Version](https://img.shields.io/badge/VCP-v1.1-blue)
+![VCP Version](https://img.shields.io/badge/VCP-v1.2-blue)
 ![License: CC BY 4.0](https://img.shields.io/badge/License-CC%20BY%204.0-green)
 
 # VeritasChain Protocol (VCP)
@@ -23,7 +23,8 @@ The **canonical (normative) specification** of VCP is located under:
 ```text
 /spec/
 ├─ v1.0/
-└─ v1.1/
+├─ v1.1/
+└─ v1.2/
 ```
 
 - Each version directory contains the authoritative specification (`SPEC.md`)
@@ -37,8 +38,8 @@ The **canonical (normative) specification** of VCP is located under:
 ## 📘 Available Versions
 
 ### ▶ Current Stable
-- **v1.1** — latest specification with strengthened integrity guarantees  
-  → `/spec/v1.1/`
+- **v1.2** — latest specification with strengthened integrity guarantees  
+  → `/spec/v1.2/`
 
 ### ▶ Legacy
 - **v1.0** — initial released version  
