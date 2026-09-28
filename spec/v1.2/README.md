@@ -10,7 +10,9 @@
 
 **Release Candidate (RC1)** — 2026-05-31.
 
-v1.2 is a **protocol-compatible / certification-stricter** update over v1.1. It introduces **zero breaking changes**: all v1.0 and v1.1 events remain valid and verifiable under v1.2. The complete normative specification of every change is provided in this directory as a normative annex (see Documents below).
+v1.2 is a **protocol-compatible / certification-stricter** update over v1.1. It introduces **zero breaking changes**: all v1.0 and v1.1 events remain valid and verifiable under v1.2. The complete normative specification of every change is defined in the normative annex VSO-SPEC-CHANGE-001, which is **not yet published in this repository** (see Documents below).
+
+A Release Candidate is feature-complete and published for final review; it is not a Released version (VAP v1.2 §4.5.2 status vocabulary).
 
 ## Overview
 
@@ -38,15 +40,32 @@ v1.2 strengthens operational integrity (VCP-RECOVERY), reconciles append-only au
 
 | Language | File | Status |
 |----------|------|--------|
-| 🇬🇧 English | [VCP-Specification-v1_2_en.md](VCP-Specification-v1_2_en.md) | Release Candidate |
-| 📎 Change Proposal (normative annex) | [VSO-SPEC-CHANGE-001.md](VSO-SPEC-CHANGE-001.md) | Adopted into v1.2 (Rev. 3) |
-| 🇯🇵 日本語 | VCP-Specification-v1_2_ja.md | Planned (after EN finalization) |
-| 🇨🇳 中文 | VCP-Specification-v1_2_zh.md | Planned (after EN finalization) |
+| 🇬🇧 English | [VCP-Specification-v1_2_en.md](VCP-Specification-v1_2_en.md) | Release Candidate (normative) |
+| 📎 Change Proposal (normative annex) | VSO-SPEC-CHANGE-001.md | **Not yet published in this repository** — referenced by the RC1 text as "included in this directory" |
+| 🇯🇵 日本語 | [VCP-Specification-v1_2_ja.md](VCP-Specification-v1_2_ja.md) | Translation of RC1 (convenience only; English prevails) |
+| 🇨🇳 中文 | [VCP-Specification-v1_2_zh.md](VCP-Specification-v1_2_zh.md) | Translation of RC1 (convenience only; English prevails) |
 | 📄 PDF | VCP-Specification-v1_2_en.pdf | Planned |
 
 ## Three-Layer Architecture
 
 The three-layer integrity architecture introduced in v1.1 (Layer 1 Event Integrity, Layer 2 Collection Integrity / Merkle Tree, Layer 3 External Verifiability) is **unchanged** in v1.2. See Section 6 of the specification for details.
+
+## Known issues in RC1 (informative)
+
+The RC1 text is unchanged; these will be addressed in the next revision.
+
+| Location | Issue |
+|----------|-------|
+| Summary of Changes; §12 "VSO Normative Annexes" | `VSO-SPEC-CHANGE-001.md` is referenced as included in this directory but is not yet published |
+| §12 References | `draft-ietf-scitt-architecture` and `draft-ietf-cose-merkle-tree-proofs` are now **RFC 9943** and **RFC 9942** (June 2026) |
+| §6.3.3 Attested Database Examples | AWS QLDB reached end of support on 2025-07-31 |
+| §6.3.1 table | DILITHIUM2 / FALCON512 still shown as "Future (reserved)", while §1.4 and §1.5.1 give their v1.2 status as EXPERIMENTAL; §1.5.1 prevails |
+| §1.1 | "immutable" and "ensuring compliance with international regulations" — the property provided is tamper-evidence, and conformance does not constitute compliance (VAP v1.2 §1.6) |
+| §3.2.2 | ERASURE described as "a new immutable event" — append-only, tamper-evident |
+
+## Relationship to VAP
+
+VCP v1.2 RC1 is the reference profile for [VAP v1.2](https://github.com/veritaschain/vap-spec/tree/main/spec/v1.2) (VAP §5.1; VSO-VAP-CHANGE-001 Annex A). VAP and VCP version numbers are assigned independently; the matching "1.2" is coincidental (VAP §10.4).
 
 ## Relationship to v1.1
 

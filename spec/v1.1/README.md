@@ -6,9 +6,13 @@
 
 ---
 
+> **Newer version:** [v1.2 Release Candidate (RC1)](../v1.2/) — protocol-compatible with v1.1. v1.1 has no tagged release in this repository.
+
+---
+
 ## Overview
 
-VCP v1.1 introduces **Completeness Guarantees**, extending tamper-evidence to ensure that third parties can cryptographically verify not only that events were not altered, but that **no required events were omitted**.
+VCP v1.1 introduces completeness verification (§1.1 "Completeness Guarantees"), extending tamper-evidence so that third parties can cryptographically verify not only that events were not altered, but that **no required events were omitted** after anchoring — verifiable at anchor time and at batch granularity, not continuously (events never recorded remain undetectable).
 
 This is a **protocol-compatible / certification-stricter** update from v1.0.
 
@@ -28,10 +32,10 @@ This is a **protocol-compatible / certification-stricter** update from v1.0.
 
 | Language | File | Status |
 |----------|------|--------|
-| 🇬🇧 English | [VCP-Specification-v1_1_en.md](VCP-Specification-v1_1_en.md) | ✅ Production Ready |
-| 🇯🇵 日本語 | [VCP-Specification-v1_1_ja.md](VCP-Specification-v1_1_ja.md) | ✅ Production Ready |
-| 🇨🇳 中文 | [VCP-Specification-v1_1_zh.md](VCP-Specification-v1_1_zh.md) | ✅ Production Ready |
-| 📄 PDF | [VCP-Specification-v1_1_en.pdf](VCP-Specification-v1_1_en.pdf) | ✅ Available |
+| 🇬🇧 English | [VCP-Specification-v1_1_en.md](VCP-Specification-v1_1_en.md) | Published 2025-12-30 (normative) |
+| 🇯🇵 日本語 | [VCP-Specification-v1_1_ja.md](VCP-Specification-v1_1_ja.md) | Translation (convenience only; English prevails) |
+| 🇨🇳 中文 | [VCP-Specification-v1_1_zh.md](VCP-Specification-v1_1_zh.md) | Translation (convenience only; English prevails) |
+| 📄 PDF | [VCP-Specification-v1_1_en.pdf](VCP-Specification-v1_1_en.pdf) | Available |
 
 ## Three-Layer Architecture
 

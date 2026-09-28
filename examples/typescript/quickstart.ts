@@ -49,7 +49,7 @@ interface VcpEvent {
   };
   payload: Record<string, unknown>;
   security: {
-    prev_hash: string;
+    prev_hash?: string; // OPTIONAL since VCP v1.1 (hash chain is not required)
     event_hash: string;
     hash_algo: string;
     signature?: string;

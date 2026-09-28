@@ -394,7 +394,7 @@ export VCP_API_KEY="your-actual-key"
 
 | Step | Link |
 |------|------|
-| 📋 Read Full Specification | [VCP Spec v1.0](../VCP-Specification-v1_0_en.md) |
+| 📋 Read Full Specification | [VCP Spec v1.2 (RC1)](../spec/v1.2/VCP-Specification-v1_2_en.md) |
 | 🛠️ SDK Development | [SDK Specification](https://github.com/veritaschain/vcp-sdk-spec) |
 | 🔍 Explore Events | [VCP Explorer GUI](https://veritaschain.org/explorer/app/) |
 | 🔌 MT4/MT5 Integration | [Sidecar Guide](https://github.com/veritaschain/vcp-sidecar-guide) |

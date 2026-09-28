@@ -43,5 +43,5 @@ curl -H "Authorization: Bearer $VCP_API_KEY" \
 ## 📖 More Information
 
 - [Quick Start Guide](../docs/QUICKSTART.md)
-- [VCP Specification](../VCP-Specification-v1_0_en.md)
+- [VCP Specification v1.2 (RC1)](../spec/v1.2/VCP-Specification-v1_2_en.md)
 - [SDK Specification](https://github.com/veritaschain/vcp-sdk-spec)

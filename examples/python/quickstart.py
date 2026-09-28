@@ -233,7 +233,7 @@ A VCP event consists of three parts:
 │  • vcp_gov (algorithm governance)       │
 ├─────────────────────────────────────────┤
 │ SECURITY                                │
-│  • prev_hash (chain link)               │
+│  • prev_hash (chain link, OPTIONAL)     │
 │  • event_hash (this event's hash)       │
 │  • signature (Ed25519)                  │
 └─────────────────────────────────────────┘
