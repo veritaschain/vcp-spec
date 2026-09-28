@@ -6,7 +6,7 @@
 
 ---
 
-> **Newer version:** [v1.2 Release Candidate (RC1)](../v1.2/) — protocol-compatible with v1.1. v1.1 has no tagged release in this repository.
+> **Superseded by [v1.2](../v1.2/)** (Production Ready, GA 2026-07-06) — protocol-compatible with v1.1; all v1.1 events and anchors remain valid and verifiable under v1.2. v1.1 has no tagged release in this repository.
 
 ---
 
