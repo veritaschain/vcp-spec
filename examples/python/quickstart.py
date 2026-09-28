@@ -7,7 +7,7 @@ Usage:
     pip install httpx
     python quickstart.py
 
-Get your API key at: https://veritaschain.org/register
+API key information: https://veritaschain.org/vcp/explorer-api/
 """
 import os
 import sys
@@ -25,7 +25,7 @@ API_KEY = os.environ.get("VCP_API_KEY", "")
 
 if not API_KEY:
     print("Warning: VCP_API_KEY not set. Some features may not work.")
-    print("Get your API key at: https://veritaschain.org/register")
+    print("API key information: https://veritaschain.org/vcp/explorer-api/")
     print()
 
 headers = {"Authorization": f"Bearer {API_KEY}"} if API_KEY else {}
@@ -119,7 +119,7 @@ def main():
         
         if response.status_code == 401:
             print("Error: Invalid API key")
-            print("Get a valid key at: https://veritaschain.org/register")
+            print("API key information: https://veritaschain.org/vcp/explorer-api/")
             return
         
         response.raise_for_status()
@@ -256,7 +256,7 @@ A VCP event consists of three parts:
     print("  🛠️  SDK Spec:       https://github.com/veritaschain/vcp-sdk-spec")
     print("  🔍 Explorer GUI:   https://veritaschain.org/explorer/app/")
     print("  🔌 MT4/MT5:        https://github.com/veritaschain/vcp-sidecar-guide")
-    print("  ✅ Get Certified:  https://certified.veritaschain.org")
+    print("  ✅ Get Certified:  https://veritaschain.org/certified/")
     print()
 
 
