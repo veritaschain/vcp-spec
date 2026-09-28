@@ -229,7 +229,7 @@ async function main() {
   console.log('  🛠️  SDK Spec:       https://github.com/veritaschain/vcp-sdk-spec');
   console.log('  🔍 Explorer GUI:   https://veritaschain.org/explorer/app/');
   console.log('  🔌 MT4/MT5:        https://github.com/veritaschain/vcp-sidecar-guide');
-  console.log('  ✅ Get Certified:  https://veritaschain.org/certified/');
+  console.log('  ℹ️  VC-Certified:   https://veritaschain.org/certified/ (issued by independent CABs, not VSO)');
   console.log();
 }
 
