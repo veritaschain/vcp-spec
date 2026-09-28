@@ -256,7 +256,7 @@ A VCP event consists of three parts:
     print("  🛠️  SDK Spec:       https://github.com/veritaschain/vcp-sdk-spec")
     print("  🔍 Explorer GUI:   https://veritaschain.org/explorer/app/")
     print("  🔌 MT4/MT5:        https://github.com/veritaschain/vcp-sidecar-guide")
-    print("  ℹ️  VC-Certified:   https://veritaschain.org/certified/ (issued by independent CABs, not VSO)")
+    print("  ℹ️  VC-Certified:   https://veritaschain.org/certified/ (issued by accredited CABs, not VSO)")
     print()
 
 
