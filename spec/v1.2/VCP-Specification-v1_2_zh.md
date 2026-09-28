@@ -1,9 +1,9 @@
 # VeritasChain Protocol (VCP) 规范
 ## 版本 1.2
 
-**状态:** Release Candidate (RC1)  
+**状态:** Production Ready  
 **类别:** 金融科技 / 审计标准  
-**日期:** 2026-05-31  
+**日期:** 2026-07-06  
 **维护者:** VeritasChain Standards Organization (VSO)  
 **许可证:** CC BY 4.0 International  
 **网站:** https://veritaschain.org
@@ -14,7 +14,7 @@
 
 | 版本 | 日期 | 变更内容 | 作者 |
 |-----|------|---------|------|
-| 1.2 | 2026-05-31 | VCP-RECOVERY运行约束、ERASURE事件（GDPR / 加密粉碎）、版本兼容性矩阵、SCITT对齐字段、延迟预算、锚定连续性、多参与方XREF、Silver层指南 | VSO技术委员会 |
+| 1.2 | 2026-07-06 | VCP-RECOVERY运行约束、ERASURE事件（GDPR / 加密粉碎）、版本兼容性矩阵、SCITT对齐字段、延迟预算、锚定连续性、多参与方XREF、Silver层指南 | VSO技术委员会 |
 | 1.1 | 2025-12-30 | 三层架构、外部锚定必需化、策略标识、VCP-XREF、完整性保证 | VSO技术委员会 |
 | 1.0 | 2025-11-25 | 初始发布 | VSO技术委员会 |
 
@@ -381,7 +381,7 @@ VCP v1.2引入**ERASURE**事件类型，以协调GDPR擦除权（第17条）与�
 | `RetentionExemption` | string | OPTIONAL | 保留义务优先于擦除时的法律依据（例如MiFID II第16条(7)） |
 | `OperatorID` | string | REQUIRED | 授权擦除的主体 |
 
-> **范围与法律说明（honest scoping）:** ERASURE提供支持擦除义务的*技术*机制（加密粉碎），而**非法律判定**。加密粉碎是否构成GDPR下的"擦除"，取决于司法管辖区和待决判例（参见关于假名化的EDPB指南01/2025；本文撰写时待决的CJEU C-413/23 P）。VCP不保证法律结论。还需注意与SEC Rule 17a-4审计跟踪控制等可重现性要求之间的张力：DEK一旦销毁，按设计原始明文将**无法重现**。包含保留例外处理的完整规格参见Annex §3。
+> **范围与法律说明（honest scoping）:** ERASURE提供支持擦除义务的*技术*机制（加密粉碎），而**非法律判定**。加密粉碎是否构成GDPR下的"擦除"，取决于司法管辖区和判例的发展（参见关于假名化的EDPB指南01/2025；以及CJEU C-413/23 P（2025年9月4日判决）— 该判决确认了假名化数据下个人数据概念的“相对”方法，对加密粉碎构成第17条“擦除”具有支持性但非决定性）。VCP不保证法律结论。还需注意与SEC Rule 17a-4审计跟踪控制等可重现性要求之间的张力：DEK一旦销毁，按设计原始明文将**无法重现**。包含保留例外处理的完整规格参见Annex §3。
 
 ---
 

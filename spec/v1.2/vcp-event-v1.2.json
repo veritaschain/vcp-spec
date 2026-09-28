@@ -1,0 +1,359 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://veritaschain.org/schema/vcp-event-v1.2.json",
+  "title": "VeritasChain Protocol (VCP) Event - Version 1.2",
+  "description": "JSON Schema for VCP v1.2 events in the structured Header/Payload/Security encoding. This is the encoding used when a VCP Event is carried as the payload of a SCITT Signed Statement (draft-kamimura-scitt-vcp) and in VCP v1.1+ implementation examples. This schema enforces protocol-level requirements only. Conformance-tier and VC-Certified requirements (for example, mandatory MerkleRoot, MerkleIndex, and AnchorReference under v1.1+ certification, per Specification Section 6.4.1) are Registration Policy and certification matters and are intentionally not enforced here.",
+  "$comment": "Maintainer: VeritasChain Standards Organization (VSO). Source specification: https://github.com/veritaschain/vcp-spec/tree/main/spec/v1.2 . License: CC BY 4.0.",
+  "type": "object",
+  "required": ["Header", "Payload", "Security"],
+  "additionalProperties": false,
+  "properties": {
+    "Header": { "$ref": "#/$defs/Header" },
+    "Payload": { "$ref": "#/$defs/Payload" },
+    "Security": { "$ref": "#/$defs/Security" },
+    "PolicyIdentification": { "$ref": "#/$defs/PolicyIdentification" }
+  },
+  "if": {
+    "required": ["Header"],
+    "properties": {
+      "Header": {
+        "required": ["EventType"],
+        "properties": { "EventType": { "const": "ERASURE" } }
+      }
+    }
+  },
+  "then": {
+    "properties": {
+      "Payload": {
+        "required": ["VCP-PRIVACY"],
+        "properties": {
+          "VCP-PRIVACY": {
+            "required": [
+              "ErasureTargetEventIDs",
+              "ErasureReason",
+              "KeyDestructionProof",
+              "OperatorID"
+            ]
+          }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "UUID": {
+      "type": "string",
+      "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$",
+      "$comment": "UUIDv7 (RFC 9562) is required for time-sortable EventIDs at Gold/Platinum tiers; the pattern accepts any RFC 9562 UUID."
+    },
+    "DecimalString": {
+      "type": "string",
+      "pattern": "^-?[0-9]+(\\.[0-9]+)?$",
+      "$comment": "Specification Section 4.2.2: all financial numeric values MUST be encoded as strings to avoid IEEE 754 precision loss under RFC 8785 canonicalization."
+    },
+    "Header": {
+      "type": "object",
+      "required": [
+        "EventID",
+        "TimestampISO",
+        "TimestampInt",
+        "EventType",
+        "ActorID",
+        "ChainID",
+        "SequenceNum",
+        "PolicyID"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "EventID": {
+          "$ref": "#/$defs/UUID",
+          "description": "Unique event identifier. UUIDv7 (RFC 9562) provides time-sortable identification."
+        },
+        "TraceID": {
+          "$ref": "#/$defs/UUID",
+          "description": "OPTIONAL transaction trace identifier (for example, CAT Rule 613 correlation)."
+        },
+        "TimestampISO": {
+          "type": "string",
+          "format": "date-time",
+          "description": "ISO 8601 / RFC 3339 timestamp, UTC, up to nanosecond precision."
+        },
+        "TimestampInt": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Nanoseconds since the Unix epoch (UTC), as a 64-bit integer.",
+          "$comment": "Values exceed 2^53; parsers must preserve 64-bit integer precision."
+        },
+        "EventType": {
+          "type": "string",
+          "enum": [
+            "INIT", "SIG", "ORD", "ACK", "EXE", "CXL", "MOD", "RSK",
+            "ERR", "HBT", "CLS", "ANC",
+            "ERR_CONN", "ERR_AUTH", "ERR_TIMEOUT", "ERR_REJECT",
+            "ERR_PARSE", "ERR_SYNC", "ERR_RISK", "ERR_SYSTEM",
+            "ERR_RECOVER",
+            "ERASURE"
+          ],
+          "description": "VCP v1.2 Event Type Registry: core types (v1.0), standardized error types (v1.1), and ERASURE (v1.2)."
+        },
+        "ActorID": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Identifier of the entity generating this event."
+        },
+        "ChainID": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Identifier of the per-Actor hash chain."
+        },
+        "SequenceNum": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Monotonically increasing sequence number within the Actor's chain."
+        },
+        "PolicyID": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Registration Policy identifier. SHOULD follow the Issuer Domain + Local ID convention (reverse_domain:local_identifier), for example 'org.veritaschain.policy:gold-v1-2' (Specification Section 5.5.4)."
+        },
+        "SCITTAlignment": { "$ref": "#/$defs/SCITTAlignment" }
+      }
+    },
+    "SCITTAlignment": {
+      "type": "object",
+      "description": "OPTIONAL SCITT alignment object (v1.2). REQUIRED under the VCP_SCITT conformance profile; RECOMMENDED under VCP_REGULATORY.",
+      "required": ["Version", "ConformanceProfile"],
+      "additionalProperties": false,
+      "properties": {
+        "Version": {
+          "type": "string",
+          "description": "VCP specification version governing the alignment semantics.",
+          "examples": ["1.2"]
+        },
+        "ConformanceProfile": {
+          "type": "string",
+          "enum": ["VCP_BASE", "VCP_SCITT", "VCP_REGULATORY"]
+        },
+        "StatementID": {
+          "type": "string",
+          "description": "Identifier of the SCITT Signed Statement carrying this event."
+        },
+        "TransparencyServiceID": {
+          "type": "string",
+          "description": "Identifier of the Transparency Service with which the event is registered. REQUIRED under the VCP_SCITT profile."
+        },
+        "ReceiptFormat": {
+          "type": "string",
+          "description": "Receipt encoding in use.",
+          "examples": ["COSE_RECEIPT"]
+        },
+        "RegistrationPolicy": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "PolicyID": { "type": "string" },
+            "Issuer": { "type": "string" },
+            "IssuedAt": { "type": "integer", "minimum": 0 }
+          }
+        }
+      }
+    },
+    "Payload": {
+      "type": "object",
+      "minProperties": 1,
+      "description": "Domain data organized into VCP-* modules. Module names MUST match ^VCP-[A-Z]+$.",
+      "patternProperties": {
+        "^VCP-[A-Z]+$": { "type": "object" }
+      },
+      "additionalProperties": false,
+      "properties": {
+        "VCP-TRADE": {
+          "type": "object",
+          "description": "Trading data: orders, executions, modifications, cancellations.",
+          "properties": {
+            "OrderID": { "type": "string" },
+            "BrokerOrderID": { "type": "string" },
+            "ExchangeOrderID": { "type": "string" },
+            "Symbol": { "type": "string" },
+            "Side": { "type": "string", "enum": ["BUY", "SELL"] },
+            "OrderType": {
+              "type": "string",
+              "enum": ["MARKET", "LIMIT", "STOP", "STOP_LIMIT"]
+            },
+            "TimeInForce": { "type": "string" },
+            "Price": { "$ref": "#/$defs/DecimalString" },
+            "Quantity": { "$ref": "#/$defs/DecimalString" },
+            "ExecutedQty": { "$ref": "#/$defs/DecimalString" },
+            "RemainingQty": { "$ref": "#/$defs/DecimalString" },
+            "ExecutionPrice": { "$ref": "#/$defs/DecimalString" },
+            "Commission": { "$ref": "#/$defs/DecimalString" },
+            "Slippage": { "$ref": "#/$defs/DecimalString" },
+            "Currency": {
+              "type": "string",
+              "description": "ISO 4217 currency code."
+            },
+            "RejectReason": { "type": "string" },
+            "AccountID": {
+              "type": "string",
+              "description": "MUST be pseudonymized."
+            },
+            "ClientID": { "type": "string" },
+            "VenueID": {
+              "type": "string",
+              "description": "ISO 10383 MIC code when applicable."
+            }
+          }
+        },
+        "VCP-RISK": {
+          "type": "object",
+          "description": "Risk management data: exposure, limits, margin."
+        },
+        "VCP-GOV": {
+          "type": "object",
+          "description": "Governance data: algorithm parameters, decision factors, operator actions.",
+          "properties": {
+            "AlgoID": { "type": "string" },
+            "AlgoVersion": { "type": "string" },
+            "AlgoType": {
+              "type": "string",
+              "enum": ["AI_MODEL", "RULE_BASED", "HYBRID"]
+            },
+            "ModelHash": { "type": "string" },
+            "DecisionFactors": {
+              "type": ["array", "object"],
+              "description": "Compact form: array of factor names. Extended form: object per Specification Section 5.1.1."
+            },
+            "ConfidenceScore": {
+              "type": ["string", "number"],
+              "description": "Confidence in [0.0, 1.0]. String encoding is RECOMMENDED for precision (Specification Section 5.1.1)."
+            },
+            "RiskCheckPassed": { "type": "boolean" }
+          }
+        },
+        "VCP-PRIVACY": {
+          "type": "object",
+          "description": "Privacy metadata: encrypted-field inventory, key references, retention policy, and (v1.2) ERASURE event fields.",
+          "properties": {
+            "EncryptedFields": {
+              "type": "array",
+              "items": { "type": "string" }
+            },
+            "KeyID": { "type": "string" },
+            "Algorithm": { "type": "string" },
+            "RetentionPolicy": { "type": "string" },
+            "ErasureTargetEventIDs": {
+              "type": "array",
+              "minItems": 1,
+              "items": { "$ref": "#/$defs/UUID" },
+              "description": "Events whose protected fields are crypto-shredded (ERASURE events)."
+            },
+            "ErasureReason": {
+              "type": "string",
+              "enum": ["SUBJECT_REQUEST", "RETENTION_EXPIRED", "LEGAL_ORDER"]
+            },
+            "KeyDestructionProof": {
+              "type": "string",
+              "description": "Evidence that the DEK was destroyed (for example, an HSM or KMS attestation)."
+            },
+            "RetentionExemption": {
+              "type": "string",
+              "description": "Legal basis where a retention obligation overrides erasure (for example, MiFID II Article 16(7))."
+            },
+            "OperatorID": {
+              "type": "string",
+              "description": "Actor authorizing the erasure."
+            }
+          }
+        },
+        "VCP-XREF": {
+          "type": "object",
+          "description": "Cross-reference data, including v1.2 multi-actor chain linking."
+        },
+        "VCP-RECOVERY": {
+          "type": "object",
+          "description": "Recovery operations, subject to the v1.2 operational constraints."
+        }
+      }
+    },
+    "Security": {
+      "type": "object",
+      "required": ["EventHash", "SignAlgo"],
+      "additionalProperties": false,
+      "$comment": "VC-Certified v1.1+ additionally requires MerkleRoot, MerkleIndex, and AnchorReference (Specification Section 6.4.1). Those are certification requirements enforced by Registration Policy, not by this protocol-level schema. In the SCITT Signed Statement encoding, the event signature MAY be carried by the COSE_Sign1 envelope, in which case the Signature field is omitted here.",
+      "properties": {
+        "Version": { "type": "string" },
+        "EventHash": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Hash of the canonicalized (RFC 8785) Header and Payload. Production values use the algorithm-prefixed form 'sha256:' followed by 64 lowercase hex characters."
+        },
+        "PrevHash": {
+          "type": "string",
+          "description": "OPTIONAL hash of the previous event in this Actor's chain; absent for INIT events."
+        },
+        "HashAlgo": {
+          "type": "string",
+          "enum": ["SHA256", "SHA3_256", "BLAKE3", "SHA3_512"]
+        },
+        "Signature": {
+          "type": "string",
+          "description": "Base64-encoded signature over the event. MAY be omitted in the SCITT encoding, where COSE_Sign1 carries the signature."
+        },
+        "SignAlgo": {
+          "type": "string",
+          "enum": [
+            "ED25519",
+            "ECDSA_SECP256K1",
+            "RSA_2048",
+            "DILITHIUM2",
+            "FALCON512"
+          ],
+          "description": "Signature algorithm registry value. ED25519 is the default. DILITHIUM2 (ML-DSA, FIPS 204) and FALCON512 hold EXPERIMENTAL status in v1.2. RSA_2048 is DEPRECATED."
+        },
+        "PQCSignature": {
+          "type": "string",
+          "description": "OPTIONAL post-quantum signature for dual-signature deployments (Specification Appendix E)."
+        },
+        "PQCSignAlgo": {
+          "type": "string",
+          "description": "Algorithm of PQCSignature.",
+          "examples": ["DILITHIUM2", "FALCON512"]
+        },
+        "MerkleRoot": { "type": "string" },
+        "MerkleIndex": { "type": "integer", "minimum": 0 },
+        "AnchorRef": {
+          "type": "string",
+          "description": "Reference to the external anchor location (draft-kamimura-scitt-vcp field name)."
+        },
+        "AnchorReference": {
+          "type": "string",
+          "description": "Reference to the anchor record (Specification Section 6.4 field name)."
+        }
+      }
+    },
+    "PolicyIdentification": {
+      "type": "object",
+      "description": "OPTIONAL top-level Policy Identification block (Specification Section 5.5).",
+      "required": ["PolicyID", "ConformanceTier"],
+      "properties": {
+        "Version": { "type": "string" },
+        "PolicyID": { "type": "string", "minLength": 1 },
+        "ConformanceTier": {
+          "type": "string",
+          "enum": ["SILVER", "GOLD", "PLATINUM"]
+        },
+        "RegistrationPolicy": {
+          "type": "object",
+          "properties": {
+            "Issuer": { "type": "string" },
+            "PolicyURI": { "type": "string" },
+            "EffectiveDate": { "type": "integer" },
+            "ExpirationDate": { "type": "integer" }
+          }
+        },
+        "VerificationDepth": {
+          "description": "Declares verification capabilities."
+        }
+      }
+    }
+  }
+}
