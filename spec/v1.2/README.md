@@ -62,6 +62,7 @@ The RC1 text is unchanged; these will be addressed in the next revision.
 | §6.3.1 table | DILITHIUM2 / FALCON512 still shown as "Future (reserved)", while §1.4 and §1.5.1 give their v1.2 status as EXPERIMENTAL; §1.5.1 prevails |
 | §1.1 | "immutable" and "ensuring compliance with international regulations" — the property provided is tamper-evidence, and conformance does not constitute compliance (VAP v1.2 §1.6) |
 | §3.2.2 | ERASURE described as "a new immutable event" — append-only, tamper-evident |
+| §1.1 note; §2.2.3; §6.0; Appendix D | "Completeness guarantees", "no required events were omitted", "provably complete" — the property provided is detectability, at batch granularity, of omission after anchoring and of split-view presentation (VAP v1.2 INT-008); an event that never entered an anchored batch is not revealed by it |
 
 ## Relationship to VAP
 

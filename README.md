@@ -134,6 +134,12 @@ revision.
   "a new immutable event". The property the protocol provides is
   tamper-evidence (append-only records), and conformance does not constitute
   compliance (see Legal scope above).
+- **Completeness language.** §1.1 (note "Completeness Guarantees"), §2.2.3,
+  §6.0 and Appendix D speak of "completeness guarantees", say that "no required
+  events were omitted" and call event batches "provably complete". The property
+  the protocol provides is detectability, at batch granularity, of omission
+  after anchoring and of split-view presentation (VAP v1.2 INT-008). An event
+  that never entered an anchored batch is not revealed by it.
 
 ---
 
