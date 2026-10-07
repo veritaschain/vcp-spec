@@ -538,8 +538,8 @@ VCP-PRIVACY defines crypto-shredding conceptually, but lacks a formal event type
 
 | Code | Description | Legal Basis | Retention Override |
 |------|-------------|-------------|-------------------|
-| **GDPR_ART_17_1A** | Consent withdrawn | GDPR Art. 17(1)(a) | After retention period |
-| **GDPR_ART_17_1B** | Purpose fulfilled | GDPR Art. 17(1)(b) | After retention period |
+| **GDPR_ART_17_1A** | Data no longer needed for its original purposes | GDPR Art. 17(1)(a) | After retention period |
+| **GDPR_ART_17_1B** | Consent withdrawn; no other processing ground | GDPR Art. 17(1)(b) | After retention period |
 | **GDPR_ART_17_1C** | Objection (no override) | GDPR Art. 17(1)(c) | After retention period |
 | **GDPR_ART_17_1D** | Unlawful processing | GDPR Art. 17(1)(d) | Immediate |
 | **RETENTION_EXPIRED** | Legal retention period ended | MiFID II Art. 16(7) | N/A |
@@ -595,7 +595,7 @@ def create_erasure_event(
                 "Salt": salt
             },
             "Reason": {
-                "Code": "GDPR_ART_17_1A",
+                "Code": "GDPR_ART_17_1B",
                 "Description": "Consent withdrawn by data subject",  # No PII
                 # Hash the ticket reference
                 "RequestReferenceHash": hashlib.sha256(
