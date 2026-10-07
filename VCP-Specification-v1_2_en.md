@@ -1,9 +1,9 @@
 # VeritasChain Protocol (VCP) Specification
 ## Version 1.2
 
-**Status:** Release Candidate (RC1)  
+**Status:** Production Ready  
 **Category:** Financial Technology / Audit Standards  
-**Date:** 2026-05-31  
+**Date:** 2026-07-06  
 **Maintainer:** VeritasChain Standards Organization (VSO)  
 **License:** CC BY 4.0 International  
 **Website:** https://veritaschain.org
@@ -14,7 +14,7 @@
 
 | Version | Date | Changes | Author |
 |---------|------|---------|--------|
-| 1.2 | 2026-05-31 | RECOVERY operational constraints, ERASURE event (GDPR / crypto-shredding), Version Compatibility Matrix, SCITT alignment fields, latency budgets, anchor continuity, multi-actor XREF, Silver-tier guidance | VSO Technical Committee |
+| 1.2 | 2026-07-06 | RECOVERY operational constraints, ERASURE event (GDPR / crypto-shredding), Version Compatibility Matrix, SCITT alignment fields, latency budgets, anchor continuity, multi-actor XREF, Silver-tier guidance | VSO Technical Committee |
 | 1.1 | 2025-12-30 | Three-layer architecture, External Anchor mandatory, Policy Identification, VCP-XREF, Completeness Guarantees | VSO Technical Committee |
 | 1.0 | 2025-11-25 | Initial release | VSO Technical Committee |
 
@@ -381,7 +381,7 @@ VCP v1.2 introduces the **ERASURE** event type to reconcile the GDPR right to er
 | `RetentionExemption` | string | OPTIONAL | Legal basis if retention overrides erasure (e.g., MiFID II Art. 16(7)) |
 | `OperatorID` | string | REQUIRED | Actor authorizing the erasure |
 
-> **Scope & legal note (honest scoping):** ERASURE provides a *technical* mechanism (crypto-shredding) that supports erasure obligations; it is **not** a legal determination. Whether crypto-shredding qualifies as "erasure" under GDPR is jurisdiction- and case-dependent (cf. EDPB Guidelines 01/2025 on pseudonymisation; CJEU C-413/23 P, pending as of this writing). Note also the tension with reproducibility-style requirements such as SEC Rule 17a-4 audit-trail controls: once a DEK is destroyed, the original plaintext is, by design, **not re-creatable**. See **Annex §3** for the complete specification, including retention-exemption handling.
+> **Scope & legal note (honest scoping):** ERASURE provides a *technical* mechanism (crypto-shredding) that supports erasure obligations; it is **not** a legal determination. Whether crypto-shredding qualifies as "erasure" under GDPR is jurisdiction- and case-dependent (cf. EDPB Guidelines 01/2025 on pseudonymisation; CJEU C-413/23 P, judgment of 4 September 2025, confirming a "relative" approach to personal data for pseudonymised data — supportive of, but not dispositive for, crypto-shredding as Article 17 erasure). Note also the tension with reproducibility-style requirements such as SEC Rule 17a-4 audit-trail controls: once a DEK is destroyed, the original plaintext is, by design, **not re-creatable**. See **Annex §3** for the complete specification, including retention-exemption handling.
 
 ---
 

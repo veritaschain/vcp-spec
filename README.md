@@ -1,4 +1,4 @@
-![VCP Version](https://img.shields.io/badge/VCP-v1.2%20RC1-blue)
+![VCP Version](https://img.shields.io/badge/VCP-v1.2%20Production%20Ready-blue)
 ![License: CC BY 4.0](https://img.shields.io/badge/License-CC%20BY%204.0-green)
 
 # VeritasChain Protocol (VCP)
@@ -40,13 +40,16 @@ The **canonical (normative) specification** of VCP is located under:
 /spec/
 ├─ v1.0/   index.html (HTML rendition; Markdown source at repository root)
 ├─ v1.1/   VCP-Specification-v1_1_{en,ja,zh}.md, PDF, CHANGELOG
-└─ v1.2/   VCP-Specification-v1_2_{en,ja,zh}.md
+└─ v1.2/   VCP-Specification-v1_2_{en,ja,zh}.md,
+           VSO-SPEC-CHANGE-001.md (normative annex),
+           vcp-event-v1.2.json (JSON Schema)
 ```
 
 - The English Markdown file in each version directory is the authoritative text;
   Japanese and Chinese translations and PDFs are provided **for convenience only**
-- `VCP-Specification-*.md` files at the repository root are **non-normative
-  copies** (identical to the `/spec/` versions for v1.1 and v1.2)
+- `VCP-Specification-*.md` and `VSO-SPEC-CHANGE-001.md` files at the
+  repository root are **non-normative copies** (identical to the `/spec/`
+  versions for v1.1 and v1.2)
 
 **If there is any conflict, the content under `/spec/` always prevails.**
 
@@ -56,13 +59,16 @@ The **canonical (normative) specification** of VCP is located under:
 
 | Version | Status | Date | Location |
 |---------|--------|------|----------|
-| **v1.2** | **Release Candidate (RC1)** — current | 2026-05-31 | [`/spec/v1.2/`](spec/v1.2/) |
+| **v1.2** | **Production Ready (GA)** — current (tag `v1.2.0`) | 2026-07-06 (RC1: 2026-05-31) | [`/spec/v1.2/`](spec/v1.2/) · [JSON Schema](spec/v1.2/vcp-event-v1.2.json) |
 | v1.1 | Published (no tagged release) | 2025-12-30 | [`/spec/v1.1/`](spec/v1.1/) |
 | v1.0 | Released (tag `v1.0.0`) | 2025-11-25 | [`/spec/v1.0/`](spec/v1.0/) |
 
 v1.2 is a protocol-compatible / certification-stricter update: zero breaking
 changes, all v1.0 and v1.1 events remain valid. Migration notes and
 compatibility considerations are documented inside each version directory.
+
+GA was declared on 2026-07-06. The GA text was committed to this repository
+after that date; until that commit, this repository showed RC1.
 
 ---
 
@@ -115,20 +121,20 @@ now published as **RFC 9943** and **RFC 9942** (June 2026).
 
 ---
 
-## 📝 Known issues in v1.2 RC1 (informative)
+## 📝 Known issues in v1.2 (informative)
 
-The RC1 text is left unchanged; the following will be addressed in the next
-revision.
+The Production Ready text is the RC1 text with its status, dates and one
+informative legal note updated; there was no technical change. The following
+are errata candidates for the next revision. The full list, including issues
+in the normative annex, is in
+[`spec/v1.2/README.md`](spec/v1.2/README.md#known-issues-in-v12-informative).
 
-- **Normative annex not yet published.** The specification refers to
-  `VSO-SPEC-CHANGE-001.md` ("VCP v1.2 Change Proposal") as a normative annex
-  "included in this directory". It is not yet in this repository. Until it is,
-  the Annex §1–§9 references in the RC1 text cannot be resolved.
 - **Superseded references.** §12 cites `draft-ietf-scitt-architecture` and
   `draft-ietf-cose-merkle-tree-proofs`; these are now **RFC 9943** and
   **RFC 9942**.
-- **Retired service in an example.** The "Attested Database Examples" table in
-  §6.3.3 lists AWS QLDB, which reached end of support on 2025-07-31.
+- **Retired service in examples.** The "Attested Database Examples" table in
+  §6.3.3, and Annex §2.4 and §8.8, list AWS QLDB, which reached end of support
+  on 2025-07-31.
 - **Capability language.** §1.1 describes the format as "immutable" and as
   "ensuring compliance with international regulations"; §3.2.2 calls ERASURE
   "a new immutable event". The property the protocol provides is
@@ -140,6 +146,10 @@ revision.
   the protocol provides is detectability, at batch granularity, of omission
   after anchoring and of split-view presentation (VAP v1.2 INT-008). An event
   that never entered an anchored batch is not revealed by it.
+- **Annex benchmark figures.** Annex §8 reports figures for `vcp-core-py` and
+  `vcp-core-cpp` v1.2.0. Those implementations are not publicly available, so
+  the figures cannot be reproduced from published artifacts. They are
+  informative (Annex §8.2) and are not independent evidence of performance.
 
 ---
 
