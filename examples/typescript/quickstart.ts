@@ -7,7 +7,7 @@
  *   # or
  *   npx tsx quickstart.ts
  * 
- * Get your API key at: https://veritaschain.org/register
+ * API key information: https://veritaschain.org/vcp/explorer-api/
  */
 
 import crypto from 'crypto';
@@ -18,7 +18,7 @@ const API_KEY = process.env.VCP_API_KEY || '';
 
 if (!API_KEY) {
   console.log('Warning: VCP_API_KEY not set. Some features may not work.');
-  console.log('Get your API key at: https://veritaschain.org/register\n');
+  console.log('API key information: https://veritaschain.org/vcp/explorer-api/\n');
 }
 
 // Types
@@ -229,7 +229,7 @@ async function main() {
   console.log('  🛠️  SDK Spec:       https://github.com/veritaschain/vcp-sdk-spec');
   console.log('  🔍 Explorer GUI:   https://veritaschain.org/explorer/app/');
   console.log('  🔌 MT4/MT5:        https://github.com/veritaschain/vcp-sidecar-guide');
-  console.log('  ✅ Get Certified:  https://certified.veritaschain.org');
+  console.log('  ℹ️  VC-Certified:   https://veritaschain.org/certified/ (issued by accredited CABs, not VSO)');
   console.log();
 }
 

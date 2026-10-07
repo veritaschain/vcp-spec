@@ -135,8 +135,8 @@ broker_event = VCPEvent(
 
 - **IETF Internet-Draft**: [draft-kamimura-scitt-vcp](https://datatracker.ietf.org/doc/draft-kamimura-scitt-vcp/)
 - **Website**: [veritaschain.org](https://veritaschain.org)
-- **Developer Docs**: [docs.veritaschain.org](https://docs.veritaschain.org)
-- **VC-Certified Program**: [veritaschain.org/certification](https://veritaschain.org/certification)
+- **Explorer API reference**: [veritaschain.org/vcp/explorer-api](https://veritaschain.org/vcp/explorer-api/)
+- **VC-Certified Program**: [veritaschain.org/certified](https://veritaschain.org/certified/)
 
 ## License
 

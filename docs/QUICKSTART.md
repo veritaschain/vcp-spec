@@ -12,7 +12,7 @@
 
 ## 📋 Prerequisites
 
-1. **API Key** — Get one at [veritaschain.org/register](https://veritaschain.org/register)
+1. **API Key** — See the [Explorer API page](https://veritaschain.org/vcp/explorer-api/) (no self-service registration page is currently published)
 2. **Python 3.10+** or **Node.js 18+** (or just `curl`)
 
 ```bash
@@ -162,7 +162,7 @@ def main():
     print("Next steps:")
     print("  📖 Specification:  https://github.com/veritaschain/vcp-spec")
     print("  🔍 Explorer GUI:   https://veritaschain.org/explorer/app/")
-    print("  ✅ Get Certified:  https://certified.veritaschain.org")
+    print("  ℹ️  VC-Certified:   https://veritaschain.org/certified/ (issued by accredited CABs, not VSO)")
 
 
 def verify_merkle_proof(event_hash: str, proof_path: list, merkle_root: str) -> bool:
@@ -232,7 +232,7 @@ Proof Steps:  20
 Next steps:
   📖 Specification:  https://github.com/veritaschain/vcp-spec
   🔍 Explorer GUI:   https://veritaschain.org/explorer/app/
-  ✅ Get Certified:  https://certified.veritaschain.org
+  ℹ️  VC-Certified:   https://veritaschain.org/certified/ (issued by accredited CABs, not VSO)
 ```
 
 ---
@@ -398,7 +398,7 @@ export VCP_API_KEY="your-actual-key"
 | 🛠️ SDK Development | [SDK Specification](https://github.com/veritaschain/vcp-sdk-spec) |
 | 🔍 Explore Events | [VCP Explorer GUI](https://veritaschain.org/explorer/app/) |
 | 🔌 MT4/MT5 Integration | [Sidecar Guide](https://github.com/veritaschain/vcp-sidecar-guide) |
-| ✅ Get Certified | [VC-Certified Program](https://certified.veritaschain.org) |
+| ℹ️ Certification scheme | [VC-Certified](https://veritaschain.org/certified/) — certificates are issued by accredited Conformity Assessment Bodies, not by VSO |
 
 ---
 

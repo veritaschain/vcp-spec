@@ -36,7 +36,7 @@ curl -H "Authorization: Bearer $VCP_API_KEY" \
 
 ## 📋 Get API Key
 
-1. Go to [veritaschain.org/register](https://veritaschain.org/register)
+1. See the [Explorer API page](https://veritaschain.org/vcp/explorer-api/) (no self-service registration page is currently published)
 2. Create account
 3. Copy API key
 
