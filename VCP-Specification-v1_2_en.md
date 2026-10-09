@@ -8,6 +8,8 @@
 **License:** CC BY 4.0 International  
 **Website:** https://veritaschain.org
 
+**GA consistency correction — 2026-10-09:** The canonical ERASURE wire format and validator contract changed from the untagged RC / pre-GA artifacts (Annex §3.4.3). Claims of zero breaking changes below concern the v1.0/v1.1 baseline, not pre-GA v1.2 ERASURE. Historical signed data MUST NOT be rewritten. The release is not technically identical to RC1.
+
 ---
 
 ## Revision History
@@ -373,15 +375,32 @@ VCP v1.1 introduces standardized error event types to ensure consistent error re
 
 VCP v1.2 introduces the **ERASURE** event type to reconcile the GDPR right to erasure (Art. 17) with append-only, tamper-evident audit trails. ERASURE does **not** delete or rewrite any prior event. It records, as a new immutable event, that the *plaintext* of specified protected fields has been rendered irrecoverable via **crypto-shredding** (destruction of the per-subject data-encryption key), while the original EventHash, Merkle inclusion, and external anchor of the target events remain verifiable.
 
-| Field | Type | Requirement | Notes |
-|-------|------|-------------|-------|
-| `ErasureTargetEventIDs` | ["uuid"] | REQUIRED | Events whose protected fields are crypto-shredded |
-| `ErasureReason` | enum | REQUIRED | `SUBJECT_REQUEST` \| `RETENTION_EXPIRED` \| `LEGAL_ORDER` |
-| `KeyDestructionProof` | string | REQUIRED | Evidence the DEK was destroyed (e.g., HSM/KMS attestation) |
-| `RetentionExemption` | string | OPTIONAL | Legal basis if retention overrides erasure (e.g., MiFID II Art. 16(7)) |
-| `OperatorID` | string | REQUIRED | Actor authorizing the erasure |
+
+The canonical structured encoding is `Payload.VCP-PRIVACY.ErasureDetails`. All seven members below are REQUIRED. Annex §3.4 defines nested fields and §3.4.3 defines historical migration; the compact pre-GA form is not a GA encoding.
+
+| ErasureDetails member | Requirement |
+|---|---|
+| `Version` | REQUIRED — Annex §3.4 |
+| `TargetIdentifier` | REQUIRED — Annex §3.4 |
+| `Scope` | REQUIRED — Annex §3.4 |
+| `Reason` | REQUIRED — Annex §3.4 |
+| `Authorization` | REQUIRED — Annex §3.4 |
+| `CryptoShredding` | REQUIRED — Annex §3.4 |
+| `Verification` | REQUIRED — Annex §3.4 |
 
 > **Scope & legal note (honest scoping):** ERASURE provides a *technical* mechanism (crypto-shredding) that supports erasure obligations; it is **not** a legal determination. Whether crypto-shredding qualifies as "erasure" under GDPR is jurisdiction- and case-dependent (cf. EDPB Guidelines 01/2025 on pseudonymisation; CJEU C-413/23 P, judgment of 4 September 2025, confirming a "relative" approach to personal data for pseudonymised data — supportive of, but not dispositive for, crypto-shredding as Article 17 erasure). Note also the tension with reproducibility-style requirements such as SEC Rule 17a-4 audit-trail controls: once a DEK is destroyed, the original plaintext is, by design, **not re-creatable**. See **Annex §3** for the complete specification, including retention-exemption handling.
+
+#### 3.2.3 System Event Registry (v1.2 GA correction)
+
+| Header.EventType | Required payload location | Meaning |
+|---|---|---|
+| `SYS_RECOVERY_ANNOUNCE` | `Payload.VCP-RECOVERY.Announcement` | Planned CHECKPOINT notice |
+| `SYS_CHECKPOINT` | `Payload.VCP-RECOVERY` | Recorded chain reset with authorized RecoveryAction |
+| `SYS_AUDIT` | `Payload.VCP-GOV.AuditDetails` | Post-incident review |
+| `SYS_ANCHOR_MIGRATION` | `Payload.VCP-ANCHOR.MigrationDetails` | Anchor transition and phase |
+| `SYS_ANCHOR_FAILOVER` | `Payload.VCP-ANCHOR.FailoverDetails` | Anchor failover and queued-event inventory |
+
+Normative structured encoding and runtime requirements: Annex §1.4.10. These five codes are additive; strict pre-GA validators require an update.
 
 ---
 

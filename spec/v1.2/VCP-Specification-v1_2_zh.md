@@ -8,6 +8,8 @@
 **许可证:** CC BY 4.0 International  
 **网站:** https://veritaschain.org
 
+**GA一致性修正 — 2026-10-09:** ERASURE规范编码和验证规则相较未打标签的RC／GA前成果物已有变化（Annex §3.4.3）。下文“零破坏性变更”仅针对v1.0/v1.1基线，不适用于GA前v1.2 ERASURE。禁止重写已签名历史记录；本版本与RC1技术内容并不相同。
+
 ---
 
 ## 修订历史
@@ -373,15 +375,32 @@ VCP v1.1引入标准化的错误事件类型，以确保跨实现的一致错误
 
 VCP v1.2引入**ERASURE**事件类型，以协调GDPR擦除权（第17条）与仅追加、防篡改可检测的审计跟踪。ERASURE不删除或重写任何先前事件。它作为一个新的不可变事件，记录指定受保护字段的*明文*已通过**加密粉碎（crypto-shredding，销毁按主体的数据加密密钥）**变得不可恢复。目标事件的原始EventHash、Merkle包含和外部锚定仍保持可验证。
 
-| 字段 | 类型 | 要求 | 注意 |
-|------|------|------|------|
-| `ErasureTargetEventIDs` | ["uuid"] | REQUIRED | 受保护字段被加密粉碎的事件 |
-| `ErasureReason` | enum | REQUIRED | `SUBJECT_REQUEST` \| `RETENTION_EXPIRED` \| `LEGAL_ORDER` |
-| `KeyDestructionProof` | string | REQUIRED | DEK已被销毁的证据（例如HSM/KMS认证） |
-| `RetentionExemption` | string | OPTIONAL | 保留义务优先于擦除时的法律依据（例如MiFID II第16条(7)） |
-| `OperatorID` | string | REQUIRED | 授权擦除的主体 |
+
+规范结构化表示为 `Payload.VCP-PRIVACY.ErasureDetails`。以下七项为必需字段。嵌套字段见Annex §3.4，历史格式迁移见§3.4.3；标签发布前的简化格式不是GA编码。
+
+| ErasureDetails member | Requirement |
+|---|---|
+| `Version` | REQUIRED — Annex §3.4 |
+| `TargetIdentifier` | REQUIRED — Annex §3.4 |
+| `Scope` | REQUIRED — Annex §3.4 |
+| `Reason` | REQUIRED — Annex §3.4 |
+| `Authorization` | REQUIRED — Annex §3.4 |
+| `CryptoShredding` | REQUIRED — Annex §3.4 |
+| `Verification` | REQUIRED — Annex §3.4 |
 
 > **范围与法律说明（honest scoping）:** ERASURE提供支持擦除义务的*技术*机制（加密粉碎），而**非法律判定**。加密粉碎是否构成GDPR下的"擦除"，取决于司法管辖区和判例的发展（参见关于假名化的EDPB指南01/2025；以及CJEU C-413/23 P（2025年9月4日判决）— 该判决确认了假名化数据下个人数据概念的“相对”方法，对加密粉碎构成第17条“擦除”具有支持性但非决定性）。VCP不保证法律结论。还需注意与SEC Rule 17a-4审计跟踪控制等可重现性要求之间的张力：DEK一旦销毁，按设计原始明文将**无法重现**。包含保留例外处理的完整规格参见Annex §3。
+
+#### 3.2.3 System Event Registry (v1.2 GA correction)
+
+| Header.EventType | Required payload location | Meaning |
+|---|---|---|
+| `SYS_RECOVERY_ANNOUNCE` | `Payload.VCP-RECOVERY.Announcement` | Planned CHECKPOINT notice |
+| `SYS_CHECKPOINT` | `Payload.VCP-RECOVERY` | Recorded chain reset with authorized RecoveryAction |
+| `SYS_AUDIT` | `Payload.VCP-GOV.AuditDetails` | Post-incident review |
+| `SYS_ANCHOR_MIGRATION` | `Payload.VCP-ANCHOR.MigrationDetails` | Anchor transition and phase |
+| `SYS_ANCHOR_FAILOVER` | `Payload.VCP-ANCHOR.FailoverDetails` | Anchor failover and queued-event inventory |
+
+Normative structured encoding and runtime requirements: Annex §1.4.10. These five codes are additive; strict pre-GA validators require an update.
 
 ---
 

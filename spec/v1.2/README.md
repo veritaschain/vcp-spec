@@ -8,11 +8,11 @@
 
 ## Status
 
-**Production Ready** — GA 2026-07-06 (Release Candidate RC1 published 2026-05-31). Tag: `v1.2.0`.
+**Production Ready** — GA 2026-07-06 (Release Candidate RC1 published 2026-05-31). Release target: `v1.2.0` on the validated correction commit, not the earlier PR #1 merge. Tag existence must be verified before downstream publication.
 
 v1.2 is a **protocol-compatible / certification-stricter** update over v1.1. It introduces **zero breaking changes**: all v1.0 and v1.1 events remain valid and verifiable under v1.2. The complete normative specification of every change is provided in this directory as the normative annex VSO-SPEC-CHANGE-001 (see Documents below).
 
-The Production Ready text is the RC1 text with its status, dates and one informative legal note (CJEU C-413/23 P) updated; there was no technical change between RC1 and GA. The GA files were committed to this repository after the GA date; until that commit, this repository showed RC1.
+The 2026-10-09 GA consistency correction changes the untagged pre-GA ERASURE encoding and adds the five Annex system codes to the schema. **This is not technically identical to RC1.** See [GA consistency and compatibility](GA-CONSISTENCY.md) for migration, validation scope and release gates. The 2026-07-06 GA declaration is historical; it is not evidence of a tag or completed release.
 
 ## Overview
 
@@ -45,9 +45,9 @@ with VSO's honest-scoping policy, the following distinctions apply.
 
 - The v1.2 specification text (EN/JA/ZH), its normative annex
   (VSO-SPEC-CHANGE-001), and the canonical JSON Schema are stable and
-  frozen. Future changes are errata or a new version.
+  frozen only by the verified release tag. Future tagged-artifact changes require errata or a new version.
 - v1.2 is protocol-compatible with v1.0/v1.1: zero breaking changes;
-  all previously recorded events remain valid and verifiable.
+  historical v1.0/v1.1 events retain their original validation context. Untagged v1.2 ERASURE migration is explicitly breaking (Annex §3.4.3).
 - An IETF SCITT profile aligned with v1.2 exists as an individual
   Internet-Draft ([draft-kamimura-scitt-vcp](https://datatracker.ietf.org/doc/draft-kamimura-scitt-vcp/)).
 
@@ -89,8 +89,8 @@ Assessment Bodies (CABs), not by VSO.
 | Language | File | Status |
 |----------|------|--------|
 | 🇬🇧 English | [VCP-Specification-v1_2_en.md](VCP-Specification-v1_2_en.md) | Production Ready (normative) |
-| 📎 Change Proposal (normative annex) | [VSO-SPEC-CHANGE-001.md](VSO-SPEC-CHANGE-001.md) | Adopted into v1.2 (Rev. 3); prevails over the specification text where they differ |
-| 🧩 JSON Schema | [vcp-event-v1.2.json](vcp-event-v1.2.json) | Canonical copy (served at https://veritaschain.org/schema/vcp-event-v1.2.json) |
+| 📎 Change Proposal (normative annex) | [VSO-SPEC-CHANGE-001.md](VSO-SPEC-CHANGE-001.md) | Adopted into v1.2 (Rev. 3 + 2026-10-09 correction); prevails over the specification text where they differ |
+| 🧩 JSON Schema | [vcp-event-v1.2.json](vcp-event-v1.2.json) | Canonical source; website copy must match at release (https://veritaschain.org/schema/vcp-event-v1.2.json) |
 | 🇯🇵 日本語 | [VCP-Specification-v1_2_ja.md](VCP-Specification-v1_2_ja.md) | Translation (convenience only; English prevails) |
 | 🇨🇳 中文 | [VCP-Specification-v1_2_zh.md](VCP-Specification-v1_2_zh.md) | Translation (convenience only; English prevails) |
 | 📄 PDF | VCP-Specification-v1_2_en.pdf | Planned |

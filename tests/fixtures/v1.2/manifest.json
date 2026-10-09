@@ -1,0 +1,421 @@
+[
+  {
+    "file": "valid/erasure.json",
+    "contract": "ga",
+    "valid": true
+  },
+  {
+    "file": "valid/erasure-gdpr_art_17_1a.json",
+    "contract": "ga",
+    "valid": true
+  },
+  {
+    "file": "valid/erasure-gdpr_art_17_1b.json",
+    "contract": "ga",
+    "valid": true
+  },
+  {
+    "file": "valid/erasure-gdpr_art_17_1c.json",
+    "contract": "ga",
+    "valid": true
+  },
+  {
+    "file": "valid/erasure-gdpr_art_17_1d.json",
+    "contract": "ga",
+    "valid": true
+  },
+  {
+    "file": "valid/erasure-retention_expired.json",
+    "contract": "ga",
+    "valid": true
+  },
+  {
+    "file": "valid/erasure-court_order.json",
+    "contract": "ga",
+    "valid": true
+  },
+  {
+    "file": "valid/erasure-error_correction.json",
+    "contract": "ga",
+    "valid": true
+  },
+  {
+    "file": "valid/erasure-hsm_zeroize.json",
+    "contract": "ga",
+    "valid": true
+  },
+  {
+    "file": "valid/erasure-secure_delete.json",
+    "contract": "ga",
+    "valid": true
+  },
+  {
+    "file": "valid/existing-init.json",
+    "contract": "ga",
+    "valid": true
+  },
+  {
+    "file": "valid/existing-sig.json",
+    "contract": "ga",
+    "valid": true
+  },
+  {
+    "file": "valid/existing-ord.json",
+    "contract": "ga",
+    "valid": true
+  },
+  {
+    "file": "valid/existing-ack.json",
+    "contract": "ga",
+    "valid": true
+  },
+  {
+    "file": "valid/existing-exe.json",
+    "contract": "ga",
+    "valid": true
+  },
+  {
+    "file": "valid/existing-cxl.json",
+    "contract": "ga",
+    "valid": true
+  },
+  {
+    "file": "valid/existing-mod.json",
+    "contract": "ga",
+    "valid": true
+  },
+  {
+    "file": "valid/existing-rsk.json",
+    "contract": "ga",
+    "valid": true
+  },
+  {
+    "file": "valid/existing-err.json",
+    "contract": "ga",
+    "valid": true
+  },
+  {
+    "file": "valid/existing-hbt.json",
+    "contract": "ga",
+    "valid": true
+  },
+  {
+    "file": "valid/existing-cls.json",
+    "contract": "ga",
+    "valid": true
+  },
+  {
+    "file": "valid/existing-anc.json",
+    "contract": "ga",
+    "valid": true
+  },
+  {
+    "file": "valid/existing-err_conn.json",
+    "contract": "ga",
+    "valid": true
+  },
+  {
+    "file": "valid/existing-err_auth.json",
+    "contract": "ga",
+    "valid": true
+  },
+  {
+    "file": "valid/existing-err_timeout.json",
+    "contract": "ga",
+    "valid": true
+  },
+  {
+    "file": "valid/existing-err_reject.json",
+    "contract": "ga",
+    "valid": true
+  },
+  {
+    "file": "valid/existing-err_parse.json",
+    "contract": "ga",
+    "valid": true
+  },
+  {
+    "file": "valid/existing-err_sync.json",
+    "contract": "ga",
+    "valid": true
+  },
+  {
+    "file": "valid/existing-err_risk.json",
+    "contract": "ga",
+    "valid": true
+  },
+  {
+    "file": "valid/existing-err_system.json",
+    "contract": "ga",
+    "valid": true
+  },
+  {
+    "file": "valid/existing-err_recover.json",
+    "contract": "ga",
+    "valid": true
+  },
+  {
+    "file": "valid/recovery-announce.json",
+    "contract": "ga",
+    "valid": true
+  },
+  {
+    "file": "valid/checkpoint-planned.json",
+    "contract": "ga",
+    "valid": true
+  },
+  {
+    "file": "valid/checkpoint-emergency.json",
+    "contract": "ga",
+    "valid": true
+  },
+  {
+    "file": "valid/audit.json",
+    "contract": "ga",
+    "valid": true
+  },
+  {
+    "file": "valid/anchor-migration.json",
+    "contract": "ga",
+    "valid": true
+  },
+  {
+    "file": "valid/anchor-failover.json",
+    "contract": "ga",
+    "valid": true
+  },
+  {
+    "file": "invalid/announce-missing-module.json",
+    "contract": "ga",
+    "valid": false
+  },
+  {
+    "file": "invalid/checkpoint-missing-module.json",
+    "contract": "ga",
+    "valid": false
+  },
+  {
+    "file": "invalid/audit-missing-module.json",
+    "contract": "ga",
+    "valid": false
+  },
+  {
+    "file": "invalid/migration-missing-module.json",
+    "contract": "ga",
+    "valid": false
+  },
+  {
+    "file": "invalid/failover-missing-module.json",
+    "contract": "ga",
+    "valid": false
+  },
+  {
+    "file": "invalid/unknown-event.json",
+    "contract": "ga",
+    "valid": false
+  },
+  {
+    "file": "invalid/misspelled-event.json",
+    "contract": "ga",
+    "valid": false
+  },
+  {
+    "file": "invalid/erasure-missing-version.json",
+    "contract": "ga",
+    "valid": false
+  },
+  {
+    "file": "invalid/erasure-missing-targetidentifier.json",
+    "contract": "ga",
+    "valid": false
+  },
+  {
+    "file": "invalid/erasure-missing-scope.json",
+    "contract": "ga",
+    "valid": false
+  },
+  {
+    "file": "invalid/erasure-missing-reason.json",
+    "contract": "ga",
+    "valid": false
+  },
+  {
+    "file": "invalid/erasure-missing-authorization.json",
+    "contract": "ga",
+    "valid": false
+  },
+  {
+    "file": "invalid/erasure-missing-cryptoshredding.json",
+    "contract": "ga",
+    "valid": false
+  },
+  {
+    "file": "invalid/erasure-missing-verification.json",
+    "contract": "ga",
+    "valid": false
+  },
+  {
+    "file": "invalid/erasure-empty-targetidentifier.json",
+    "contract": "ga",
+    "valid": false
+  },
+  {
+    "file": "invalid/erasure-empty-scope.json",
+    "contract": "ga",
+    "valid": false
+  },
+  {
+    "file": "invalid/erasure-empty-reason.json",
+    "contract": "ga",
+    "valid": false
+  },
+  {
+    "file": "invalid/erasure-empty-authorization.json",
+    "contract": "ga",
+    "valid": false
+  },
+  {
+    "file": "invalid/erasure-empty-cryptoshredding.json",
+    "contract": "ga",
+    "valid": false
+  },
+  {
+    "file": "invalid/erasure-empty-verification.json",
+    "contract": "ga",
+    "valid": false
+  },
+  {
+    "file": "invalid/erasure-legal-order-alias.json",
+    "contract": "ga",
+    "valid": false
+  },
+  {
+    "file": "invalid/erasure-unknown-method.json",
+    "contract": "ga",
+    "valid": false
+  },
+  {
+    "file": "invalid/erasure-invalid-event-id.json",
+    "contract": "ga",
+    "valid": false
+  },
+  {
+    "file": "invalid/erasure-count-mismatch.json",
+    "contract": "ga",
+    "valid": false,
+    "error_contains": "AffectedEventCount"
+  },
+  {
+    "file": "invalid/erasure-destruction-before-authorization.json",
+    "contract": "ga",
+    "valid": false,
+    "error_contains": "authorization"
+  },
+  {
+    "file": "invalid/erasure-empty-proof.json",
+    "contract": "ga",
+    "valid": false
+  },
+  {
+    "file": "invalid/erasure-legacy-field-alongside-canonical.json",
+    "contract": "ga",
+    "valid": false
+  },
+  {
+    "file": "invalid/erasure-embedded-self-proof.json",
+    "contract": "ga",
+    "valid": false
+  },
+  {
+    "file": "invalid/erasure-root-details.json",
+    "contract": "ga",
+    "valid": false
+  },
+  {
+    "file": "invalid/erasure-wrong-payload-path.json",
+    "contract": "ga",
+    "valid": false
+  },
+  {
+    "file": "invalid/checkpoint-no-notice.json",
+    "contract": "ga",
+    "valid": false
+  },
+  {
+    "file": "invalid/emergency-single-approver.json",
+    "contract": "ga",
+    "valid": false
+  },
+  {
+    "file": "invalid/emergency-duplicate-role.json",
+    "contract": "ga",
+    "valid": false,
+    "error_contains": "distinct"
+  },
+  {
+    "file": "invalid/emergency-short-justification.json",
+    "contract": "ga",
+    "valid": false
+  },
+  {
+    "file": "invalid/emergency-no-incident.json",
+    "contract": "ga",
+    "valid": false
+  },
+  {
+    "file": "invalid/announce-bad-date.json",
+    "contract": "ga",
+    "valid": false
+  },
+  {
+    "file": "invalid/migration-bad-phase.json",
+    "contract": "ga",
+    "valid": false
+  },
+  {
+    "file": "invalid/migration-reversed-overlap.json",
+    "contract": "ga",
+    "valid": false,
+    "error_contains": "overlap"
+  },
+  {
+    "file": "invalid/failover-queued-events-without-id.json",
+    "contract": "ga",
+    "valid": false
+  },
+  {
+    "file": "invalid/failover-override-without-operator.json",
+    "contract": "ga",
+    "valid": false
+  },
+  {
+    "file": "valid/legacy-subject_request.json",
+    "contract": "legacy",
+    "valid": true
+  },
+  {
+    "file": "invalid/legacy-rejected-by-ga-subject_request.json",
+    "contract": "ga",
+    "valid": false
+  },
+  {
+    "file": "valid/legacy-retention_expired.json",
+    "contract": "legacy",
+    "valid": true
+  },
+  {
+    "file": "invalid/legacy-rejected-by-ga-retention_expired.json",
+    "contract": "ga",
+    "valid": false
+  },
+  {
+    "file": "valid/legacy-legal_order.json",
+    "contract": "legacy",
+    "valid": true
+  },
+  {
+    "file": "invalid/legacy-rejected-by-ga-legal_order.json",
+    "contract": "ga",
+    "valid": false
+  }
+]
