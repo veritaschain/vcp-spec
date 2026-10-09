@@ -1,0 +1,62 @@
+{
+  "Header": {
+    "EventID": "019eaf10-0000-7000-8000-000000000001",
+    "TimestampISO": "2026-10-09T00:00:00Z",
+    "TimestampInt": 1791504000000000000,
+    "EventType": "ERASURE",
+    "ActorID": "operator-example",
+    "ChainID": "chain-example",
+    "SequenceNum": 1,
+    "PolicyID": "org.example:fixture"
+  },
+  "Payload": {
+    "VCP-PRIVACY": {
+      "ErasureDetails": {
+        "TargetIdentifier": {
+          "Type": "ACCOUNT",
+          "Hash": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "Salt": "unique-per-erasure-example-salt"
+        },
+        "Scope": {
+          "AffectedEventCount": 1,
+          "FirstAffectedEventID": "019eaf10-0000-7000-8000-000000000002",
+          "LastAffectedEventID": "019eaf10-0000-7000-8000-000000000002",
+          "AffectedFields": [
+            "ClientID"
+          ],
+          "EventIDs": [
+            "019eaf10-0000-7000-8000-000000000002"
+          ]
+        },
+        "Reason": {
+          "Code": "SUBJECT_REQUEST",
+          "Description": "Data subject request",
+          "LegalBasis": "Applicable erasure obligation",
+          "RequestReferenceHash": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+        },
+        "Authorization": {
+          "AuthorizedByRoleID": "privacy-role",
+          "AuthorizerSignature": "fixture-only-not-a-signature",
+          "AuthorizationTimestamp": 1791503999999998000,
+          "DPONotified": true
+        },
+        "CryptoShredding": {
+          "KeyIDHash": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+          "KeyAlgorithm": "AES-256-GCM",
+          "DestructionMethod": "CLOUD_KMS_DESTROY",
+          "DestructionTimestamp": 1791503999999999000,
+          "DestructionCertificate": "fixture-only-not-an-attestation"
+        },
+        "Verification": {
+          "PreErasureEventHash": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+          "PostErasureChainHash": "sha256:ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+          "VerificationEndpoint": "https://example.org/evidence/erasure-1"
+        }
+      }
+    }
+  },
+  "Security": {
+    "EventHash": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "SignAlgo": "ED25519"
+  }
+}

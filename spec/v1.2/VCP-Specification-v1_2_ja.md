@@ -8,6 +8,8 @@
 **ライセンス:** CC BY 4.0 International  
 **ウェブサイト:** https://veritaschain.org
 
+**GA整合性修正 — 2026-10-09:** ERASUREの正規形式・検証条件はタグ未作成のRC／GA前成果物から変更されています（Annex §3.4.3）。以下の「破壊的変更ゼロ」はv1.0/v1.1を対象とし、GA前のv1.2 ERASUREには当てはまりません。署名済み履歴の書換えは禁止です。RC1と技術的に同一ではありません。
+
 ---
 
 ## 改訂履歴
@@ -373,15 +375,32 @@ VCP v1.1は、実装間で一貫したエラー記録を確保するための標
 
 VCP v1.2は、GDPRの消去権（第17条）と追記型・改ざん検知可能な監査証跡とを両立させるため、**ERASURE**イベントタイプを導入します。ERASUREは過去のイベントを削除・書き換えしません。指定された保護対象フィールドの*平文*が、**暗号消去（crypto-shredding、サブジェクト単位のデータ暗号化鍵の破棄）**によって復元不能にされたことを、新たな不変イベントとして記録します。対象イベントの元のEventHash、Merkle包含、外部アンカーは引き続き検証可能なまま保たれます。
 
-| フィールド | 型 | 要件 | 注記 |
-|-----------|----|------|------|
-| `ErasureTargetEventIDs` | ["uuid"] | REQUIRED | 保護対象フィールドが暗号消去されるイベント |
-| `ErasureReason` | enum | REQUIRED | `SUBJECT_REQUEST` \| `RETENTION_EXPIRED` \| `LEGAL_ORDER` |
-| `KeyDestructionProof` | string | REQUIRED | DEKが破棄された証拠（例: HSM/KMSのアテステーション） |
-| `RetentionExemption` | string | OPTIONAL | 保持義務が消去に優先する場合の法的根拠（例: MiFID II第16条(7)） |
-| `OperatorID` | string | REQUIRED | 消去を承認する主体 |
+
+正規の構造化表現は `Payload.VCP-PRIVACY.ErasureDetails` です。以下の7項目は必須です。入れ子フィールドはAnnex §3.4、旧形式の移行は§3.4.3に従います。タグ作成前の簡略形式はGA形式ではありません。
+
+| ErasureDetails member | Requirement |
+|---|---|
+| `Version` | REQUIRED — Annex §3.4 |
+| `TargetIdentifier` | REQUIRED — Annex §3.4 |
+| `Scope` | REQUIRED — Annex §3.4 |
+| `Reason` | REQUIRED — Annex §3.4 |
+| `Authorization` | REQUIRED — Annex §3.4 |
+| `CryptoShredding` | REQUIRED — Annex §3.4 |
+| `Verification` | REQUIRED — Annex §3.4 |
 
 > **適用範囲と法的注記（honest scoping）:** ERASUREは消去義務を支援する*技術的*メカニズム（暗号消去）を提供するものであり、**法的判断ではありません**。暗号消去がGDPR上の「消去」に該当するかは、法域および判例の発展に依存します（cf. 仮名化に関するEDPBガイドライン01/2025、およびCJEU C-413/23 P（2025年9月4日判決）— 仮名化データについて個人データ概念の「相対的」アプローチを確認したもので、暗号消去の第17条「消去」該当性を支持し得るが確定するものではない）。VCPは法的結論を保証しません。また、SEC Rule 17a-4の監査証跡統制のような再現性要件との緊張にも留意が必要です。DEKが破棄されると、設計上、元の平文は**再現不可能**になります。保持義務の例外処理を含む完全な仕様はAnnex §3を参照してください。
+
+#### 3.2.3 System Event Registry (v1.2 GA correction)
+
+| Header.EventType | Required payload location | Meaning |
+|---|---|---|
+| `SYS_RECOVERY_ANNOUNCE` | `Payload.VCP-RECOVERY.Announcement` | Planned CHECKPOINT notice |
+| `SYS_CHECKPOINT` | `Payload.VCP-RECOVERY` | Recorded chain reset with authorized RecoveryAction |
+| `SYS_AUDIT` | `Payload.VCP-GOV.AuditDetails` | Post-incident review |
+| `SYS_ANCHOR_MIGRATION` | `Payload.VCP-ANCHOR.MigrationDetails` | Anchor transition and phase |
+| `SYS_ANCHOR_FAILOVER` | `Payload.VCP-ANCHOR.FailoverDetails` | Anchor failover and queued-event inventory |
+
+Normative structured encoding and runtime requirements: Annex §1.4.10. These five codes are additive; strict pre-GA validators require an update.
 
 ---
 

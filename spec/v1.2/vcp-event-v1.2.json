@@ -2,37 +2,86 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://veritaschain.org/schema/vcp-event-v1.2.json",
   "title": "VeritasChain Protocol (VCP) Event - Version 1.2",
-  "description": "JSON Schema for VCP v1.2 events in the structured Header/Payload/Security encoding. This is the encoding used when a VCP Event is carried as the payload of a SCITT Signed Statement (draft-kamimura-scitt-vcp) and in VCP v1.1+ implementation examples. This schema enforces protocol-level requirements only. Conformance-tier and VC-Certified requirements (for example, mandatory MerkleRoot, MerkleIndex, and AnchorReference under v1.1+ certification, per Specification Section 6.4.1) are Registration Policy and certification matters and are intentionally not enforced here.",
-  "$comment": "Maintainer: VeritasChain Standards Organization (VSO). Source specification: https://github.com/veritaschain/vcp-spec/tree/main/spec/v1.2 . License: CC BY 4.0.",
+  "description": "JSON Schema for VCP v1.2 events in the structured Header/Payload/Security encoding. This is the encoding used when a VCP Event is carried as the payload of a SCITT Signed Statement (draft-kamimura-scitt-vcp) and in VCP v1.1+ implementation examples. This schema checks structured-event syntax, including ERASURE and system event envelopes. It is not a complete protocol-conformance verifier. Conformance-tier and VC-Certified requirements (for example, mandatory MerkleRoot, MerkleIndex, and AnchorReference under v1.1+ certification, per Specification Section 6.4.1) are Registration Policy and certification matters and are intentionally not enforced here.",
+  "$comment": "Maintainer: VeritasChain Standards Organization (VSO). Source specification: https://github.com/veritaschain/vcp-spec/tree/main/spec/v1.2 . License: CC BY 4.0. GA consistency correction 2026-10-09. Schema validation does not verify signatures, key destruction, external anchors, cross-event deadlines or distinct human identities.",
   "type": "object",
-  "required": ["Header", "Payload", "Security"],
+  "required": [
+    "Header",
+    "Payload",
+    "Security"
+  ],
   "additionalProperties": false,
   "properties": {
-    "Header": { "$ref": "#/$defs/Header" },
-    "Payload": { "$ref": "#/$defs/Payload" },
-    "Security": { "$ref": "#/$defs/Security" },
-    "PolicyIdentification": { "$ref": "#/$defs/PolicyIdentification" }
+    "Header": {
+      "$ref": "#/$defs/Header"
+    },
+    "Payload": {
+      "$ref": "#/$defs/Payload"
+    },
+    "Security": {
+      "$ref": "#/$defs/Security"
+    },
+    "PolicyIdentification": {
+      "$ref": "#/$defs/PolicyIdentification"
+    }
   },
   "if": {
-    "required": ["Header"],
+    "required": [
+      "Header"
+    ],
     "properties": {
       "Header": {
-        "required": ["EventType"],
-        "properties": { "EventType": { "const": "ERASURE" } }
+        "required": [
+          "EventType"
+        ],
+        "properties": {
+          "EventType": {
+            "const": "ERASURE"
+          }
+        }
       }
     }
   },
   "then": {
     "properties": {
       "Payload": {
-        "required": ["VCP-PRIVACY"],
+        "required": [
+          "VCP-PRIVACY"
+        ],
         "properties": {
           "VCP-PRIVACY": {
             "required": [
-              "ErasureTargetEventIDs",
-              "ErasureReason",
-              "KeyDestructionProof",
-              "OperatorID"
+              "ErasureDetails"
+            ],
+            "allOf": [
+              {
+                "not": {
+                  "required": [
+                    "ErasureTargetEventIDs"
+                  ]
+                }
+              },
+              {
+                "not": {
+                  "required": [
+                    "ErasureReason"
+                  ]
+                }
+              },
+              {
+                "not": {
+                  "required": [
+                    "KeyDestructionProof"
+                  ]
+                }
+              },
+              {
+                "not": {
+                  "required": [
+                    "OperatorID"
+                  ]
+                }
+              }
             ]
           }
         }
@@ -86,14 +135,35 @@
         "EventType": {
           "type": "string",
           "enum": [
-            "INIT", "SIG", "ORD", "ACK", "EXE", "CXL", "MOD", "RSK",
-            "ERR", "HBT", "CLS", "ANC",
-            "ERR_CONN", "ERR_AUTH", "ERR_TIMEOUT", "ERR_REJECT",
-            "ERR_PARSE", "ERR_SYNC", "ERR_RISK", "ERR_SYSTEM",
+            "INIT",
+            "SIG",
+            "ORD",
+            "ACK",
+            "EXE",
+            "CXL",
+            "MOD",
+            "RSK",
+            "ERR",
+            "HBT",
+            "CLS",
+            "ANC",
+            "ERR_CONN",
+            "ERR_AUTH",
+            "ERR_TIMEOUT",
+            "ERR_REJECT",
+            "ERR_PARSE",
+            "ERR_SYNC",
+            "ERR_RISK",
+            "ERR_SYSTEM",
             "ERR_RECOVER",
-            "ERASURE"
+            "ERASURE",
+            "SYS_RECOVERY_ANNOUNCE",
+            "SYS_CHECKPOINT",
+            "SYS_AUDIT",
+            "SYS_ANCHOR_MIGRATION",
+            "SYS_ANCHOR_FAILOVER"
           ],
-          "description": "VCP v1.2 Event Type Registry: core types (v1.0), standardized error types (v1.1), and ERASURE (v1.2)."
+          "description": "VCP v1.2 event registry, including the five system events in Specification \u00a73.2.3 / Annex \u00a71.4.10."
         },
         "ActorID": {
           "type": "string",
@@ -115,23 +185,34 @@
           "minLength": 1,
           "description": "Registration Policy identifier. SHOULD follow the Issuer Domain + Local ID convention (reverse_domain:local_identifier), for example 'org.veritaschain.policy:gold-v1-2' (Specification Section 5.5.4)."
         },
-        "SCITTAlignment": { "$ref": "#/$defs/SCITTAlignment" }
+        "SCITTAlignment": {
+          "$ref": "#/$defs/SCITTAlignment"
+        }
       }
     },
     "SCITTAlignment": {
       "type": "object",
       "description": "OPTIONAL SCITT alignment object (v1.2). REQUIRED under the VCP_SCITT conformance profile; RECOMMENDED under VCP_REGULATORY.",
-      "required": ["Version", "ConformanceProfile"],
+      "required": [
+        "Version",
+        "ConformanceProfile"
+      ],
       "additionalProperties": false,
       "properties": {
         "Version": {
           "type": "string",
           "description": "VCP specification version governing the alignment semantics.",
-          "examples": ["1.2"]
+          "examples": [
+            "1.2"
+          ]
         },
         "ConformanceProfile": {
           "type": "string",
-          "enum": ["VCP_BASE", "VCP_SCITT", "VCP_REGULATORY"]
+          "enum": [
+            "VCP_BASE",
+            "VCP_SCITT",
+            "VCP_REGULATORY"
+          ]
         },
         "StatementID": {
           "type": "string",
@@ -144,15 +225,24 @@
         "ReceiptFormat": {
           "type": "string",
           "description": "Receipt encoding in use.",
-          "examples": ["COSE_RECEIPT"]
+          "examples": [
+            "COSE_RECEIPT"
+          ]
         },
         "RegistrationPolicy": {
           "type": "object",
           "additionalProperties": false,
           "properties": {
-            "PolicyID": { "type": "string" },
-            "Issuer": { "type": "string" },
-            "IssuedAt": { "type": "integer", "minimum": 0 }
+            "PolicyID": {
+              "type": "string"
+            },
+            "Issuer": {
+              "type": "string"
+            },
+            "IssuedAt": {
+              "type": "integer",
+              "minimum": 0
+            }
           }
         }
       }
@@ -162,7 +252,9 @@
       "minProperties": 1,
       "description": "Domain data organized into VCP-* modules. Module names MUST match ^VCP-[A-Z]+$.",
       "patternProperties": {
-        "^VCP-[A-Z]+$": { "type": "object" }
+        "^VCP-[A-Z]+$": {
+          "type": "object"
+        }
       },
       "additionalProperties": false,
       "properties": {
@@ -170,33 +262,72 @@
           "type": "object",
           "description": "Trading data: orders, executions, modifications, cancellations.",
           "properties": {
-            "OrderID": { "type": "string" },
-            "BrokerOrderID": { "type": "string" },
-            "ExchangeOrderID": { "type": "string" },
-            "Symbol": { "type": "string" },
-            "Side": { "type": "string", "enum": ["BUY", "SELL"] },
+            "OrderID": {
+              "type": "string"
+            },
+            "BrokerOrderID": {
+              "type": "string"
+            },
+            "ExchangeOrderID": {
+              "type": "string"
+            },
+            "Symbol": {
+              "type": "string"
+            },
+            "Side": {
+              "type": "string",
+              "enum": [
+                "BUY",
+                "SELL"
+              ]
+            },
             "OrderType": {
               "type": "string",
-              "enum": ["MARKET", "LIMIT", "STOP", "STOP_LIMIT"]
+              "enum": [
+                "MARKET",
+                "LIMIT",
+                "STOP",
+                "STOP_LIMIT"
+              ]
             },
-            "TimeInForce": { "type": "string" },
-            "Price": { "$ref": "#/$defs/DecimalString" },
-            "Quantity": { "$ref": "#/$defs/DecimalString" },
-            "ExecutedQty": { "$ref": "#/$defs/DecimalString" },
-            "RemainingQty": { "$ref": "#/$defs/DecimalString" },
-            "ExecutionPrice": { "$ref": "#/$defs/DecimalString" },
-            "Commission": { "$ref": "#/$defs/DecimalString" },
-            "Slippage": { "$ref": "#/$defs/DecimalString" },
+            "TimeInForce": {
+              "type": "string"
+            },
+            "Price": {
+              "$ref": "#/$defs/DecimalString"
+            },
+            "Quantity": {
+              "$ref": "#/$defs/DecimalString"
+            },
+            "ExecutedQty": {
+              "$ref": "#/$defs/DecimalString"
+            },
+            "RemainingQty": {
+              "$ref": "#/$defs/DecimalString"
+            },
+            "ExecutionPrice": {
+              "$ref": "#/$defs/DecimalString"
+            },
+            "Commission": {
+              "$ref": "#/$defs/DecimalString"
+            },
+            "Slippage": {
+              "$ref": "#/$defs/DecimalString"
+            },
             "Currency": {
               "type": "string",
               "description": "ISO 4217 currency code."
             },
-            "RejectReason": { "type": "string" },
+            "RejectReason": {
+              "type": "string"
+            },
             "AccountID": {
               "type": "string",
               "description": "MUST be pseudonymized."
             },
-            "ClientID": { "type": "string" },
+            "ClientID": {
+              "type": "string"
+            },
             "VenueID": {
               "type": "string",
               "description": "ISO 10383 MIC code when applicable."
@@ -211,52 +342,87 @@
           "type": "object",
           "description": "Governance data: algorithm parameters, decision factors, operator actions.",
           "properties": {
-            "AlgoID": { "type": "string" },
-            "AlgoVersion": { "type": "string" },
+            "AlgoID": {
+              "type": "string"
+            },
+            "AlgoVersion": {
+              "type": "string"
+            },
             "AlgoType": {
               "type": "string",
-              "enum": ["AI_MODEL", "RULE_BASED", "HYBRID"]
+              "enum": [
+                "AI_MODEL",
+                "RULE_BASED",
+                "HYBRID"
+              ]
             },
-            "ModelHash": { "type": "string" },
+            "ModelHash": {
+              "type": "string"
+            },
             "DecisionFactors": {
-              "type": ["array", "object"],
+              "type": [
+                "array",
+                "object"
+              ],
               "description": "Compact form: array of factor names. Extended form: object per Specification Section 5.1.1."
             },
             "ConfidenceScore": {
-              "type": ["string", "number"],
+              "type": [
+                "string",
+                "number"
+              ],
               "description": "Confidence in [0.0, 1.0]. String encoding is RECOMMENDED for precision (Specification Section 5.1.1)."
             },
-            "RiskCheckPassed": { "type": "boolean" }
+            "RiskCheckPassed": {
+              "type": "boolean"
+            }
           }
         },
         "VCP-PRIVACY": {
           "type": "object",
-          "description": "Privacy metadata: encrypted-field inventory, key references, retention policy, and (v1.2) ERASURE event fields.",
+          "description": "Privacy metadata. ERASURE events MUST carry ErasureDetails; compact pre-GA aliases are rejected. See Annex \u00a73.4.3 for historical compatibility.",
           "properties": {
             "EncryptedFields": {
               "type": "array",
-              "items": { "type": "string" }
+              "items": {
+                "type": "string"
+              }
             },
-            "KeyID": { "type": "string" },
-            "Algorithm": { "type": "string" },
-            "RetentionPolicy": { "type": "string" },
-            "ErasureTargetEventIDs": {
-              "type": "array",
-              "minItems": 1,
-              "items": { "$ref": "#/$defs/UUID" },
-              "description": "Events whose protected fields are crypto-shredded (ERASURE events)."
+            "KeyID": {
+              "type": "string"
             },
-            "ErasureReason": {
-              "type": "string",
-              "enum": ["SUBJECT_REQUEST", "RETENTION_EXPIRED", "LEGAL_ORDER"]
+            "Algorithm": {
+              "type": "string"
             },
-            "KeyDestructionProof": {
-              "type": "string",
-              "description": "Evidence that the DEK was destroyed (for example, an HSM or KMS attestation)."
+            "RetentionPolicy": {
+              "type": "string"
             },
             "RetentionExemption": {
               "type": "string",
               "description": "Legal basis where a retention obligation overrides erasure (for example, MiFID II Article 16(7))."
+            },
+            "ErasureDetails": {
+              "$ref": "#/$defs/ErasureDetails"
+            },
+            "ErasureTargetEventIDs": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "$ref": "#/$defs/UUID"
+              },
+              "description": "Events whose protected fields are crypto-shredded (ERASURE events)."
+            },
+            "ErasureReason": {
+              "type": "string",
+              "enum": [
+                "SUBJECT_REQUEST",
+                "RETENTION_EXPIRED",
+                "LEGAL_ORDER"
+              ]
+            },
+            "KeyDestructionProof": {
+              "type": "string",
+              "description": "Evidence that the DEK was destroyed (for example, an HSM or KMS attestation)."
             },
             "OperatorID": {
               "type": "string",
@@ -276,11 +442,16 @@
     },
     "Security": {
       "type": "object",
-      "required": ["EventHash", "SignAlgo"],
+      "required": [
+        "EventHash",
+        "SignAlgo"
+      ],
       "additionalProperties": false,
       "$comment": "VC-Certified v1.1+ additionally requires MerkleRoot, MerkleIndex, and AnchorReference (Specification Section 6.4.1). Those are certification requirements enforced by Registration Policy, not by this protocol-level schema. In the SCITT Signed Statement encoding, the event signature MAY be carried by the COSE_Sign1 envelope, in which case the Signature field is omitted here.",
       "properties": {
-        "Version": { "type": "string" },
+        "Version": {
+          "type": "string"
+        },
         "EventHash": {
           "type": "string",
           "minLength": 1,
@@ -292,7 +463,12 @@
         },
         "HashAlgo": {
           "type": "string",
-          "enum": ["SHA256", "SHA3_256", "BLAKE3", "SHA3_512"]
+          "enum": [
+            "SHA256",
+            "SHA3_256",
+            "BLAKE3",
+            "SHA3_512"
+          ]
         },
         "Signature": {
           "type": "string",
@@ -316,10 +492,18 @@
         "PQCSignAlgo": {
           "type": "string",
           "description": "Algorithm of PQCSignature.",
-          "examples": ["DILITHIUM2", "FALCON512"]
+          "examples": [
+            "DILITHIUM2",
+            "FALCON512"
+          ]
         },
-        "MerkleRoot": { "type": "string" },
-        "MerkleIndex": { "type": "integer", "minimum": 0 },
+        "MerkleRoot": {
+          "type": "string"
+        },
+        "MerkleIndex": {
+          "type": "integer",
+          "minimum": 0
+        },
         "AnchorRef": {
           "type": "string",
           "description": "Reference to the external anchor location (draft-kamimura-scitt-vcp field name)."
@@ -333,27 +517,967 @@
     "PolicyIdentification": {
       "type": "object",
       "description": "OPTIONAL top-level Policy Identification block (Specification Section 5.5).",
-      "required": ["PolicyID", "ConformanceTier"],
+      "required": [
+        "PolicyID",
+        "ConformanceTier"
+      ],
       "properties": {
-        "Version": { "type": "string" },
-        "PolicyID": { "type": "string", "minLength": 1 },
+        "Version": {
+          "type": "string"
+        },
+        "PolicyID": {
+          "type": "string",
+          "minLength": 1
+        },
         "ConformanceTier": {
           "type": "string",
-          "enum": ["SILVER", "GOLD", "PLATINUM"]
+          "enum": [
+            "SILVER",
+            "GOLD",
+            "PLATINUM"
+          ]
         },
         "RegistrationPolicy": {
           "type": "object",
           "properties": {
-            "Issuer": { "type": "string" },
-            "PolicyURI": { "type": "string" },
-            "EffectiveDate": { "type": "integer" },
-            "ExpirationDate": { "type": "integer" }
+            "Issuer": {
+              "type": "string"
+            },
+            "PolicyURI": {
+              "type": "string"
+            },
+            "EffectiveDate": {
+              "type": "integer"
+            },
+            "ExpirationDate": {
+              "type": "integer"
+            }
           }
         },
         "VerificationDepth": {
           "description": "Declares verification capabilities."
         }
       }
+    },
+    "Approval": {
+      "type": "object",
+      "properties": {
+        "ApproverRoleID": {
+          "type": "string",
+          "minLength": 1
+        },
+        "ApproverSignature": {
+          "type": "string",
+          "minLength": 1
+        },
+        "ApprovalTimestamp": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "required": [
+        "ApproverRoleID",
+        "ApproverSignature",
+        "ApprovalTimestamp"
+      ],
+      "additionalProperties": false
+    },
+    "ErasureDetails": {
+      "type": "object",
+      "properties": {
+        "Version": {
+          "const": "1.2"
+        },
+        "TargetIdentifier": {
+          "type": "object",
+          "properties": {
+            "Type": {
+              "type": "string",
+              "enum": [
+                "ACCOUNT",
+                "SESSION",
+                "EVENT_RANGE"
+              ]
+            },
+            "Hash": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$"
+            },
+            "Salt": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": [
+            "Type",
+            "Hash",
+            "Salt"
+          ],
+          "additionalProperties": false
+        },
+        "Scope": {
+          "type": "object",
+          "properties": {
+            "AffectedEventCount": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "FirstAffectedEventID": {
+              "$ref": "#/$defs/UUID"
+            },
+            "LastAffectedEventID": {
+              "$ref": "#/$defs/UUID"
+            },
+            "AffectedFields": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "string",
+                "minLength": 1
+              },
+              "uniqueItems": true
+            },
+            "EventIDs": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "$ref": "#/$defs/UUID"
+              },
+              "uniqueItems": true
+            }
+          },
+          "required": [
+            "AffectedEventCount",
+            "FirstAffectedEventID",
+            "LastAffectedEventID",
+            "AffectedFields"
+          ],
+          "additionalProperties": false
+        },
+        "Reason": {
+          "type": "object",
+          "properties": {
+            "Code": {
+              "type": "string",
+              "enum": [
+                "GDPR_ART_17_1A",
+                "GDPR_ART_17_1B",
+                "GDPR_ART_17_1C",
+                "GDPR_ART_17_1D",
+                "RETENTION_EXPIRED",
+                "SUBJECT_REQUEST",
+                "COURT_ORDER",
+                "ERROR_CORRECTION"
+              ]
+            },
+            "Description": {
+              "type": "string",
+              "minLength": 1
+            },
+            "LegalBasis": {
+              "type": "string",
+              "minLength": 1
+            },
+            "RequestReferenceHash": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$"
+            }
+          },
+          "required": [
+            "Code",
+            "Description",
+            "LegalBasis",
+            "RequestReferenceHash"
+          ],
+          "additionalProperties": false
+        },
+        "Authorization": {
+          "type": "object",
+          "properties": {
+            "AuthorizedByRoleID": {
+              "type": "string",
+              "minLength": 1
+            },
+            "AuthorizerSignature": {
+              "type": "string",
+              "minLength": 1
+            },
+            "AuthorizationTimestamp": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "ApprovalChain": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "$ref": "#/$defs/Approval"
+              }
+            },
+            "DPONotified": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "AuthorizedByRoleID",
+            "AuthorizerSignature",
+            "AuthorizationTimestamp",
+            "DPONotified"
+          ],
+          "additionalProperties": false
+        },
+        "CryptoShredding": {
+          "type": "object",
+          "properties": {
+            "KeyIDHash": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$"
+            },
+            "KeyAlgorithm": {
+              "type": "string",
+              "minLength": 1
+            },
+            "DestructionMethod": {
+              "type": "string",
+              "enum": [
+                "HSM_ZEROIZE",
+                "SECURE_DELETE",
+                "CLOUD_KMS_DESTROY"
+              ]
+            },
+            "DestructionTimestamp": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "DestructionCertificate": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": [
+            "KeyIDHash",
+            "KeyAlgorithm",
+            "DestructionMethod",
+            "DestructionTimestamp"
+          ],
+          "additionalProperties": false,
+          "if": {
+            "properties": {
+              "DestructionMethod": {
+                "enum": [
+                  "HSM_ZEROIZE",
+                  "CLOUD_KMS_DESTROY"
+                ]
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "DestructionCertificate"
+            ]
+          }
+        },
+        "Verification": {
+          "type": "object",
+          "properties": {
+            "PreErasureEventHash": {
+              "type": "string",
+              "minLength": 1
+            },
+            "PostErasureChainHash": {
+              "type": "string",
+              "minLength": 1
+            },
+            "VerificationEndpoint": {
+              "type": "string",
+              "format": "uri"
+            }
+          },
+          "required": [
+            "PreErasureEventHash",
+            "PostErasureChainHash"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "Version",
+        "TargetIdentifier",
+        "Scope",
+        "Reason",
+        "Authorization",
+        "CryptoShredding",
+        "Verification"
+      ],
+      "additionalProperties": false
+    },
+    "RecoveryAnnouncement": {
+      "type": "object",
+      "properties": {
+        "PlannedRecoveryType": {
+          "const": "CHECKPOINT"
+        },
+        "ScheduledTime": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "Reason": {
+          "type": "string",
+          "minLength": 1
+        },
+        "OperatorID": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "PlannedRecoveryType",
+        "ScheduledTime",
+        "Reason",
+        "OperatorID"
+      ],
+      "additionalProperties": false
+    },
+    "EmergencyOverride": {
+      "type": "object",
+      "properties": {
+        "IsEmergency": {
+          "const": true
+        },
+        "EmergencyJustification": {
+          "type": "string",
+          "minLength": 50
+        },
+        "ApprovalChain": {
+          "type": "array",
+          "minItems": 2,
+          "items": {
+            "$ref": "#/$defs/Approval"
+          }
+        },
+        "IncidentReference": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "IsEmergency",
+        "EmergencyJustification",
+        "ApprovalChain",
+        "IncidentReference"
+      ],
+      "additionalProperties": false
+    },
+    "Checkpoint": {
+      "type": "object",
+      "properties": {
+        "Version": {
+          "const": "1.2"
+        },
+        "RecoveryType": {
+          "const": "CHECKPOINT"
+        },
+        "RecoveryAction": {
+          "type": "object",
+          "properties": {
+            "Method": {
+              "const": "CHECKPOINT"
+            },
+            "OperatorID": {
+              "type": "string",
+              "minLength": 1
+            },
+            "PreAnnouncementEventID": {
+              "$ref": "#/$defs/UUID"
+            },
+            "EmergencyOverride": {}
+          },
+          "required": [
+            "Method",
+            "OperatorID"
+          ],
+          "additionalProperties": false,
+          "oneOf": [
+            {
+              "required": [
+                "PreAnnouncementEventID"
+              ],
+              "properties": {
+                "EmergencyOverride": {
+                  "type": "object",
+                  "properties": {
+                    "IsEmergency": {
+                      "const": false
+                    }
+                  },
+                  "required": [
+                    "IsEmergency"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            },
+            {
+              "required": [
+                "EmergencyOverride"
+              ],
+              "properties": {
+                "EmergencyOverride": {
+                  "$ref": "#/$defs/EmergencyOverride"
+                }
+              },
+              "not": {
+                "required": [
+                  "PreAnnouncementEventID"
+                ]
+              }
+            }
+          ]
+        },
+        "BreakPoint": {
+          "type": "object"
+        },
+        "ChainValidation": {
+          "type": "object"
+        }
+      },
+      "required": [
+        "Version",
+        "RecoveryType",
+        "RecoveryAction"
+      ]
+    },
+    "AuditDetails": {
+      "type": "object",
+      "properties": {
+        "IncidentReference": {
+          "type": "string",
+          "minLength": 1
+        },
+        "CheckpointEventID": {
+          "$ref": "#/$defs/UUID"
+        },
+        "ReviewedAt": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "ReviewerRoleID": {
+          "type": "string",
+          "minLength": 1
+        },
+        "Findings": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "IncidentReference",
+        "CheckpointEventID",
+        "ReviewedAt",
+        "ReviewerRoleID",
+        "Findings"
+      ],
+      "additionalProperties": false
+    },
+    "MigrationDetails": {
+      "type": "object",
+      "properties": {
+        "MigrationID": {
+          "$ref": "#/$defs/UUID"
+        },
+        "Phase": {
+          "type": "string",
+          "enum": [
+            "PLANNED",
+            "START",
+            "CUTOVER",
+            "COMPLETE"
+          ]
+        },
+        "OldAnchorTarget": {
+          "type": "object",
+          "properties": {
+            "Type": {
+              "type": "string",
+              "minLength": 1
+            },
+            "Identifier": {
+              "type": "string",
+              "minLength": 1
+            },
+            "LastAnchorTimestamp": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "Status": {
+              "type": "string",
+              "enum": [
+                "ACTIVE",
+                "LEGACY",
+                "DEPRECATED"
+              ]
+            }
+          },
+          "required": [
+            "Type",
+            "Identifier",
+            "LastAnchorTimestamp",
+            "Status"
+          ],
+          "additionalProperties": false
+        },
+        "NewAnchorTarget": {
+          "type": "object",
+          "properties": {
+            "Type": {
+              "type": "string",
+              "minLength": 1
+            },
+            "Identifier": {
+              "type": "string",
+              "minLength": 1
+            },
+            "FirstAnchorTimestamp": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "Status": {
+              "type": "string",
+              "enum": [
+                "PENDING",
+                "ACTIVE"
+              ]
+            }
+          },
+          "required": [
+            "Type",
+            "Identifier",
+            "FirstAnchorTimestamp",
+            "Status"
+          ],
+          "additionalProperties": false
+        },
+        "Reason": {
+          "type": "object",
+          "properties": {
+            "Code": {
+              "type": "string",
+              "enum": [
+                "PLANNED_UPGRADE",
+                "DISCONTINUATION",
+                "SECURITY",
+                "COST"
+              ]
+            },
+            "Description": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": [
+            "Code",
+            "Description"
+          ],
+          "additionalProperties": false
+        },
+        "DualAnchorPeriod": {
+          "type": "object",
+          "properties": {
+            "StartTimestamp": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "EndTimestamp": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "OverlapEventCount": {
+              "type": "integer",
+              "minimum": 0
+            }
+          },
+          "required": [
+            "StartTimestamp",
+            "EndTimestamp",
+            "OverlapEventCount"
+          ],
+          "additionalProperties": false
+        },
+        "TierSpecificRTO": {
+          "type": "object",
+          "properties": {
+            "Tier": {
+              "type": "string",
+              "enum": [
+                "SILVER",
+                "GOLD",
+                "PLATINUM"
+              ]
+            },
+            "MaxOutageDuration": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "FailoverDeadline": {
+              "type": "integer",
+              "minimum": 0
+            }
+          },
+          "required": [
+            "Tier",
+            "MaxOutageDuration",
+            "FailoverDeadline"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "MigrationID",
+        "Phase",
+        "OldAnchorTarget",
+        "NewAnchorTarget",
+        "Reason",
+        "DualAnchorPeriod",
+        "TierSpecificRTO"
+      ],
+      "additionalProperties": false
+    },
+    "FailoverDetails": {
+      "type": "object",
+      "properties": {
+        "FailoverID": {
+          "$ref": "#/$defs/UUID"
+        },
+        "TriggerCondition": {
+          "type": "object",
+          "properties": {
+            "FailureCount": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "TotalDowntimeSec": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "LastSuccessfulAnchor": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "ErrorCodes": {
+              "type": "array",
+              "minItems": 0,
+              "items": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          },
+          "required": [
+            "FailureCount",
+            "TotalDowntimeSec",
+            "LastSuccessfulAnchor",
+            "ErrorCodes"
+          ],
+          "additionalProperties": false
+        },
+        "PrimaryAnchor": {
+          "type": "object",
+          "properties": {
+            "Type": {
+              "type": "string",
+              "minLength": 1
+            },
+            "Identifier": {
+              "type": "string",
+              "minLength": 1
+            },
+            "LastAttemptTimestamp": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "LastErrorMessage": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": [
+            "Type",
+            "Identifier",
+            "LastAttemptTimestamp",
+            "LastErrorMessage"
+          ],
+          "additionalProperties": false
+        },
+        "SecondaryAnchor": {
+          "type": "object",
+          "properties": {
+            "Type": {
+              "type": "string",
+              "minLength": 1
+            },
+            "Identifier": {
+              "type": "string",
+              "minLength": 1
+            },
+            "ActivationTimestamp": {
+              "type": "integer",
+              "minimum": 0
+            }
+          },
+          "required": [
+            "Type",
+            "Identifier",
+            "ActivationTimestamp"
+          ],
+          "additionalProperties": false
+        },
+        "QueuedEvents": {
+          "type": "object",
+          "properties": {
+            "Count": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "FirstEventID": {
+              "$ref": "#/$defs/UUID"
+            },
+            "LastEventID": {
+              "$ref": "#/$defs/UUID"
+            }
+          },
+          "required": [
+            "Count"
+          ],
+          "additionalProperties": false,
+          "if": {
+            "properties": {
+              "Count": {
+                "minimum": 1
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "FirstEventID",
+              "LastEventID"
+            ]
+          }
+        },
+        "AutomatedDecision": {
+          "type": "boolean"
+        },
+        "OperatorOverride": {
+          "type": "object",
+          "properties": {
+            "Overridden": {
+              "type": "boolean"
+            },
+            "OperatorRoleID": {
+              "type": "string",
+              "minLength": 1
+            },
+            "Justification": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": [
+            "Overridden"
+          ],
+          "additionalProperties": false,
+          "if": {
+            "properties": {
+              "Overridden": {
+                "const": true
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "OperatorRoleID",
+              "Justification"
+            ]
+          }
+        }
+      },
+      "required": [
+        "FailoverID",
+        "TriggerCondition",
+        "PrimaryAnchor",
+        "SecondaryAnchor",
+        "QueuedEvents",
+        "AutomatedDecision",
+        "OperatorOverride"
+      ],
+      "additionalProperties": false
     }
-  }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "Header": {
+            "properties": {
+              "EventType": {
+                "const": "SYS_RECOVERY_ANNOUNCE"
+              }
+            }
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "Payload": {
+            "required": [
+              "VCP-RECOVERY"
+            ],
+            "properties": {
+              "VCP-RECOVERY": {
+                "type": "object",
+                "properties": {
+                  "Announcement": {
+                    "$ref": "#/$defs/RecoveryAnnouncement"
+                  }
+                },
+                "required": [
+                  "Announcement"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "Header": {
+            "properties": {
+              "EventType": {
+                "const": "SYS_CHECKPOINT"
+              }
+            }
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "Payload": {
+            "required": [
+              "VCP-RECOVERY"
+            ],
+            "properties": {
+              "VCP-RECOVERY": {
+                "$ref": "#/$defs/Checkpoint"
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "Header": {
+            "properties": {
+              "EventType": {
+                "const": "SYS_AUDIT"
+              }
+            }
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "Payload": {
+            "required": [
+              "VCP-GOV"
+            ],
+            "properties": {
+              "VCP-GOV": {
+                "type": "object",
+                "properties": {
+                  "AuditDetails": {
+                    "$ref": "#/$defs/AuditDetails"
+                  }
+                },
+                "required": [
+                  "AuditDetails"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "Header": {
+            "properties": {
+              "EventType": {
+                "const": "SYS_ANCHOR_MIGRATION"
+              }
+            }
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "Payload": {
+            "required": [
+              "VCP-ANCHOR"
+            ],
+            "properties": {
+              "VCP-ANCHOR": {
+                "type": "object",
+                "properties": {
+                  "MigrationDetails": {
+                    "$ref": "#/$defs/MigrationDetails"
+                  }
+                },
+                "required": [
+                  "MigrationDetails"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "Header": {
+            "properties": {
+              "EventType": {
+                "const": "SYS_ANCHOR_FAILOVER"
+              }
+            }
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "Payload": {
+            "required": [
+              "VCP-ANCHOR"
+            ],
+            "properties": {
+              "VCP-ANCHOR": {
+                "type": "object",
+                "properties": {
+                  "FailoverDetails": {
+                    "$ref": "#/$defs/FailoverDetails"
+                  }
+                },
+                "required": [
+                  "FailoverDetails"
+                ]
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
 }

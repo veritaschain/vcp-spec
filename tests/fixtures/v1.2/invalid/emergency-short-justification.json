@@ -1,0 +1,43 @@
+{
+  "Header": {
+    "EventID": "019eaf10-0000-7000-8000-000000000001",
+    "TimestampISO": "2026-10-09T00:00:00Z",
+    "TimestampInt": 1791504000000000000,
+    "EventType": "SYS_CHECKPOINT",
+    "ActorID": "operator-example",
+    "ChainID": "chain-example",
+    "SequenceNum": 1,
+    "PolicyID": "org.example:fixture"
+  },
+  "Payload": {
+    "VCP-RECOVERY": {
+      "Version": "1.2",
+      "RecoveryType": "CHECKPOINT",
+      "RecoveryAction": {
+        "Method": "CHECKPOINT",
+        "OperatorID": "ops-role",
+        "EmergencyOverride": {
+          "IsEmergency": true,
+          "EmergencyJustification": "failed",
+          "ApprovalChain": [
+            {
+              "ApproverRoleID": "security-role",
+              "ApproverSignature": "fixture-only-not-a-signature",
+              "ApprovalTimestamp": 1791503999999999000
+            },
+            {
+              "ApproverRoleID": "senior-ops-role",
+              "ApproverSignature": "fixture-only-not-a-signature",
+              "ApprovalTimestamp": 1791503999999999000
+            }
+          ],
+          "IncidentReference": "INC-example-1"
+        }
+      }
+    }
+  },
+  "Security": {
+    "EventHash": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "SignAlgo": "ED25519"
+  }
+}

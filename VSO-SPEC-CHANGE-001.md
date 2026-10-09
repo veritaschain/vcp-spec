@@ -3,7 +3,7 @@
 ## VeritasChain Protocol Specification Update
 
 **Document ID:** VSO-SPEC-CHANGE-001  
-**Status:** ADOPTED (Revision 3) — Normative Annex to VCP v1.2  
+**Status:** ADOPTED (Revision 3, GA consistency correction 2026-10-09) — Normative Annex to VCP v1.2
 **Date:** 2026-01-06  
 **Target Version:** 1.2  
 **Adopted:** 2026-05-31 (v1.2 RC1); GA 2026-07-06  
@@ -16,6 +16,7 @@
 
 | Version | Date | Changes |
 |---------|------|---------|
+| 1.2-ga-correction | 2026-10-09 | Canonical system event registry and payload mapping; ERASURE nested encoding and explicit pre-GA migration; bounded CHECKPOINT/storage guidance; detached erasure proofs |
 | 1.2-draft-03 | 2026-01-06 | Silver Tier implementation guidance, CAB audit requirements for Emergency Override, Failover automation criteria, Implementation cost estimates, Phased adoption roadmap |
 | 1.2-draft-02 | 2026-01-06 | Normative count fixed, blockchain criteria harmonized, CHECKPOINT emergency override added, tier-specific RTO/RPO, privacy guidance for ERASURE |
 | 1.2-draft-01 | 2026-01-06 | Initial draft with all 9 proposed changes |
@@ -32,7 +33,7 @@ VCP v1.2 is a **Protocol-Compatible / Certification-Stricter** update that addre
 |----------|-------|--------|
 | Normative (REQUIRED) | 7 | Certification requirements tightened |
 | Informative (RECOMMENDED) | 2 | Documentation improvements |
-| Breaking Changes | 0 | Full backward compatibility maintained |
+| Pre-GA compatibility | See §3.4.3 | Canonical ERASURE changes the untagged compact encoding; system events are additive |
 
 > **Note**: Multi-Actor Chain Linking (§9) is classified as Normative because when used, it imposes MUST-level requirements. However, its adoption remains OPTIONAL.
 
@@ -308,6 +309,44 @@ All Emergency Override instances MUST be documented in the annual VC-Certified a
 3. Post-Incident Review outcome
 4. Remediation actions taken
 
+#### 1.4.10 Canonical structured system events (2026-10-09)
+
+The following codes are registered verbatim; they are not aliases for ERR_RECOVER,
+HBT, or ANC. Event names in workflow diagrams are conceptual shorthand. On the
+wire, EventType MUST be in Header and data MUST be in the locations below.
+
+| Header.EventType | Required payload location | Meaning |
+|---|---|---|
+| `SYS_RECOVERY_ANNOUNCE` | `Payload.VCP-RECOVERY.Announcement` | Planned CHECKPOINT notice |
+| `SYS_CHECKPOINT` | `Payload.VCP-RECOVERY` | Recorded chain reset with authorized RecoveryAction |
+| `SYS_AUDIT` | `Payload.VCP-GOV.AuditDetails` | Post-incident review |
+| `SYS_ANCHOR_MIGRATION` | `Payload.VCP-ANCHOR.MigrationDetails` | Anchor transition and phase |
+| `SYS_ANCHOR_FAILOVER` | `Payload.VCP-ANCHOR.FailoverDetails` | Anchor failover and queued-event inventory |
+
+RecoveryAction (including EmergencyOverride) MUST be nested under VCP-RECOVERY.
+SYS_CHECKPOINT requires Version `1.2`, RecoveryType/RecoveryAction.Method
+`CHECKPOINT`, OperatorID, and exactly one authorization route: a
+PreAnnouncementEventID (optionally IsEmergency=false), or EmergencyOverride=true
+with justification, incident reference and at least two signed approvals.
+ApproverRoleIDs MUST be distinct and MUST resolve to different individuals;
+distinct role strings alone do not prove two-person authorization. Approval times
+MUST NOT follow the checkpoint timestamp. Normal references MUST resolve to an
+authentic notice satisfying §1.4.6 (24h maintenance / 72h migration).
+Emergency reviews MUST resolve to a SYS_AUDIT record within 72 hours.
+
+Announcement requires PlannedRecoveryType, ScheduledTime, Reason and OperatorID.
+AuditDetails requires IncidentReference, CheckpointEventID, ReviewedAt,
+ReviewerRoleID and Findings. MigrationDetails and FailoverDetails are defined in
+§7.5 and §7.8.3. All fields in those complete examples are required except:
+QueuedEvents first/last IDs may be absent when Count=0; OperatorOverride role and
+justification may be absent when Overridden=false. Migration overlap start MUST
+NOT follow its end. See `vcp-event-v1.2.json` for machine-checkable types.
+
+Schema validation cannot check advance notice, the identity behind a role,
+approval signatures, post-incident review deadlines, chain bounds or actual anchor
+availability. Those remain mandatory runtime/auditor checks. Fixtures are syntax
+examples, not certificates of operational conformity.
+
 ### 1.5 Migration Impact
 
 | Existing Implementation | Required Action |
@@ -477,59 +516,111 @@ VCP-PRIVACY defines crypto-shredding conceptually, but lacks a formal event type
 
 ### 3.4 ERASURE Event Schema
 
+For the structured Header/Payload/Security encoding, an ERASURE event MUST use
+`Payload.VCP-PRIVACY.ErasureDetails`. `ErasureDetails` at the event root or directly
+under Payload is invalid. The canonical schema is `vcp-event-v1.2.json`.
+The seven members below are REQUIRED; there is no parallel compact representation.
+
+| Field within ErasureDetails | Requirement |
+|---|---|
+| `Version` | Literal `1.2` |
+| `TargetIdentifier` | `Type` (ACCOUNT, SESSION, EVENT_RANGE), salted SHA-256 `Hash`, `Salt` |
+| `Scope` | Positive `AffectedEventCount`, first/last affected UUIDs, nonempty unique `AffectedFields` |
+| `Reason` | §3.4.1 `Code`, nonempty `Description`, `LegalBasis`, SHA-256 `RequestReferenceHash` |
+| `Authorization` | Role ID, signature, nanosecond timestamp, `DPONotified`; optional nonempty approval chain |
+| `CryptoShredding` | Key-ID SHA-256 hash, algorithm, §3.4.2 method, nanosecond destruction timestamp |
+| `Verification` | `PreErasureEventHash`, `PostErasureChainHash`; optional verification endpoint |
+
+All timestamps in this structured encoding are integer nanoseconds since the Unix
+epoch, except explicitly ISO/RFC 3339 fields; durations named `*Sec` and
+`MaxOutageDuration` are seconds. `Header.TimestampInt` replaces the shorthand
+`Timestamp` used in older conceptual diagrams.
+
+`Scope.EventIDs` MAY enumerate the exact affected set in chain order. When present,
+its unique IDs, count and first/last IDs MUST agree. Without it, the verifier MUST
+resolve the range and affected fields against the source chain; it MUST NOT infer
+a contiguous range merely from unrelated UUIDs. Authorization MUST precede or equal
+destruction, which MUST precede or equal the ERASURE event timestamp.
+HSM/KMS destruction requires a nonempty `DestructionCertificate`; a secure-delete
+implementation MUST supply independent software verification evidence.
+The schema/fixtures check evidence structure, not the truth of destruction.
+
+`Verification.PreErasureEventHash` identifies the last affected event and
+`PostErasureChainHash` identifies a chain state recorded after destruction but
+before this ERASURE event. Neither may depend on this event's own hash.
+The ERASURE event's Merkle inclusion proof MUST be detached (Evidence Pack / receipt),
+not embedded in its own hashed Payload. The verifier retrieves it by EventID.
+Signatures, key destruction, range resolution, chain continuity, external anchors,
+legal basis and retention overrides require independent verification; JSON Schema
+success does not establish them. Where retention prevents deletion, do not emit a
+successful ERASURE event for data that remains decryptable.
+
+The following is a complete **syntax fixture**. Hashes, signatures and certificates
+are placeholders, not cryptographic test vectors or evidence of an actual erasure.
+
+<!-- canonical-event -->
 ```json
 {
   "Header": {
-    "EventID": "uuid-v7",
+    "EventID": "019eaf10-0000-7000-8000-000000000001",
+    "TimestampISO": "2026-10-09T00:00:00Z",
+    "TimestampInt": 1791504000000000000,
     "EventType": "ERASURE",
-    "Timestamp": "int64",
-    "TimestampISO": "string"
+    "ActorID": "operator-example",
+    "ChainID": "chain-example",
+    "SequenceNum": 1,
+    "PolicyID": "org.example:fixture"
   },
-  "ErasureDetails": {
-    "Version": "1.2",
-    "TargetIdentifier": {
-      "Type": "enum",                    // ACCOUNT | SESSION | EVENT_RANGE
-      "Hash": "string",                  // SHA-256 hash of original identifier
-      "Salt": "string"                   // Per-erasure salt for privacy
-    },
-    "Scope": {
-      "AffectedEventCount": "int32",
-      "FirstAffectedEventID": "uuid",
-      "LastAffectedEventID": "uuid",
-      "AffectedFields": ["string"]       // e.g., ["ClientID", "AccountID"]
-    },
-    "Reason": {
-      "Code": "enum",                    // See 3.4.1
-      "Description": "string",
-      "LegalBasis": "string",            // e.g., "GDPR Art. 17(1)(a)"
-      "RequestReferenceHash": "string"   // REVISED: Hash of ticket/case number
-    },
-    "Authorization": {
-      "AuthorizedByRoleID": "string",    // REVISED: Role ID, not personal name
-      "AuthorizerSignature": "string",   // Cryptographic signature
-      "AuthorizationTimestamp": "int64",
-      "ApprovalChain": [                 // For multi-party approval
-        {
-          "ApproverRoleID": "string",
-          "ApproverSignature": "string",
-          "ApprovalTimestamp": "int64"
+  "Payload": {
+    "VCP-PRIVACY": {
+      "ErasureDetails": {
+        "Version": "1.2",
+        "TargetIdentifier": {
+          "Type": "ACCOUNT",
+          "Hash": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "Salt": "unique-per-erasure-example-salt"
+        },
+        "Scope": {
+          "AffectedEventCount": 1,
+          "FirstAffectedEventID": "019eaf10-0000-7000-8000-000000000002",
+          "LastAffectedEventID": "019eaf10-0000-7000-8000-000000000002",
+          "AffectedFields": [
+            "ClientID"
+          ],
+          "EventIDs": [
+            "019eaf10-0000-7000-8000-000000000002"
+          ]
+        },
+        "Reason": {
+          "Code": "SUBJECT_REQUEST",
+          "Description": "Data subject request",
+          "LegalBasis": "Applicable erasure obligation",
+          "RequestReferenceHash": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+        },
+        "Authorization": {
+          "AuthorizedByRoleID": "privacy-role",
+          "AuthorizerSignature": "fixture-only-not-a-signature",
+          "AuthorizationTimestamp": 1791503999999998000,
+          "DPONotified": true
+        },
+        "CryptoShredding": {
+          "KeyIDHash": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+          "KeyAlgorithm": "AES-256-GCM",
+          "DestructionMethod": "CLOUD_KMS_DESTROY",
+          "DestructionTimestamp": 1791503999999999000,
+          "DestructionCertificate": "fixture-only-not-an-attestation"
+        },
+        "Verification": {
+          "PreErasureEventHash": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+          "PostErasureChainHash": "sha256:ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+          "VerificationEndpoint": "https://example.org/evidence/erasure-1"
         }
-      ],
-      "DPONotified": "boolean"           // Data Protection Officer notification
-    },
-    "CryptoShredding": {
-      "KeyIDHash": "string",             // SHA-256 of destroyed key ID
-      "KeyAlgorithm": "string",          // e.g., "AES-256-GCM"
-      "DestructionMethod": "enum",       // HSM_ZEROIZE | SECURE_DELETE | CLOUD_KMS_DESTROY
-      "DestructionTimestamp": "int64",
-      "DestructionCertificate": "string" // HSM attestation if available
-    },
-    "Verification": {
-      "PreErasureEventHash": "string",   // Hash of last affected event
-      "PostErasureChainHash": "string",  // Hash proving chain continuity
-      "MerkleProof": ["string"],         // Inclusion proof for ERASURE event
-      "VerificationEndpoint": "string"   // URL for third-party verification
+      }
     }
+  },
+  "Security": {
+    "EventHash": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "SignAlgo": "ED25519"
   }
 }
 ```
@@ -555,6 +646,40 @@ VCP-PRIVACY defines crypto-shredding conceptually, but lacks a formal event type
 | **SECURE_DELETE** | Gold, Silver | Software verification + timestamp |
 | **CLOUD_KMS_DESTROY** | All tiers | Cloud provider deletion confirmation |
 
+#### 3.4.3 Pre-GA compatibility and migration (2026-10-09)
+
+The pre-tag compact encoding and the former root-level Annex sketch were
+inconsistent; they are not alternate GA encodings. Existing signed records MUST
+retain their original bytes and original validation context. The historical
+`vcp-event-v1.2-rc-legacy.json` preserves the pre-fix compact schema's acceptance
+rules for archival reads only. New producers MUST use the canonical nested form.
+Consumers MUST select the historical contract explicitly from trusted provenance;
+they MUST NOT retry an invalid GA event against the legacy schema as a downgrade.
+
+| Historical compact field | Canonical destination / migration limit |
+|---|---|
+| `ErasureTargetEventIDs` | `Scope.EventIDs`; derive count/endpoints only after validating source chain order and exact affected set |
+| `ErasureReason: SUBJECT_REQUEST` | `Reason.Code: SUBJECT_REQUEST` (do not infer a GDPR subparagraph) |
+| `ErasureReason: RETENTION_EXPIRED` | `Reason.Code: RETENTION_EXPIRED` |
+| `ErasureReason: LEGAL_ORDER` | `COURT_ORDER` only with evidence that it was a court order; other legal orders require case-specific justification under an applicable registered reason, otherwise no automatic conversion |
+| `KeyDestructionProof` | `CryptoShredding.DestructionCertificate` only when the original artifact is an applicable destruction attestation; otherwise retain it as detached evidence |
+| `OperatorID` | `Authorization.AuthorizedByRoleID` only after role identity is verified |
+| `RetentionExemption` | Retain as privacy metadata / legal context; it cannot certify successful deletion |
+
+Compact events lack required target hashes/salt, affected fields, authorization
+signature/time, destruction method/time and chain evidence. A total lossless
+automatic conversion is therefore **not defined**. A new canonical event may be
+issued only from verified source evidence, with a fresh EventID, hash and signature;
+the original record remains unchanged. No missing evidence may be synthesized.
+The old root-level Annex sketch may be decoded for historical inspection but was
+never accepted by the compact schema; it is not accepted by the GA schema either.
+
+This is a **wire-format and validation change from the untagged v1.2 RC / pre-GA
+artifacts**, not an editorial-only release. Pre-GA ERASURE serializers and strict
+event-enum validators must be updated. Ordinary non-ERASURE events keep their
+previous schema rules; the five SYS_* codes are additive, and older validators
+will reject them. Historical v1.0/v1.1 data is verified under its original encoding.
+
 ### 3.5 Privacy Guidance for ERASURE Events (NEW in v1.2-draft-02)
 
 > **IMPORTANT**: ERASURE events themselves may inadvertently contain personal data. Follow these guidelines:
@@ -570,13 +695,15 @@ VCP-PRIVACY defines crypto-shredding conceptually, but lacks a formal event type
 **Implementation Pattern:**
 
 ```python
-def create_erasure_event(
+def create_erasure_details_fragment(
     request_ticket: str,
     authorizer_email: str,
     subject_account_id: str
 ) -> dict:
     """
-    Create ERASURE event with privacy-preserving identifiers.
+    Build privacy-sensitive fields for Payload.VCP-PRIVACY.ErasureDetails.
+    Merge with verified Scope/CryptoShredding/Verification evidence before signing.
+    This fragment alone is NOT a valid event.
     """
     import hashlib
     import secrets
@@ -585,6 +712,7 @@ def create_erasure_event(
     salt = secrets.token_hex(16)
     
     return {
+        # Fragment only; canonical placement is Payload.VCP-PRIVACY.ErasureDetails.
         "ErasureDetails": {
             "TargetIdentifier": {
                 "Type": "ACCOUNT",
@@ -618,7 +746,8 @@ def create_erasure_event(
 def verify_erasure_event(
     erasure_event: dict,
     chain: VCPChain,
-    anchor_service: AnchorService
+    anchor_service: AnchorService,
+    evidence_pack: EvidencePack
 ) -> VerificationResult:
     """
     Auditor verification procedure for ERASURE events.
@@ -626,6 +755,8 @@ def verify_erasure_event(
     Returns: VerificationResult with status and evidence
     """
     
+    # Precondition: validate canonical schema, authorizations, destruction evidence
+    # and legal/retention scope independently; this outline is not a full verifier.
     # Step 1: Verify ERASURE event exists in chain
     if not chain.contains_event(erasure_event["Header"]["EventID"]):
         return VerificationResult(
@@ -634,7 +765,7 @@ def verify_erasure_event(
         )
     
     # Step 2: Verify ERASURE event's Merkle inclusion proof
-    merkle_proof = erasure_event["ErasureDetails"]["Verification"]["MerkleProof"]
+    merkle_proof = evidence_pack.get_merkle_proof(erasure_event["Header"]["EventID"])
     if not verify_merkle_proof(erasure_event, merkle_proof):
         return VerificationResult(
             status="FAILED",
@@ -642,8 +773,8 @@ def verify_erasure_event(
         )
     
     # Step 3: Verify chain continuity (hash chain not broken)
-    pre_hash = erasure_event["ErasureDetails"]["Verification"]["PreErasureEventHash"]
-    post_hash = erasure_event["ErasureDetails"]["Verification"]["PostErasureChainHash"]
+    pre_hash = erasure_event["Payload"]["VCP-PRIVACY"]["ErasureDetails"]["Verification"]["PreErasureEventHash"]
+    post_hash = erasure_event["Payload"]["VCP-PRIVACY"]["ErasureDetails"]["Verification"]["PostErasureChainHash"]
     if not chain.verify_continuity(pre_hash, post_hash):
         return VerificationResult(
             status="FAILED",
@@ -661,11 +792,11 @@ def verify_erasure_event(
     
     # Step 5: Verify affected events are now inaccessible
     affected_events = chain.get_events_in_range(
-        erasure_event["ErasureDetails"]["Scope"]["FirstAffectedEventID"],
-        erasure_event["ErasureDetails"]["Scope"]["LastAffectedEventID"]
+        erasure_event["Payload"]["VCP-PRIVACY"]["ErasureDetails"]["Scope"]["FirstAffectedEventID"],
+        erasure_event["Payload"]["VCP-PRIVACY"]["ErasureDetails"]["Scope"]["LastAffectedEventID"]
     )
     for event in affected_events:
-        if is_decryptable(event, erasure_event["ErasureDetails"]["CryptoShredding"]):
+        if is_decryptable(event, erasure_event["Payload"]["VCP-PRIVACY"]["ErasureDetails"]["CryptoShredding"]):
             return VerificationResult(
                 status="FAILED",
                 reason="Affected data still accessible",
@@ -675,9 +806,9 @@ def verify_erasure_event(
     # All checks passed
     return VerificationResult(
         status="LEGITIMATELY_ERASED",
-        erasure_timestamp=erasure_event["ErasureDetails"]["Authorization"]["AuthorizationTimestamp"],
-        authorized_by=erasure_event["ErasureDetails"]["Authorization"]["AuthorizedByRoleID"],
-        key_destroyed=erasure_event["ErasureDetails"]["CryptoShredding"]["KeyIDHash"],
+        erasure_timestamp=erasure_event["Payload"]["VCP-PRIVACY"]["ErasureDetails"]["Authorization"]["AuthorizationTimestamp"],
+        authorized_by=erasure_event["Payload"]["VCP-PRIVACY"]["ErasureDetails"]["Authorization"]["AuthorizedByRoleID"],
+        key_destroyed=erasure_event["Payload"]["VCP-PRIVACY"]["ErasureDetails"]["CryptoShredding"]["KeyIDHash"],
         anchor_reference=anchor_ref,
         evidence={
             "merkle_proof": merkle_proof,
@@ -1072,41 +1203,62 @@ Given different anchor frequencies across tiers, response requirements MUST be p
 
 ### 7.5 Migration Event Schema
 
+Complete structured syntax fixture; cryptographic evidence is illustrative.
+
+<!-- canonical-event -->
 ```json
 {
-  "EventType": "SYS_ANCHOR_MIGRATION",
-  "MigrationDetails": {
-    "MigrationID": "uuid",
-    "Phase": "enum",                    // PLANNED | START | CUTOVER | COMPLETE
-    "OldAnchorTarget": {
-      "Type": "string",
-      "Identifier": "string",
-      "LastAnchorTimestamp": "int64",
-      "Status": "enum"                  // ACTIVE | LEGACY | DEPRECATED
-    },
-    "NewAnchorTarget": {
-      "Type": "string",
-      "Identifier": "string",
-      "FirstAnchorTimestamp": "int64",
-      "Status": "enum"                  // PENDING | ACTIVE
-    },
-    "Reason": {
-      "Code": "enum",                   // PLANNED_UPGRADE | DISCONTINUATION | SECURITY | COST
-      "Description": "string"
-    },
-    "DualAnchorPeriod": {
-      "StartTimestamp": "int64",
-      "EndTimestamp": "int64",
-      "OverlapEventCount": "int32"
-    },
-    "TierSpecificRTO": {
-      "Tier": "enum",
-      "MaxOutageDuration": "int64",
-      "FailoverDeadline": "int64"
+  "Header": {
+    "EventID": "019eaf10-0000-7000-8000-000000000001",
+    "TimestampISO": "2026-10-09T00:00:00Z",
+    "TimestampInt": 1791504000000000000,
+    "EventType": "SYS_ANCHOR_MIGRATION",
+    "ActorID": "operator-example",
+    "ChainID": "chain-example",
+    "SequenceNum": 1,
+    "PolicyID": "org.example:fixture"
+  },
+  "Payload": {
+    "VCP-ANCHOR": {
+      "MigrationDetails": {
+        "MigrationID": "019eaf10-0000-7000-8000-000000000002",
+        "Phase": "START",
+        "OldAnchorTarget": {
+          "Type": "TSA",
+          "Identifier": "old.example",
+          "LastAnchorTimestamp": 1791503999999997000,
+          "Status": "ACTIVE"
+        },
+        "NewAnchorTarget": {
+          "Type": "TSA",
+          "Identifier": "new.example",
+          "FirstAnchorTimestamp": 1791503999999998000,
+          "Status": "ACTIVE"
+        },
+        "Reason": {
+          "Code": "PLANNED_UPGRADE",
+          "Description": "Planned anchor replacement"
+        },
+        "DualAnchorPeriod": {
+          "StartTimestamp": 1791503999999998000,
+          "EndTimestamp": 1791504000001000000,
+          "OverlapEventCount": 1
+        },
+        "TierSpecificRTO": {
+          "Tier": "SILVER",
+          "MaxOutageDuration": 172800,
+          "FailoverDeadline": 1791504000001000000
+        }
+      }
     }
+  },
+  "Security": {
+    "EventHash": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "SignAlgo": "ED25519"
   }
 }
 ```
+
 
 ### 7.6 Fallback Strategy
 
@@ -1188,42 +1340,63 @@ AnchorRecordRetention:
 
 #### 7.8.3 Failover Event Schema
 
+Complete structured syntax fixture; cryptographic evidence is illustrative.
+
+<!-- canonical-event -->
 ```json
 {
-  "EventType": "SYS_ANCHOR_FAILOVER",
-  "FailoverDetails": {
-    "FailoverID": "uuid",
-    "TriggerCondition": {
-      "FailureCount": "int32",
-      "TotalDowntimeSec": "int64",
-      "LastSuccessfulAnchor": "int64",
-      "ErrorCodes": ["string"]
-    },
-    "PrimaryAnchor": {
-      "Type": "string",
-      "Identifier": "string",
-      "LastAttemptTimestamp": "int64",
-      "LastErrorMessage": "string"
-    },
-    "SecondaryAnchor": {
-      "Type": "string",
-      "Identifier": "string",
-      "ActivationTimestamp": "int64"
-    },
-    "QueuedEvents": {
-      "Count": "int32",
-      "FirstEventID": "uuid",
-      "LastEventID": "uuid"
-    },
-    "AutomatedDecision": "boolean",
-    "OperatorOverride": {
-      "Overridden": "boolean",
-      "OperatorRoleID": "string",
-      "Justification": "string"
+  "Header": {
+    "EventID": "019eaf10-0000-7000-8000-000000000001",
+    "TimestampISO": "2026-10-09T00:00:00Z",
+    "TimestampInt": 1791504000000000000,
+    "EventType": "SYS_ANCHOR_FAILOVER",
+    "ActorID": "operator-example",
+    "ChainID": "chain-example",
+    "SequenceNum": 1,
+    "PolicyID": "org.example:fixture"
+  },
+  "Payload": {
+    "VCP-ANCHOR": {
+      "FailoverDetails": {
+        "FailoverID": "019eaf10-0000-7000-8000-000000000002",
+        "TriggerCondition": {
+          "FailureCount": 10,
+          "TotalDowntimeSec": 86401,
+          "LastSuccessfulAnchor": 1791417599000000000,
+          "ErrorCodes": [
+            "TIMEOUT"
+          ]
+        },
+        "PrimaryAnchor": {
+          "Type": "TSA",
+          "Identifier": "old.example",
+          "LastAttemptTimestamp": 1791503999999999000,
+          "LastErrorMessage": "Timeout"
+        },
+        "SecondaryAnchor": {
+          "Type": "TSA",
+          "Identifier": "new.example",
+          "ActivationTimestamp": 1791504000000000000
+        },
+        "QueuedEvents": {
+          "Count": 1,
+          "FirstEventID": "019eaf10-0000-7000-8000-000000000002",
+          "LastEventID": "019eaf10-0000-7000-8000-000000000002"
+        },
+        "AutomatedDecision": false,
+        "OperatorOverride": {
+          "Overridden": false
+        }
+      }
     }
+  },
+  "Security": {
+    "EventHash": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "SignAlgo": "ED25519"
   }
 }
 ```
+
 
 #### 7.8.4 Secondary Anchor Pre-Registration
 
@@ -1610,14 +1783,14 @@ bridge.LogOrder(ticket, symbol, type, lots, price);
 
 ### 10.5 Silver Tier "Escape Hatches"
 
-For organizations that find even Silver requirements challenging, the SDK provides graceful degradation:
+The following failure handling is required guidance; it does not assert that a published SDK implements it. Graceful degradation MUST preserve evidence and MUST NOT bypass §§1.4.2–1.4.9:
 
 | Scenario | SDK Behavior | Compliance Impact |
 |----------|-------------|-------------------|
-| **No internet connectivity** | Queue locally, anchor when connected | ✅ Compliant (within 48h) |
-| **OpenTimestamps unavailable** | Retry with backoff, alert after 24h | ✅ Compliant (RPO: 24h) |
-| **Storage full** | Rotate oldest unanchored events | ⚠️ Warning logged |
-| **SKIP limit approached** | Auto-CHECKPOINT before limit | ✅ Compliant |
+| **No internet connectivity** | Durably queue, alert and recover anchoring | RTO recovery targets do not waive the Silver 24h anchor obligation; record/report any breach |
+| **OpenTimestamps unavailable** | Retry/fail over under §7; preserve queued events | Verify actual anchor deadlines; a retry or warning does not establish conformity |
+| **Storage full** | Preserve unanchored events in durable overflow storage or stop accepting new auditable operations and raise an incident | MUST NOT rotate/drop unanchored evidence to claim compliance; record any unavoidable loss as a gap |
+| **SKIP limit approached** | Stop SKIP at the bound; request controlled CHECKPOINT | No automatic bypass: §1.4.6 notice or §1.4.7 two-person emergency authorization, recorded recovery and review remain REQUIRED |
 
 ### 10.6 Migration Path: v1.1 Silver → v1.2 Silver
 

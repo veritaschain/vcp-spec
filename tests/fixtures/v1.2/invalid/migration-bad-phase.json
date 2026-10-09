@@ -1,0 +1,50 @@
+{
+  "Header": {
+    "EventID": "019eaf10-0000-7000-8000-000000000001",
+    "TimestampISO": "2026-10-09T00:00:00Z",
+    "TimestampInt": 1791504000000000000,
+    "EventType": "SYS_ANCHOR_MIGRATION",
+    "ActorID": "operator-example",
+    "ChainID": "chain-example",
+    "SequenceNum": 1,
+    "PolicyID": "org.example:fixture"
+  },
+  "Payload": {
+    "VCP-ANCHOR": {
+      "MigrationDetails": {
+        "MigrationID": "019eaf10-0000-7000-8000-000000000002",
+        "Phase": "DONE",
+        "OldAnchorTarget": {
+          "Type": "TSA",
+          "Identifier": "old.example",
+          "LastAnchorTimestamp": 1791503999999997000,
+          "Status": "ACTIVE"
+        },
+        "NewAnchorTarget": {
+          "Type": "TSA",
+          "Identifier": "new.example",
+          "FirstAnchorTimestamp": 1791503999999998000,
+          "Status": "ACTIVE"
+        },
+        "Reason": {
+          "Code": "PLANNED_UPGRADE",
+          "Description": "Planned anchor replacement"
+        },
+        "DualAnchorPeriod": {
+          "StartTimestamp": 1791503999999998000,
+          "EndTimestamp": 1791504000001000000,
+          "OverlapEventCount": 1
+        },
+        "TierSpecificRTO": {
+          "Tier": "SILVER",
+          "MaxOutageDuration": 172800,
+          "FailoverDeadline": 1791504000001000000
+        }
+      }
+    }
+  },
+  "Security": {
+    "EventHash": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "SignAlgo": "ED25519"
+  }
+}

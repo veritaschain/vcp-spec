@@ -59,7 +59,7 @@ The **canonical (normative) specification** of VCP is located under:
 
 | Version | Status | Date | Location |
 |---------|--------|------|----------|
-| **v1.2** | **Production Ready (GA)** — current (tag `v1.2.0`) | 2026-07-06 (RC1: 2026-05-31) | [`/spec/v1.2/`](spec/v1.2/) · [JSON Schema](spec/v1.2/vcp-event-v1.2.json) |
+| **v1.2** | **Production Ready (GA)** — corrected source; release target `v1.2.0` | 2026-07-06 (RC1: 2026-05-31) | [`/spec/v1.2/`](spec/v1.2/) · [JSON Schema](spec/v1.2/vcp-event-v1.2.json) |
 | v1.1 | Published (no tagged release) | 2025-12-30 | [`/spec/v1.1/`](spec/v1.1/) |
 | v1.0 | Released (tag `v1.0.0`) | 2025-11-25 | [`/spec/v1.0/`](spec/v1.0/) |
 
@@ -68,7 +68,9 @@ changes, all v1.0 and v1.1 events remain valid. Migration notes and
 compatibility considerations are documented inside each version directory.
 
 GA was declared on 2026-07-06. The GA text was committed to this repository
-after that date; until that commit, this repository showed RC1.
+after that date; until that commit, this repository showed RC1. The GA tag must
+point to the validated consistency correction, not the earlier uncorrected merge.
+Pre-GA v1.2 ERASURE producers need migration; historical records stay unchanged.
 
 ---
 
@@ -123,9 +125,10 @@ now published as **RFC 9943** and **RFC 9942** (June 2026).
 
 ## 📝 Known issues in v1.2 (informative)
 
-The Production Ready text is the RC1 text with its status, dates and one
-informative legal note updated; there was no technical change. The following
-are errata candidates for the next revision. The full list, including issues
+The 2026-10-09 consistency correction changes pre-GA ERASURE encoding and
+registers the Annex system events. It is not technically identical to RC1.
+See [compatibility and release gates](spec/v1.2/GA-CONSISTENCY.md). The following
+remain errata candidates for the next revision. The full list, including issues
 in the normative annex, is in
 [`spec/v1.2/README.md`](spec/v1.2/README.md#known-issues-in-v12-informative).
 

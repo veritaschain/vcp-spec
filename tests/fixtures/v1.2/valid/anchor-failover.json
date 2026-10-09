@@ -1,0 +1,51 @@
+{
+  "Header": {
+    "EventID": "019eaf10-0000-7000-8000-000000000001",
+    "TimestampISO": "2026-10-09T00:00:00Z",
+    "TimestampInt": 1791504000000000000,
+    "EventType": "SYS_ANCHOR_FAILOVER",
+    "ActorID": "operator-example",
+    "ChainID": "chain-example",
+    "SequenceNum": 1,
+    "PolicyID": "org.example:fixture"
+  },
+  "Payload": {
+    "VCP-ANCHOR": {
+      "FailoverDetails": {
+        "FailoverID": "019eaf10-0000-7000-8000-000000000002",
+        "TriggerCondition": {
+          "FailureCount": 10,
+          "TotalDowntimeSec": 86401,
+          "LastSuccessfulAnchor": 1791417599000000000,
+          "ErrorCodes": [
+            "TIMEOUT"
+          ]
+        },
+        "PrimaryAnchor": {
+          "Type": "TSA",
+          "Identifier": "old.example",
+          "LastAttemptTimestamp": 1791503999999999000,
+          "LastErrorMessage": "Timeout"
+        },
+        "SecondaryAnchor": {
+          "Type": "TSA",
+          "Identifier": "new.example",
+          "ActivationTimestamp": 1791504000000000000
+        },
+        "QueuedEvents": {
+          "Count": 1,
+          "FirstEventID": "019eaf10-0000-7000-8000-000000000002",
+          "LastEventID": "019eaf10-0000-7000-8000-000000000002"
+        },
+        "AutomatedDecision": false,
+        "OperatorOverride": {
+          "Overridden": false
+        }
+      }
+    }
+  },
+  "Security": {
+    "EventHash": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "SignAlgo": "ED25519"
+  }
+}
