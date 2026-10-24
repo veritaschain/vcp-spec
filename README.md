@@ -14,7 +14,7 @@ and risk controls.
 
 VCP is the finance profile of the
 [Verifiable AI Provenance Framework (VAP)](https://github.com/veritaschain/vap-spec)
-and its first implementation profile. [VAP v1.2 alignment remains under review](https://github.com/veritaschain/vap-spec/blob/0f8a2faa2cd50c296c90974476f4b6ecf169c163/spec/v1.2/VAP_Framework_Specification.md); full conformance has not been established. Within the VAP family, the designation
+and its first implementation profile. [VAP v1.2 alignment remains under review](https://github.com/veritaschain/vap-spec/blob/b5ef9316717bebe638d5eca621327b54cdda93e1/spec/v1.2/VAP_Framework_Specification.md); full conformance has not been established. Within the VAP family, the designation
 "Protocol" is reserved for VCP, which defines an actual wire protocol.
 
 This repository is maintained by the
@@ -140,9 +140,10 @@ controls require implementation-specific assessment. An inclusion proof alone
 is not a check of the entire submitted batch. No claim is made that all deployed
 implementations have the example's behavior.
 
-[Technical-errata Draft PR #3](https://github.com/veritaschain/vcp-spec/pull/3)
-and [normative-change Draft PR #4](https://github.com/veritaschain/vcp-spec/pull/4)
-are **unadopted proposals**, not an issued erratum or repaired release. Target
+The [technical-errata draft](proposals/integrity-2026-10-24/technical-errata-draft.md)
+and the [normative-change draft](proposals/integrity-2026-10-24/normative-change-draft.md)
+were merged on 24 October 2026 as discussion documents (PR #3 and PR #4). Merging
+them did not adopt them: both remain **unadopted proposals**, not an issued erratum or repaired release. Target
 version and migration remain undecided. Existing signed data and fixed releases
 are preserved. VAP integrity alignment is under review; full conformance has
 not been established. Internal synthetic results are not independent third-party
