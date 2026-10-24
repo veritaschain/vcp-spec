@@ -14,7 +14,7 @@ and risk controls.
 
 VCP is the finance profile of the
 [Verifiable AI Provenance Framework (VAP)](https://github.com/veritaschain/vap-spec)
-and the reference profile for VAP v1.2. Within the VAP family, the designation
+and its first implementation profile. [VAP v1.2 alignment remains under review](https://github.com/veritaschain/vap-spec/blob/0f8a2faa2cd50c296c90974476f4b6ecf169c163/spec/v1.2/VAP_Framework_Specification.md); full conformance has not been established. Within the VAP family, the designation
 "Protocol" is reserved for VCP, which defines an actual wire protocol.
 
 This repository is maintained by the
@@ -23,12 +23,9 @@ This repository is maintained by the
 ### Implementation status (mandatory disclosure)
 
 As of September 2026: **zero external implementations** of VCP or any other VAP
-profile, and **zero Evidence Packs accepted in any proceeding**. VeritasChain
-Co., Ltd., which provides the operating base of VSO, holds ten paid service
-contracts with European organizations in regulatory technology, financial
-trading, and audit and assurance (client names withheld pending individual
-consent); those contracts are not external implementations and are not
-independent validation of VCP.
+profile, and **zero Evidence Packs accepted in any proceeding**.
+
+**Commercial disclosure correction — 24 October 2026:** the previously published paid-service contract figure and associated commercial details have not been substantiated through reconciliation with primary records. The claim is withdrawn pending verification; this does **not** establish a count of zero. No verified contract count, customer count or revenue figure is asserted here. Commercial activity is separate from external implementation, independent validation and Evidence Pack acceptance. See the [dated correction and counting criteria](https://github.com/veritaschain/vap-spec/blob/main/disclosures/2026-10-24-commercial-contracts.md). Fixed distributions and historical evidence remain unchanged.
 
 ---
 
@@ -124,6 +121,33 @@ now published as **RFC 9943** and **RFC 9942** (June 2026).
 ---
 
 ## 📝 Known issues in v1.2 (informative)
+
+### Integrity review notice — 24 October 2026 (informative)
+
+The published specification requires RFC 6962 construction, but its odd-node
+builder and audit-path examples conflict with that requirement. The shown
+root-only AnchorRecord signature does not authenticate attached count, endpoint
+or policy metadata. Exact nanosecond integer handling also needs a portable
+canonicalization contract. These are the bounded observations P1, P2, P4, P6 and
+P8 in the [pinned research record](https://github.com/veritaschain/vap-spec/blob/9fa5fbc68075079b4599e16940e9078db976cd59/experiments/vcp-v1.2-integrity-alignment/README.md); P3 separately concerns the quickstart verifier.
+
+The numeric finding distinguishes library input rejection from precision loss:
+all 40 tested fixture timestamps are exactly binary64-representable, whereas
+arbitrary nanosecond integers need not be. The duplicate-node example is a tree-construction ambiguity, not a SHA-256
+collision. Metadata tampering applies where no separate signature or external
+anchor authenticates the full AnchorRecord; EventID uniqueness checks and other
+controls require implementation-specific assessment. An inclusion proof alone
+is not a check of the entire submitted batch. No claim is made that all deployed
+implementations have the example's behavior.
+
+[Technical-errata Draft PR #3](https://github.com/veritaschain/vcp-spec/pull/3)
+and [normative-change Draft PR #4](https://github.com/veritaschain/vcp-spec/pull/4)
+are **unadopted proposals**, not an issued erratum or repaired release. Target
+version and migration remain undecided. Existing signed data and fixed releases
+are preserved. VAP integrity alignment is under review; full conformance has
+not been established. Internal synthetic results are not independent third-party
+reproduction, which remains unestablished. Current protocol requirements and
+K3 baselines, criteria and results are unchanged.
 
 The 2026-10-09 consistency correction changes pre-GA ERASURE encoding and
 registers the Annex system events. It is not technically identical to RC1.

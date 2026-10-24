@@ -101,6 +101,33 @@ The three-layer integrity architecture introduced in v1.1 (Layer 1 Event Integri
 
 ## Known issues in v1.2 (informative)
 
+### Integrity review notice — 24 October 2026 (informative)
+
+The published specification requires RFC 6962 construction, but its odd-node
+builder and audit-path examples conflict with that requirement. The shown
+root-only AnchorRecord signature does not authenticate attached count, endpoint
+or policy metadata. Exact nanosecond integer handling also needs a portable
+canonicalization contract. These are the bounded observations P1, P2, P4, P6 and
+P8 in the [pinned research record](https://github.com/veritaschain/vap-spec/blob/9fa5fbc68075079b4599e16940e9078db976cd59/experiments/vcp-v1.2-integrity-alignment/README.md); P3 separately concerns the quickstart verifier.
+
+The numeric finding distinguishes library input rejection from precision loss:
+all 40 tested fixture timestamps are exactly binary64-representable, whereas
+arbitrary nanosecond integers need not be. The duplicate-node example is a tree-construction ambiguity, not a SHA-256
+collision. Metadata tampering applies where no separate signature or external
+anchor authenticates the full AnchorRecord; EventID uniqueness checks and other
+controls require implementation-specific assessment. An inclusion proof alone
+is not a check of the entire submitted batch. No claim is made that all deployed
+implementations have the example's behavior.
+
+[Technical-errata Draft PR #3](https://github.com/veritaschain/vcp-spec/pull/3)
+and [normative-change Draft PR #4](https://github.com/veritaschain/vcp-spec/pull/4)
+are **unadopted proposals**, not an issued erratum or repaired release. Target
+version and migration remain undecided. Existing signed data and fixed releases
+are preserved. VAP integrity alignment is under review; full conformance has
+not been established. Internal synthetic results are not independent third-party
+reproduction, which remains unestablished. Current protocol requirements and
+K3 baselines, criteria and results are unchanged.
+
 The v1.2 text is unchanged in these respects; they are errata candidates for the next revision.
 
 | Location | Issue |
@@ -117,7 +144,7 @@ The v1.2 text is unchanged in these respects; they are errata candidates for the
 
 ## Relationship to VAP
 
-VCP v1.2 is the reference profile for [VAP v1.2](https://github.com/veritaschain/vap-spec/tree/main/spec/v1.2) (VAP §5.1; VSO-VAP-CHANGE-001 Annex A). VAP and VCP version numbers are assigned independently; the matching "1.2" is coincidental (VAP §10.4).
+VCP is the first implementation profile of the VAP family. [The current VAP status](https://github.com/veritaschain/vap-spec/blob/0f8a2faa2cd50c296c90974476f4b6ecf169c163/spec/v1.2/VAP_Framework_Specification.md) records VCP v1.1 and v1.2 integrity alignment under review, a mapping outstanding, and full conformance unestablished. Under VAP §1.7, that current status prevails over the historical compatibility claims in VSO-VAP-CHANGE-001 CH-11 / Annex A; the annex itself is preserved. VAP and VCP version numbers are assigned independently; matching version numbers do not establish conformance.
 
 ## Relationship to v1.1
 
