@@ -52,6 +52,10 @@ in binary64, but the Python JCS library rejects their integer inputs; arbitrary
 nanosecond integers can additionally lose precision. Neither observation
 licenses rounding old data.
 
+The 40 fixture files share the timestamp `1791504000000000000`; that count
+does not represent 40 distinct numeric values or the boundary coverage
+requested in §8.
+
 ## 3. Candidate event-to-Merkle contract
 
 ### 3.1 One explicit interpretation
@@ -206,6 +210,13 @@ or a full-batch check; if neither is supplied, the verifier MUST NOT label
 the endpoints checked. Signed metadata is an attributable assertion until
 its relationship to the events is verified.
 
+Presented events still require event-hash, scheme and policy-consistency
+checks. Inclusion proofs for a subset do not establish batch-wide EventID
+uniqueness or policy consistency for withheld events. Without evidence covering
+those properties, the verifier MUST retain them as unassessed rather than
+reporting full-batch validation. A policy that permits partial submission may
+be satisfied while these separate batch-wide properties remain unassessed.
+
 ### 4.3 Receipt commitment without circularity
 
 The proposed external commitment is SHA-256 of a third, distinct domain prefix
@@ -213,6 +224,14 @@ followed by JCS of the object containing exactly `AnchorStatement` and
 `Signature`. Receipt adapters submit those commitment bytes and later verify
 that the external service's proof refers to the same commitment, subject to
 that service's authentication, time and finality rules.
+
+The verifier MUST also match the receipt's authenticated service/target
+identity to `IntendedAnchorTarget`, under independently configured trust and
+acceptance rules. A valid receipt from a different target is not a match.
+Missing receipts or unresolved target/trust evidence MUST NOT be reported as
+successful external anchoring, even when the AnchorStatement signature passes.
+Receipt adapter formats and target-identity matching rules remain release
+blockers; this paragraph does not supply or validate an adapter.
 
 `ExternalReceipts` is excluded from the signed object and commitment so that
 the receipt never refers to a preimage containing itself. Receipt bytes,
@@ -320,9 +339,10 @@ completed tests or authority to edit the current fixed artifacts.
 | Authority and version | Confirm VCP approval procedure, record decision and formal identifier, select version/migration strategy; do not borrow a VAP vote or imply one occurred |
 | Byte contract | Select event preimage option; fix all domain literals, scheme identifiers, lexical encodings and extension rules; define event-signature and COSE mappings |
 | Schema and numeric inventory | Enumerate every affected path in body/schema/annex, units, ranges, null/absence rules and backwards impact; no unreviewed global conversion |
-| Anchor policy | Finalize identity, key/time policy, policy-byte commitment, target binding, correction/supersession and interaction with recovery/failover |
+| Anchor policy | Finalize identity, key/time policy, policy-byte commitment, receipt adapters and authenticated target-identity matching, correction/supersession and interaction with recovery/failover |
 | Merkle vectors | Empty root plus nonempty sizes 1–64 and power-of-two boundaries; every index, odd sizes, duplicate-ID rejection, changed order, missing/surplus/wrong-length proof nodes and wrong signed counts |
-| Signed-field mutation vectors | Real signatures; mutate each protected field, algorithm/context, key, signature and policy bytes; reject unauthorized keys and receipt-to-commitment mismatch; do not use validity flags |
+| Signed-field mutation vectors | Real signatures; mutate each protected field, algorithm/context, key, signature and policy bytes; reject unauthorized keys and receipt-to-commitment or receipt-to-target mismatch; missing receipts must not pass; do not use validity flags |
+| Partial-disclosure limits | Verify presented-event consistency; omitted endpoint evidence, undisclosed duplicate IDs and policy mismatches must not produce an unsupported full-batch verdict; keep submission-policy satisfaction separate |
 | Numeric vectors | Exact values around 2^53 and the chosen 32/64-bit boundaries, the lossy nanosecond example, invalid lexical forms, boolean/number/string substitutions and all timestamp-bearing paths |
 | Cross-language reproducibility | At least two independently implemented serializers/verifiers agree on preimage bytes, hashes, roots and signatures; document dependency and environment details, including failures |
 | Migration and framework mapping | Preserve legacy verification records; compare affected bytes explicitly; reconcile VAP clauses without claiming conformance from this draft |
