@@ -1,0 +1,16 @@
+{
+  "algorithm": "SHA-256",
+  "base_commit": "9b88e318aeb9575de66047ed49c8ab86c2879487",
+  "status": "internal; unadopted; independent reproduction unestablished",
+  "files": {
+    ".gitignore": "e99f6ee4eb88882ea6589ecb717e10a41401763241b246b6821bc091cfe2227e",
+    "README.md": "ea7dc3c89b0582c52d418f98ef41a3b1718c691f3610a35d07729399aa584504",
+    "contract.py": "bcdb677900a4b57321f1b2a84c7d51fa80e8d83778d01a13eabb393df61d07be",
+    "generate.py": "1fb9a03ee6ea4105980fa2d4480995110dedc525133fb5f21facbad32bc55053",
+    "check.py": "652bca37851b101002db77d48f635b998ef06a35c408c46df2ceb2e874a0f1f9",
+    "crosscheck.mjs": "794101885eb68d2d6261e84a5b042cd57963dd9f4f1f998c127fe02e39380cef",
+    "requirements.txt": "6245940e3b65e73edb34f73ca9e7c7d1161905f12984067c5e50e01ad97c4043",
+    "data/vectors.json": "d5a633c2ea5f1efa4aa1eec968aca4fcbdd025eec58bb5e451bc7fbb361d4196",
+    "data/merkle-vectors.jsonl": "93d25ecf678af81dbae2f90bf1b32e9b36d361a6258a865fa926be8a731a2b61"
+  }
+}
