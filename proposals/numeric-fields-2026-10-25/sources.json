@@ -1,0 +1,25 @@
+{
+  "commit": "e984d85311f57338065570d7679ddff92718001b",
+  "sources": {
+    "body": {
+      "path": "spec/v1.2/VCP-Specification-v1_2_en.md",
+      "sha256": "ce94399bde111c8b805d3804fad2e6d61cab2f1839533d5009e94e812d15a942",
+      "url": "https://github.com/veritaschain/vcp-spec/blob/e984d85311f57338065570d7679ddff92718001b/spec/v1.2/VCP-Specification-v1_2_en.md"
+    },
+    "schema": {
+      "path": "spec/v1.2/vcp-event-v1.2.json",
+      "sha256": "fa73e3e76ebd939f84f6ac28dd6aadd08007aa753feb25f278d58ff02a74eac4",
+      "url": "https://github.com/veritaschain/vcp-spec/blob/e984d85311f57338065570d7679ddff92718001b/spec/v1.2/vcp-event-v1.2.json"
+    },
+    "annex": {
+      "path": "spec/v1.2/VSO-SPEC-CHANGE-001.md",
+      "sha256": "e810b952099f96c1f0841916be8c3babcb6adbfc48c05a236966d164fe11292b",
+      "url": "https://github.com/veritaschain/vcp-spec/blob/e984d85311f57338065570d7679ddff92718001b/spec/v1.2/VSO-SPEC-CHANGE-001.md"
+    },
+    "inherited": {
+      "path": "VCP-Specification-v1_0_en.md",
+      "sha256": "30289d062edacae448a45aca4395e34457530763e4012d70b6c3068ce2e1d013",
+      "url": "https://github.com/veritaschain/vcp-spec/blob/e984d85311f57338065570d7679ddff92718001b/VCP-Specification-v1_0_en.md"
+    }
+  }
+}
