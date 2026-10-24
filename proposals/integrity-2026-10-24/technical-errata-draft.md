@@ -11,8 +11,9 @@ and exact numeric representation in VCP v1.2, with a limited v1.1 source compari
 
 This document proposes notices about contradictions and limitations in the
 published material. It does not replace the published algorithms, schemas,
-signature contract, or versioning rules. A separate normative-change draft
-will propose candidate replacement rules and migration decisions. The two
+signature contract, or versioning rules. The separate
+[normative-change draft, PR #4](https://github.com/veritaschain/vcp-spec/pull/4)
+proposes candidate replacement rules and migration decisions. The two
 documents require separate dispositions: accepting an observation does not
 approve a new wire format.
 
@@ -154,6 +155,10 @@ binary64, and equal-valued diagnostic float inputs are accepted for all 40.
 This distinguishes a library input policy from numeric precision. It does
 not show that those 40 timestamps were rounded, or that every JCS library
 rejects them.
+
+All 40 files use the same `TimestampInt`, `1791504000000000000`.
+They are 40 fixture Header inputs, not 40 distinct timestamp values or a
+boundary-value test suite. No wider numeric coverage is inferred from that count.
 
 The additional diagnostic `1791504000000000001` does lose one nanosecond when
 converted to binary64. Supporting arbitrary nanosecond integers exactly is
