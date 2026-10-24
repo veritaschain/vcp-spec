@@ -1,0 +1,34 @@
+name: Unadopted numeric representation experiment
+
+on:
+  pull_request:
+    paths:
+      - 'experiments/numeric-representation-candidate-v0/**'
+      - '.github/workflows/numeric-representation-experiment.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  synthetic-numeric-candidate:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.12', '3.14']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Run candidate vectors and negative controls
+        run: python experiments/numeric-representation-candidate-v0/run.py --output "${{ runner.temp }}/numeric-results-${{ matrix.python }}.json"
+      - name: Save internal experimental output
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: unadopted-numeric-results-python-${{ matrix.python }}
+          path: ${{ runner.temp }}/numeric-results-${{ matrix.python }}.json
+          if-no-files-found: error
+          retention-days: 30

@@ -1,0 +1,571 @@
+{
+  "contract": "vcp-numeric-experiment-v0",
+  "status": "UNADOPTED",
+  "source_commit": "16018dd405cad45bd8b11a7dc2278f6d95111ea6",
+  "inventory_path": "proposals/numeric-fields-2026-10-25/inventory.json",
+  "inventory_sha256": "28645bbdeb1da72a2cb71a703ecc1dab2a54f4f23971b65498e921699568cc63",
+  "fields": [
+    {
+      "id": "N001",
+      "path": "Header.TimestampISO",
+      "class": "UTC_NS",
+      "unit": "utc_iso_ns",
+      "unresolved": [
+        "iso_pair_required"
+      ]
+    },
+    {
+      "id": "N002",
+      "path": "Header.TimestampInt",
+      "class": "TIME_NS",
+      "unit": "unix_ns",
+      "unresolved": [
+        "iso_pair_required"
+      ]
+    },
+    {
+      "id": "N003",
+      "path": "Header.SequenceNum",
+      "class": "UINT63",
+      "unit": "sequence",
+      "unresolved": []
+    },
+    {
+      "id": "N004",
+      "path": "Header.SCITTAlignment.RegistrationPolicy.IssuedAt",
+      "class": "TIME_NS",
+      "unit": "unix_ns",
+      "unresolved": []
+    },
+    {
+      "id": "N005",
+      "path": "Payload.VCP-TRADE.Price",
+      "class": "DEC_SIGNED",
+      "unit": null,
+      "unresolved": [
+        "policy_semantics_unresolved"
+      ]
+    },
+    {
+      "id": "N006",
+      "path": "Payload.VCP-TRADE.Quantity",
+      "class": "DEC_NONNEG",
+      "unit": null,
+      "unresolved": [
+        "policy_semantics_unresolved"
+      ]
+    },
+    {
+      "id": "N007",
+      "path": "Payload.VCP-TRADE.ExecutedQty",
+      "class": "DEC_NONNEG",
+      "unit": null,
+      "unresolved": [
+        "policy_semantics_unresolved"
+      ]
+    },
+    {
+      "id": "N008",
+      "path": "Payload.VCP-TRADE.RemainingQty",
+      "class": "DEC_NONNEG",
+      "unit": null,
+      "unresolved": [
+        "policy_semantics_unresolved"
+      ]
+    },
+    {
+      "id": "N009",
+      "path": "Payload.VCP-TRADE.ExecutionPrice",
+      "class": "DEC_SIGNED",
+      "unit": null,
+      "unresolved": [
+        "policy_semantics_unresolved"
+      ]
+    },
+    {
+      "id": "N010",
+      "path": "Payload.VCP-TRADE.Commission",
+      "class": "DEC_SIGNED",
+      "unit": null,
+      "unresolved": [
+        "policy_semantics_unresolved"
+      ]
+    },
+    {
+      "id": "N011",
+      "path": "Payload.VCP-TRADE.Slippage",
+      "class": "DEC_SIGNED",
+      "unit": null,
+      "unresolved": [
+        "policy_semantics_unresolved"
+      ]
+    },
+    {
+      "id": "N012",
+      "path": "Payload.VCP-GOV.ConfidenceScore",
+      "class": "RATIO01",
+      "unit": "ratio",
+      "unresolved": []
+    },
+    {
+      "id": "N013",
+      "path": "Payload.VCP-PRIVACY.ErasureDetails.Scope.AffectedEventCount",
+      "class": "POS63",
+      "unit": "affected_events",
+      "unresolved": []
+    },
+    {
+      "id": "N014",
+      "path": "Payload.VCP-PRIVACY.ErasureDetails.Authorization.AuthorizationTimestamp",
+      "class": "TIME_NS",
+      "unit": "unix_ns",
+      "unresolved": []
+    },
+    {
+      "id": "N015",
+      "path": "Payload.VCP-PRIVACY.ErasureDetails.Authorization.ApprovalChain[].ApprovalTimestamp",
+      "class": "TIME_NS",
+      "unit": "unix_ns",
+      "unresolved": []
+    },
+    {
+      "id": "N016",
+      "path": "Payload.VCP-PRIVACY.ErasureDetails.CryptoShredding.DestructionTimestamp",
+      "class": "TIME_NS",
+      "unit": "unix_ns",
+      "unresolved": []
+    },
+    {
+      "id": "N017",
+      "path": "Security.MerkleIndex",
+      "class": "INDEX31",
+      "unit": "leaf_index",
+      "unresolved": [
+        "associated_count_required"
+      ]
+    },
+    {
+      "id": "N018",
+      "path": "PolicyIdentification.RegistrationPolicy.EffectiveDate",
+      "class": "TIME_NS",
+      "unit": "unix_ns",
+      "unresolved": []
+    },
+    {
+      "id": "N019",
+      "path": "PolicyIdentification.RegistrationPolicy.ExpirationDate",
+      "class": "TIME_NS",
+      "unit": "unix_ns",
+      "unresolved": []
+    },
+    {
+      "id": "N020",
+      "path": "Payload.VCP-RECOVERY.Announcement.ScheduledTime",
+      "class": "UTC_NS",
+      "unit": "utc_iso_ns",
+      "unresolved": []
+    },
+    {
+      "id": "N021",
+      "path": "Payload.VCP-RECOVERY.RecoveryAction.EmergencyOverride.ApprovalChain[].ApprovalTimestamp",
+      "class": "TIME_NS",
+      "unit": "unix_ns",
+      "unresolved": []
+    },
+    {
+      "id": "N022",
+      "path": "Payload.VCP-GOV.AuditDetails.ReviewedAt",
+      "class": "TIME_NS",
+      "unit": "unix_ns",
+      "unresolved": []
+    },
+    {
+      "id": "N023",
+      "path": "Payload.VCP-ANCHOR.MigrationDetails.OldAnchorTarget.LastAnchorTimestamp",
+      "class": "TIME_NS",
+      "unit": "unix_ns",
+      "unresolved": []
+    },
+    {
+      "id": "N024",
+      "path": "Payload.VCP-ANCHOR.MigrationDetails.NewAnchorTarget.FirstAnchorTimestamp",
+      "class": "TIME_NS",
+      "unit": "unix_ns",
+      "unresolved": []
+    },
+    {
+      "id": "N025",
+      "path": "Payload.VCP-ANCHOR.MigrationDetails.DualAnchorPeriod.StartTimestamp",
+      "class": "TIME_NS",
+      "unit": "unix_ns",
+      "unresolved": []
+    },
+    {
+      "id": "N026",
+      "path": "Payload.VCP-ANCHOR.MigrationDetails.DualAnchorPeriod.EndTimestamp",
+      "class": "TIME_NS",
+      "unit": "unix_ns",
+      "unresolved": []
+    },
+    {
+      "id": "N027",
+      "path": "Payload.VCP-ANCHOR.MigrationDetails.DualAnchorPeriod.OverlapEventCount",
+      "class": "UINT63",
+      "unit": "overlap_events",
+      "unresolved": []
+    },
+    {
+      "id": "N028",
+      "path": "Payload.VCP-ANCHOR.MigrationDetails.TierSpecificRTO.MaxOutageDuration",
+      "class": "SECONDS63",
+      "unit": "s",
+      "unresolved": []
+    },
+    {
+      "id": "N029",
+      "path": "Payload.VCP-ANCHOR.MigrationDetails.TierSpecificRTO.FailoverDeadline",
+      "class": "TIME_NS",
+      "unit": "unix_ns",
+      "unresolved": []
+    },
+    {
+      "id": "N030",
+      "path": "Payload.VCP-ANCHOR.FailoverDetails.TriggerCondition.FailureCount",
+      "class": "UINT63",
+      "unit": "failures",
+      "unresolved": []
+    },
+    {
+      "id": "N031",
+      "path": "Payload.VCP-ANCHOR.FailoverDetails.TriggerCondition.TotalDowntimeSec",
+      "class": "SECONDS63",
+      "unit": "s",
+      "unresolved": []
+    },
+    {
+      "id": "N032",
+      "path": "Payload.VCP-ANCHOR.FailoverDetails.TriggerCondition.LastSuccessfulAnchor",
+      "class": "TIME_NS",
+      "unit": "unix_ns",
+      "unresolved": []
+    },
+    {
+      "id": "N033",
+      "path": "Payload.VCP-ANCHOR.FailoverDetails.PrimaryAnchor.LastAttemptTimestamp",
+      "class": "TIME_NS",
+      "unit": "unix_ns",
+      "unresolved": []
+    },
+    {
+      "id": "N034",
+      "path": "Payload.VCP-ANCHOR.FailoverDetails.SecondaryAnchor.ActivationTimestamp",
+      "class": "TIME_NS",
+      "unit": "unix_ns",
+      "unresolved": []
+    },
+    {
+      "id": "N035",
+      "path": "Payload.VCP-ANCHOR.FailoverDetails.QueuedEvents.Count",
+      "class": "UINT63",
+      "unit": "queued_events",
+      "unresolved": []
+    },
+    {
+      "id": "N036",
+      "path": "AnchorRecord.Timestamp",
+      "class": "TIME_NS",
+      "unit": "unix_ns",
+      "unresolved": []
+    },
+    {
+      "id": "N037",
+      "path": "AnchorRecord.EventCount",
+      "class": "POS31",
+      "unit": "batch_events",
+      "unresolved": []
+    },
+    {
+      "id": "N038",
+      "path": "AnchorRecord.AnchorTarget.Confirmations",
+      "class": "UINT31",
+      "unit": "confirmations",
+      "unresolved": []
+    },
+    {
+      "id": "N039",
+      "path": "AnchorRecord.AnchorTarget.FinalityTimestamp",
+      "class": "TIME_NS",
+      "unit": "unix_ns",
+      "unresolved": []
+    },
+    {
+      "id": "N040",
+      "path": "AnchorRecord.AnchorTarget.EnhancedMonitoring.LastHealthCheck",
+      "class": "TIME_NS",
+      "unit": "unix_ns",
+      "unresolved": []
+    },
+    {
+      "id": "N041",
+      "path": "Payload.VCP-XREF.SharedEventKey.Timestamp",
+      "class": "TIME_NS",
+      "unit": "unix_ns",
+      "unresolved": []
+    },
+    {
+      "id": "N042",
+      "path": "Payload.VCP-XREF.SharedEventKey.ToleranceMs",
+      "class": "MILLISECONDS31",
+      "unit": "ms",
+      "unresolved": []
+    },
+    {
+      "id": "N043",
+      "path": "Payload.VCP-XREF.PartyIndex",
+      "class": "INDEX31",
+      "unit": "party_index",
+      "unresolved": [
+        "associated_count_required"
+      ]
+    },
+    {
+      "id": "N044",
+      "path": "Payload.VCP-XREF.UpstreamParty.ReceivedTimestamp",
+      "class": "TIME_NS",
+      "unit": "unix_ns",
+      "unresolved": []
+    },
+    {
+      "id": "N045",
+      "path": "Payload.VCP-XREF.DownstreamParties[].ForwardedTimestamp",
+      "class": "TIME_NS",
+      "unit": "unix_ns",
+      "unresolved": []
+    },
+    {
+      "id": "N046",
+      "path": "Payload.VCP-XREF.ChainMetadata.TotalParties",
+      "class": "POS31",
+      "unit": "parties",
+      "unresolved": []
+    },
+    {
+      "id": "N047",
+      "path": "Payload.VCP-RECOVERY.RecoveryConstraints.MaxSkipEvents",
+      "class": "UINT31",
+      "unit": "skipped_events",
+      "unresolved": []
+    },
+    {
+      "id": "N048",
+      "path": "Payload.VCP-RECOVERY.RecoveryConstraints.MaxSkipDuration",
+      "class": "DURATION_NS63",
+      "unit": "ns",
+      "unresolved": []
+    },
+    {
+      "id": "N049",
+      "path": "Payload.VCP-RECOVERY.BreakPoint.BreakTimestamp",
+      "class": "TIME_NS",
+      "unit": "unix_ns",
+      "unresolved": []
+    },
+    {
+      "id": "N050",
+      "path": "Payload.VCP-RECOVERY.RecoveryAction.RecoveredEvents",
+      "class": "UINT31",
+      "unit": "recovered_events",
+      "unresolved": []
+    },
+    {
+      "id": "N051",
+      "path": "Payload.VCP-RECOVERY.ChainValidation.AnchorVerificationTimestamp",
+      "class": "TIME_NS",
+      "unit": "unix_ns",
+      "unresolved": []
+    },
+    {
+      "id": "N052",
+      "path": "Payload.VCP-GOV.Governance.ApprovalTimestamp",
+      "class": "TIME_NS",
+      "unit": "unix_ns",
+      "unresolved": []
+    },
+    {
+      "id": "N053",
+      "path": "Payload.VCP-GOV.DecisionFactors.Features[].Value",
+      "class": "TYPED_FEATURE",
+      "unit": null,
+      "unresolved": []
+    },
+    {
+      "id": "N054",
+      "path": "Payload.VCP-GOV.DecisionFactors.Features[].Weight",
+      "class": "DEC_SIGNED",
+      "unit": null,
+      "unresolved": [
+        "policy_semantics_unresolved"
+      ]
+    },
+    {
+      "id": "N055",
+      "path": "Payload.VCP-GOV.DecisionFactors.Features[].Contribution",
+      "class": "DEC_SIGNED",
+      "unit": null,
+      "unresolved": [
+        "policy_semantics_unresolved"
+      ]
+    },
+    {
+      "id": "N056",
+      "path": "Payload.VCP-GOV.DecisionFactors.ConfidenceScore",
+      "class": "RATIO01",
+      "unit": "ratio",
+      "unresolved": []
+    },
+    {
+      "id": "N057",
+      "path": "Payload.VCP-GOV.PerformanceMetadata.SamplingRate",
+      "class": "RATIO01",
+      "unit": "ratio",
+      "unresolved": []
+    },
+    {
+      "id": "N058",
+      "path": "Payload.VCP-GOV.PerformanceMetadata.LatencyImpact",
+      "class": "DEC_NONNEG",
+      "unit": "us",
+      "unresolved": [
+        "policy_semantics_unresolved"
+      ]
+    },
+    {
+      "id": "N059",
+      "path": "Payload.VCP-RISK.RiskProfile.LastModified",
+      "class": "TIME_NS",
+      "unit": "unix_ns",
+      "unresolved": []
+    },
+    {
+      "id": "N060",
+      "path": "Payload.VCP-RISK.ParametersSnapshot.MaxOrderSize",
+      "class": "DEC_NONNEG",
+      "unit": null,
+      "unresolved": [
+        "policy_semantics_unresolved"
+      ]
+    },
+    {
+      "id": "N061",
+      "path": "Payload.VCP-RISK.ParametersSnapshot.MaxPositionSize",
+      "class": "DEC_NONNEG",
+      "unit": null,
+      "unresolved": [
+        "policy_semantics_unresolved"
+      ]
+    },
+    {
+      "id": "N062",
+      "path": "Payload.VCP-RISK.ParametersSnapshot.DailyExposureLimit",
+      "class": "DEC_NONNEG",
+      "unit": null,
+      "unresolved": [
+        "policy_semantics_unresolved"
+      ]
+    },
+    {
+      "id": "N063",
+      "path": "Payload.VCP-RISK.ParametersSnapshot.ExposureUtilization",
+      "class": "DEC_NONNEG",
+      "unit": "ratio",
+      "unresolved": [
+        "policy_semantics_unresolved"
+      ]
+    },
+    {
+      "id": "N064",
+      "path": "Payload.VCP-RISK.ParametersSnapshot.VaRLimit",
+      "class": "DEC_NONNEG",
+      "unit": null,
+      "unresolved": [
+        "policy_semantics_unresolved"
+      ]
+    },
+    {
+      "id": "N065",
+      "path": "Payload.VCP-RISK.ParametersSnapshot.CurrentVaR",
+      "class": "DEC_NONNEG",
+      "unit": null,
+      "unresolved": [
+        "policy_semantics_unresolved"
+      ]
+    },
+    {
+      "id": "N066",
+      "path": "Payload.VCP-RISK.ParametersSnapshot.ThrottleRate",
+      "class": "DEC_NONNEG",
+      "unit": "orders_per_s",
+      "unresolved": [
+        "policy_semantics_unresolved"
+      ]
+    },
+    {
+      "id": "N067",
+      "path": "Payload.VCP-RISK.TriggeredControls[].TriggerValue",
+      "class": "TYPED_CONTROL",
+      "unit": null,
+      "unresolved": []
+    },
+    {
+      "id": "N068",
+      "path": "Payload.VCP-RISK.TriggeredControls[].Timestamp",
+      "class": "TIME_NS",
+      "unit": "unix_ns",
+      "unresolved": []
+    },
+    {
+      "id": "N069",
+      "path": "Payload.VCP-PRIVACY.Pseudonymization.RetentionPeriod",
+      "class": "CALENDAR",
+      "unit": null,
+      "unresolved": []
+    },
+    {
+      "id": "N070",
+      "path": "SecondaryAnchorConfiguration.Secondary.LastHealthCheck",
+      "class": "UTC_NS",
+      "unit": "utc_iso_ns",
+      "unresolved": []
+    },
+    {
+      "id": "N071",
+      "path": "SCITTReceipt.payload.tree_size",
+      "class": "EXTERNAL_INTEGER",
+      "unit": null,
+      "unresolved": []
+    },
+    {
+      "id": "N072",
+      "path": "SCITTReceipt.payload.leaf_index",
+      "class": "EXTERNAL_INTEGER",
+      "unit": null,
+      "unresolved": []
+    },
+    {
+      "id": "N073",
+      "path": "LegacyHeader.Timestamp",
+      "class": "TIME_NS",
+      "unit": "unix_ns",
+      "unresolved": [
+        "legacy_mapping_unresolved"
+      ]
+    },
+    {
+      "id": "N074",
+      "path": "LegacyHeader.EventType",
+      "class": "ENUM_CODE",
+      "unit": null,
+      "unresolved": []
+    }
+  ]
+}

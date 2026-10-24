@@ -1,0 +1,25 @@
+{
+  "contract": "vcp-numeric-experiment-v0",
+  "status": "UNADOPTED",
+  "source_commit": "16018dd405cad45bd8b11a7dc2278f6d95111ea6",
+  "vector_count": 533,
+  "regression_count": 15,
+  "sources": {
+    "proposals/numeric-fields-2026-10-25/README.md": "9c890cbf76cdd86e03706d1e8d74abbf5a1c38cd44bbfbc71ad49b94af5e9531",
+    "proposals/numeric-fields-2026-10-25/inventory.json": "28645bbdeb1da72a2cb71a703ecc1dab2a54f4f23971b65498e921699568cc63",
+    "proposals/numeric-fields-2026-10-25/inventory.md": "2ddd4cb8076afae265de4e454fc4824fc3d93edfcb34d9e510087d5de7070c20",
+    "proposals/numeric-fields-2026-10-25/sources.json": "f11368bb05933f50d9d3e77fbce1fa32acb8a12cf796d74289cab25fe259d4e4",
+    "spec/v1.2/VCP-Specification-v1_2_en.md": "ce94399bde111c8b805d3804fad2e6d61cab2f1839533d5009e94e812d15a942",
+    "spec/v1.2/vcp-event-v1.2.json": "fa73e3e76ebd939f84f6ac28dd6aadd08007aa753feb25f278d58ff02a74eac4",
+    "spec/v1.2/VSO-SPEC-CHANGE-001.md": "e810b952099f96c1f0841916be8c3babcb6adbfc48c05a236966d164fe11292b",
+    "VCP-Specification-v1_0_en.md": "30289d062edacae448a45aca4395e34457530763e4012d70b6c3068ce2e1d013"
+  },
+  "experiment": {
+    "checker.py": "9fd2089c009ca8eb0dd20ca9e0d21150850a3ce7cf1e2d6909f15dcf86789b19",
+    "generate_vectors.py": "55dec7a573e8c693ae603d35511cf3ee95ff9e2e868b1a8e4fdfb4845c072896",
+    "run.py": "7aede9149212cc13ea0799e38097f3b2e6df7a048986919b8a061612c84e79cf",
+    "test_checker.py": "545f8d28ac67813456993458b324ccac6a06364305c901c028f070ad26cad2f5",
+    "data/field-map.json": "8654db47dcaa97cd5095c424be5bb724a85fcceb34d9062978d227e1a5a3df63",
+    "data/vectors.json": "659eb4aa96f27d5eef77ea2a1086f7c37e42b261380c6ea11db2529f4c4e2b2c"
+  }
+}
