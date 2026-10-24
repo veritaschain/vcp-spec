@@ -22,6 +22,38 @@ def require(condition, message):
         raise ValueError(message)
 
 
+def read_json(path):
+    """Keep ambiguous/non-JSON input out of the source comparison."""
+    def unique_object(pairs):
+        result = {}
+        for key, value in pairs:
+            require(key not in result, f"duplicate JSON key: {key}")
+            result[key] = value
+        return result
+
+    def reject_constant(value):
+        raise ValueError(f"non-JSON numeric constant: {value}")
+
+    return json.loads(path.read_text(encoding="utf-8"), object_pairs_hook=unique_object,
+                      parse_constant=reject_constant)
+
+
+def same_snapshot(left, right):
+    """Compare parsed snapshots without Python's bool/int/float coercion.
+
+    The inventory promises a source snapshot, not merely equivalent numeric
+    constraints. Even an integer token changed to a floating-point token differs.
+    This is an audit rule, not a new VCP scalar acceptance rule.
+    """
+    if type(left) is not type(right):
+        return False
+    if isinstance(left, dict):
+        return left.keys() == right.keys() and all(same_snapshot(left[k], right[k]) for k in left)
+    if isinstance(left, (list, tuple)):
+        return len(left) == len(right) and all(same_snapshot(a, b) for a, b in zip(left, right))
+    return left == right
+
+
 def pointer(document, value):
     node = document
     for part in value.lstrip("#/").split("/"):
@@ -120,8 +152,8 @@ def render(rows, sources):
 
 
 def audit(render_output=False):
-    manifest = json.loads((HERE / "sources.json").read_text())
-    data = json.loads((HERE / "inventory.json").read_text())
+    manifest = read_json(HERE / "sources.json")
+    data = read_json(HERE / "inventory.json")
     require(data["status"] == "UNADOPTED_DISCUSSION_DRAFT", "draft status changed")
     require(data["independent_reproduction"] == "not_established", "independence claim changed")
     require(data["base_commit"] == manifest["commit"], "baseline mismatch")
@@ -137,11 +169,11 @@ def audit(render_output=False):
                          ("annex", "VSO-SPEC-CHANGE-001.md")):
         require(hashlib.sha256((ROOT / mirror).read_bytes()).hexdigest() == sources[name]["sha256"],
                 f"root mirror drift: {mirror}")
-    schema = json.loads((ROOT / sources["schema"]["path"]).read_text())
+    schema = read_json(ROOT / sources["schema"]["path"])
     expanded = {}
     for path, ptr, context, constraints in walk(schema, schema):
         value = (ptr, context, constraints)
-        require(path not in expanded or expanded[path] == value, f"ambiguous expansion: {path}")
+        require(path not in expanded or same_snapshot(expanded[path], value), f"ambiguous expansion: {path}")
         expanded[path] = value
     rows = data["fields"]
     require(len({r["id"] for r in rows}) == len(rows), "duplicate entry ID")
@@ -151,7 +183,7 @@ def audit(render_output=False):
     require({v[0] for v in expanded.values()} == set(scalar_sites(schema)), "uncovered schema declaration")
     for path, item in documented.items():
         ptr, context, constraints = expanded[path]
-        require((item["pointer"], item["context"], item["constraints"]) == (ptr, context, constraints),
+        require(same_snapshot((item["pointer"], item["context"], item["constraints"]), (ptr, context, constraints)),
                 f"schema snapshot mismatch: {path}")
         parent, key = ptr.rsplit("/properties/", 1)
         required = key in pointer(schema, parent).get("required", [])

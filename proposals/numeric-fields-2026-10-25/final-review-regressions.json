@@ -1,0 +1,54 @@
+{
+  "status": "UNADOPTED_DISCUSSION_DRAFT",
+  "independent_reproduction": "not_established",
+  "reviewed_head": "0a5072d39af83a02790a823b443293a9d47b6c59",
+  "scope": "Inventory audit, temporary copies only; not VCP protocol validation.",
+  "before": [
+    {
+      "case": "baseline",
+      "audit_result": "PASS"
+    },
+    {
+      "case": "minimum_0_as_false",
+      "audit_result": "PASS"
+    },
+    {
+      "case": "minimum_1_as_true",
+      "audit_result": "PASS"
+    },
+    {
+      "case": "minimum_0_as_float",
+      "audit_result": "PASS"
+    },
+    {
+      "case": "duplicate_status_key",
+      "audit_result": "PASS"
+    }
+  ],
+  "after": [
+    {
+      "case": "baseline",
+      "audit_result": "PASS"
+    },
+    {
+      "case": "minimum_0_as_false",
+      "audit_result": "REJECT",
+      "reason": "schema snapshot mismatch: Header.TimestampInt"
+    },
+    {
+      "case": "minimum_1_as_true",
+      "audit_result": "REJECT",
+      "reason": "schema snapshot mismatch: Payload.VCP-PRIVACY.ErasureDetails.Scope.AffectedEventCount"
+    },
+    {
+      "case": "minimum_0_as_float",
+      "audit_result": "REJECT",
+      "reason": "schema snapshot mismatch: Header.TimestampInt"
+    },
+    {
+      "case": "duplicate_status_key",
+      "audit_result": "REJECT",
+      "reason": "duplicate JSON key: status"
+    }
+  ]
+}

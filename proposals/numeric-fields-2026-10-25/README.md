@@ -306,13 +306,20 @@ Run from the repository root (Python 3.12+ standard library only):
 
 ```sh
 python3 proposals/numeric-fields-2026-10-25/audit_inventory.py
+python3 -m unittest discover -s proposals/numeric-fields-2026-10-25 -p 'test_audit_inventory.py' -v
 ```
 
-The read-only default checks source hashes, reachable schema scalar coverage,
+The read-only default rejects duplicate JSON keys and non-JSON numeric constants,
+and checks source hashes, reachable schema scalar coverage,
 snapshotted constraints/requiredness, reference line ranges, unique inventory
-paths and the generated Markdown. `--render` regenerates only inventory.md in
+paths and the generated Markdown. Snapshot comparison preserves parsed value
+types: `false`, `0` and `0.0` are not interchangeable source snapshots even where
+two numeric constraints could be semantically equivalent. This audit rule is not
+a change to VCP's scalar rules. `--render` regenerates only inventory.md in
 this new proposal directory. No network, signatures, deployment configuration or
 existing fixture is executed or modified. The script is an inventory consistency
 audit, **not a numeric/protocol verifier**, and does not mechanically validate the
-manual prose judgments. See [review-record.md](review-record.md) for the actual
-internal checks and limitations. No external evaluator run is claimed.
+manual prose judgments. The regression suite mutates temporary copies only.
+See [review-record.md](review-record.md) for the initial checks and
+[final-review-2026-10-25.md](final-review-2026-10-25.md) for the final findings,
+repairs and validation. No external evaluator run is claimed.
