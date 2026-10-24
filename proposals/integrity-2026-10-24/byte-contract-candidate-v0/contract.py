@@ -97,6 +97,16 @@ def jcs(obj):
 
 
 def load_json(text):
+    # json.loads(bytes) otherwise auto-detects UTF-16/32 and accepts a BOM.
+    # This candidate has one transport encoding, not an encoding fallback.
+    require(type(text) in (str, bytes), "JSON source must be text or UTF-8 bytes")
+    if type(text) is bytes:
+        try:
+            text = text.decode("utf-8")
+        except UnicodeError as exc:
+            raise Rejected("JSON source must be UTF-8") from exc
+    require(not text.startswith("\ufeff"), "JSON source BOM")
+
     def pairs(items):
         obj = {}
         for key, value in items:

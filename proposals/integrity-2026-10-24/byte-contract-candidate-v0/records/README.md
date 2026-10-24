@@ -2,6 +2,14 @@
 
 **Unadopted candidate. Independent third-party reproduction unestablished.**
 
+These original files describe commit
+`93e57393a25487622ae29a2b44160088cc70078e` (2026-10-24), not the subsequently
+corrected checker. They are retained unchanged. See the
+[2026-10-25 final review](final-review-2026-10-25/README.md) for new execution
+records and the updated source-hash manifest. The original manifest must be
+compared with that original commit; its code hashes are not hashes of the
+corrected source. Synthetic `data/` bytes remain the same.
+
 The two Python JSON files are complete stdout from `check.py --node <node>` in
 the candidate folder, using Python 3.12.14 and 3.14.3 respectively with Node
 24.19.0 on the same VSO development environment. The run used no external

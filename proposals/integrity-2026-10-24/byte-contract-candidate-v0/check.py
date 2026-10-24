@@ -6,11 +6,13 @@ import hashlib
 import importlib.metadata
 import json
 import platform
+import re
 from pathlib import Path
 import subprocess
 import sys
 
 from cryptography.hazmat.backends.openssl.backend import backend
+from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey
 
 import contract as c
 import generate as g
@@ -36,8 +38,8 @@ def check(directory):
 
     for name, data in g.encoded_files().items():
         equal((directory / name).read_bytes() == data, True, "exact_regeneration")
-    v = c.load_json((directory / "vectors.json").read_text())
-    m = [c.load_json(line) for line in (directory / "merkle-vectors.jsonl").read_text().splitlines()]
+    v = c.load_json((directory / "vectors.json").read_bytes())
+    m = [c.load_json(line) for line in (directory / "merkle-vectors.jsonl").read_bytes().splitlines()]
     keys = v["public_test_keys"]
     equal(v["domain_prefixes_hex"], {k: b.hex() for k, b in c.DOMAINS.items()}, "domain_literals")
     equal(len(set(c.DOMAINS.values())), len(c.DOMAINS), "domain_separation")
@@ -75,10 +77,13 @@ def check(directory):
 
     a = v["anchor"]; statement = a["statement"]
     roles = {"event_signature": "event", "anchor_signature": "anchor"}
-    def trust(s, kind):
-        return {(kind, s["ProducerID"], s["StreamID"], s["KeyID"]): keys[roles[kind]]["public_key_hex"]}
-    fixed_trust = {**trust(statement, "anchor_signature"),
-                   **trust(v["event_signatures"][0]["statement"], "event_signature")}
+    # Configure the test authority separately; do not promote statement fields
+    # or its embedded test public key into trust entries.
+    fixed_trust = {
+        (kind, g.PRODUCER, g.STREAM, "urn:vcp-research:key:" + role):
+        Ed25519PrivateKey.from_private_bytes(g.KEYS[role]).public_key().public_bytes_raw().hex()
+        for kind, role in roles.items()
+    }
     for kind, rows in (("event_signature", v["event_signatures"]), ("anchor_signature", [a])):
         for row in rows:
             s, sig = row["statement"], row["signature"]
@@ -98,6 +103,19 @@ def check(directory):
             if kind == "event_signature":
                 c.event_binding(events[int(row["event_index"])], s)
                 counts["event_signature_binding"] = counts.get("event_signature_binding", 0) + 1
+    for kind, row in (("event_signature", v["event_signatures"][0]), ("anchor_signature", a)):
+        role = roles[kind]
+        for field in ("ProducerID", "StreamID", "KeyID"):
+            s = g.replace(row["statement"], [field], "urn:vcp-research:untrusted:other")
+            sig = g.sign(s, kind, role)
+            equal(c.raw_verify(keys[role]["public_key_hex"], sig, c.signature_preimage(s, kind)),
+                  True, "resigned_identity_raw_signature")
+            equal(c.signature_check(s, sig, kind, fixed_trust), "unknown", "untrusted_identity_not_pass")
+        identity = (kind, row["statement"]["ProducerID"], row["statement"]["StreamID"], row["statement"]["KeyID"])
+        wrong_role = "anchor_signature" if kind == "event_signature" else "event_signature"
+        role_mismatch = {(wrong_role, *identity[1:]): fixed_trust[identity]}
+        equal(c.signature_check(row["statement"], row["signature"], kind, role_mismatch),
+              "unknown", "untrusted_role_not_pass")
     for field in statement:
         s = copy.deepcopy(statement); del s[field]
         rejects(lambda: c.anchor_validate(s), "anchor_missing_field")
@@ -174,6 +192,10 @@ def check(directory):
         equal(actual, case["expected"], "numeric_lexical_and_range")
     for raw in v["invalid_json"]:
         rejects(lambda: c.load_json(raw), "malformed_or_unsupported_json")
+    for raw in (b"\xef\xbb\xbf{}", "{}".encode("utf-16"), "{}".encode("utf-16-le"),
+                "{}".encode("utf-32"), b'{"x":"\xff"}', {"already_parsed": True}):
+        rejects(lambda: c.load_json(raw), "transport_encoding_rejection")
+    equal(c.load_json('{"x":"証拠 😀"}'.encode("utf-8")), {"x": "証拠 😀"}, "utf8_bytes_supported")
     equal(c.jcs({"x": "é"}) == c.jcs({"x": "e\u0301"}), False, "unicode_not_normalized")
     equal(c.external_preimage(statement, a["signature"]).hex(), a["external_preimage_hex"], "external_preimage")
     equal(c.digest_text(c.external_preimage(statement, a["signature"])), a["external_commitment"], "external_commitment")
@@ -183,6 +205,55 @@ def check(directory):
     for statuses, expected in ((["pass", "unknown"], "unknown"), (["fail", "unknown"], "fail"), (["pass", "pass"], "pass")):
         equal(c.aggregate_required(statuses), expected, "aggregate_failure_over_unknown")
     return counts
+
+
+def validate_node_report(report, data_hashes, counts):
+    """Check completion evidence, not just process exit or a self-reported pass.
+
+    This cannot authenticate an executable/operator or detect a fully forged
+    report; it rejects missing/failed/incomplete/mismatched check reports.
+    """
+    expected_counts = {
+        "derived_public_key": 3, "domain": len(c.DOMAINS),
+        **{k: counts[k] for k in ("event_jcs", "event_preimage", "event_hash", "signed_jcs", "signed_preimage", "merkle_root", "merkle_membership")},
+        "signature_verify": counts["signed_preimage"], "signature_generation": counts["signed_preimage"],
+        "signed_mutation": counts["signed_field_mutation_crypto"],
+        "inconsistent_record_raw_signature_only": counts["resigned_inconsistency_signature"],
+        "empty_root": 1, "numeric_exact_bigint": counts["numeric_lexical_and_range"],
+        "external_preimage": 1, "external_commitment": 1, "policy_bytes": 1,
+    }
+    c.exact(report, "status node openssl scope counts contract_id data_sha256")
+    c.require(report["status"] == "internal byte agreement; not independent reproduction", "Node status")
+    c.require(report["contract_id"] == c.CONTRACT, "Node contract")
+    c.require(report["data_sha256"] == data_hashes, "Node input hashes")
+    actual = report["counts"]
+    c.require(type(actual) is dict and all(type(n) is int for n in actual.values()) and
+              actual == expected_counts, "Node coverage incomplete or invalid")
+    c.require(type(report["node"]) is str and re.fullmatch(r"v[0-9]+\.[0-9]+\.[0-9]+", report["node"]), "Node version")
+    c.require(type(report["openssl"]) is str and bool(report["openssl"]), "Node OpenSSL version")
+    c.require(report["scope"] == "known-answer JCS subset, hashes, trees/proofs, raw signatures and decimal fields; not full schema/trust/receipt validation", "Node scope")
+
+
+def node_report_negative_controls(report, data_hashes, counts):
+    cases = {
+        "empty": {},
+        "failed_status": g.replace(report, ["status"], "failed"),
+        "wrong_contract": g.replace(report, ["contract_id"], "other"),
+        "wrong_input_hash": g.replace(report, ["data_sha256", "vectors.json"], "0" * 64),
+        "zero_coverage": g.replace(report, ["counts", "merkle_membership"], 0),
+        "boolean_count": g.replace(report, ["counts", "empty_root"], True),
+        "string_count": g.replace(report, ["counts", "empty_root"], "1"),
+        "missing_group": copy.deepcopy(report),
+        "missing_environment": g.replace(report, ["node"], ""),
+    }
+    del cases["missing_group"]["counts"]["event_hash"]
+    for name, invalid in cases.items():
+        try:
+            validate_node_report(invalid, data_hashes, counts)
+        except c.Rejected:
+            continue
+        raise RuntimeError("Node report control unexpectedly accepted: " + name)
+    return {name: "rejected" for name in cases}
 
 
 if __name__ == "__main__":
@@ -205,7 +276,10 @@ if __name__ == "__main__":
     if args.node:
         run = subprocess.run([args.node, str(HERE / "crosscheck.mjs"), str(args.vectors.resolve())],
                              check=True, capture_output=True, text=True)
-        result["node_crosscheck"] = json.loads(run.stdout)
+        node_report = json.loads(run.stdout)
+        validate_node_report(node_report, result["data_sha256"], result["counts"])
+        result["node_report_negative_controls"] = node_report_negative_controls(node_report, result["data_sha256"], result["counts"])
+        result["node_crosscheck"] = node_report
     else:
         result["node_crosscheck"] = "not run"
     print(json.dumps(result, indent=2))

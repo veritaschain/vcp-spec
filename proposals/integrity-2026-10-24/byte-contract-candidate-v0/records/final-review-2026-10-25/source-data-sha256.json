@@ -1,0 +1,17 @@
+{
+  "algorithm": "SHA-256",
+  "base_commit": "9b88e318aeb9575de66047ed49c8ab86c2879487",
+  "reviewed_initial_head": "93e57393a25487622ae29a2b44160088cc70078e",
+  "status": "internal final review; unadopted; independent reproduction unestablished",
+  "files": {
+    ".gitignore": "e99f6ee4eb88882ea6589ecb717e10a41401763241b246b6821bc091cfe2227e",
+    "README.md": "5cb18c94048930f140bbb05f6679a683a694ea9630155c0c1093e61cb3dc7844",
+    "contract.py": "4b0e1d0a739590163b0d55ebc3b52fd278b07a5b10698fac9e883c71f3706596",
+    "generate.py": "1fb9a03ee6ea4105980fa2d4480995110dedc525133fb5f21facbad32bc55053",
+    "check.py": "dd2a6ef98003635dd2553435fc29ec6df1d8b742bc3f5d0f90a39798cd400d3a",
+    "crosscheck.mjs": "c853532232000865b18f22417c545d1bbffa671ea38cfaa7bbf99b583f62920a",
+    "requirements.txt": "6245940e3b65e73edb34f73ca9e7c7d1161905f12984067c5e50e01ad97c4043",
+    "data/vectors.json": "d5a633c2ea5f1efa4aa1eec968aca4fcbdd025eec58bb5e451bc7fbb361d4196",
+    "data/merkle-vectors.jsonl": "93d25ecf678af81dbae2f90bf1b32e9b36d361a6258a865fa926be8a731a2b61"
+  }
+}

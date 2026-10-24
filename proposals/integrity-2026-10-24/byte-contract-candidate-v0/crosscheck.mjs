@@ -6,8 +6,10 @@ import { fileURLToPath } from 'node:url';
 import { createHash, createPrivateKey, createPublicKey, sign, verify } from 'node:crypto';
 
 const dir = process.argv[2] ?? join(dirname(fileURLToPath(import.meta.url)), 'data');
-const v = JSON.parse(readFileSync(join(dir, 'vectors.json'), 'utf8'));
-const trees = readFileSync(join(dir, 'merkle-vectors.jsonl'), 'utf8').trim().split('\n').map(JSON.parse);
+const vectorBytes = readFileSync(join(dir, 'vectors.json'));
+const merkleBytes = readFileSync(join(dir, 'merkle-vectors.jsonl'));
+const v = JSON.parse(vectorBytes.toString('utf8'));
+const trees = merkleBytes.toString('utf8').trim().split('\n').map(JSON.parse);
 const counts = {};
 function eq(actual, expected, group) {
   if (actual !== expected) throw new Error(`${group}: mismatch`);
@@ -129,4 +131,6 @@ eq(external.toString('hex'), v.anchor.external_preimage_hex, 'external_preimage'
 eq('sha256:' + sha(external).toString('hex'), v.anchor.external_commitment, 'external_commitment');
 eq('sha256:' + sha(Buffer.from(v.policy_bytes_hex,'hex')).toString('hex'), v.policy_digest, 'policy_bytes');
 process.stdout.write(JSON.stringify({status:'internal byte agreement; not independent reproduction', node:process.version, openssl:process.versions.openssl,
+  contract_id:'urn:vcp-research:integrity-byte-contract:2026-10-24:v0',
+  data_sha256:{'vectors.json':sha(vectorBytes).toString('hex'), 'merkle-vectors.jsonl':sha(merkleBytes).toString('hex')},
   scope:'known-answer JCS subset, hashes, trees/proofs, raw signatures and decimal fields; not full schema/trust/receipt validation', counts}) + '\n');

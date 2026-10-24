@@ -72,6 +72,8 @@ to this candidate and must not be stripped down to fit it.
 Duplicate JSON keys (including escaped equivalent keys), lone surrogates,
 non-JSON constants and an input BOM are rejected. Property sorting uses UTF-16
 code-unit order as required by JCS. Strings are never Unicode-normalized.
+The JSON loader accepts Unicode text or strictly decoded UTF-8 bytes; it does
+not auto-detect UTF-16/32 or strip a byte-order mark.
 No field is silently omitted, repaired, defaulted or converted. Unknown fields
 are rejected in the closed outer/header/statement shapes. Payload is an opaque
 object of the supported JSON subset: every key/value is committed, but it does
@@ -191,6 +193,9 @@ the record is never self-authorizing. Missing trust is unknown; a supplied
 wrong key fails. Key lifetimes, revocation, actual signer authorization and
 trusted time are **not assessed**. Even the test-trust pass is not a production
 identity verdict. Event and anchor roles use distinct test keys.
+The harness fixes allowed identities/keys separately from statements. Six
+correctly re-signed identity substitutions and two role mismatches remain
+unknown rather than passing on raw cryptographic validity.
 
 There is **no external service or receipt adapter** here. The target is
 intentionally unconnected. The vectors test only the commitment bytes and show
@@ -275,6 +280,11 @@ past execution log. Check reports record the hashes of the files actually read.
 An altered saved vector or omitted proof record fails exact regeneration before
 cryptographic checks. The second language recomputes bytes from inputs, but
 does not implement full schema, duplicate-key, trust or receipt validation.
+Its process must exit successfully **and** return the expected contract, hashes
+of both files actually read, complete typed check counts, scope and environment
+metadata. Nine invalid-report controls cover absent/failed/incomplete/mismatched
+results. Exit 0 or arbitrary JSON alone is not evidence of completion. This
+report check does not authenticate the executable, environment or operator.
 
 Expected covered evidence:
 
@@ -301,6 +311,11 @@ the same saved inputs. Neither is independent third-party reproduction.
 The previous observational probe's 19/136, 0/136 and 40-fixture results concern
 legacy code; they are not these candidate test results. Existing v1.2 CI also
 checks the existing contract only, not this proposal.
+
+The [2026-10-25 final review](records/final-review-2026-10-25/README.md) retains
+before/after regression evidence and new Python/Node records. The original
+2026-10-24 outputs and original source-hash manifest remain historical records
+of commit `93e5739`; the synthetic vector data bytes are unchanged by that review.
 
 ## 7. Review and later acceptance
 
