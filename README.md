@@ -158,7 +158,14 @@ in the normative annex, is in
 
 - **Superseded references.** §12 cites `draft-ietf-scitt-architecture` and
   `draft-ietf-cose-merkle-tree-proofs`; these are now **RFC 9943** and
-  **RFC 9942**.
+  **RFC 9942**. §12 also cites `draft-kamimura-scitt-vcp` under a former
+  title; the current revision is -04 (2026-10-24).
+- **Security field names and levels.** §6.4 names the anchor reference
+  `AnchorReference`, and §6.4.1 lists it with `MerkleRoot` and `MerkleIndex`
+  as REQUIRED from v1.1. The v1.2 schema treats the three as VC-Certified
+  requirements enforced by Registration Policy and also accepts `AnchorRef`,
+  the field name of draft-kamimura-scitt-vcp. The intended level and the
+  canonical name are to be settled in the next revision.
 - **Retired service in examples.** The "Attested Database Examples" table in
   §6.3.3, and Annex §2.4 and §8.8, list AWS QLDB, which reached end of support
   on 2025-07-31.
