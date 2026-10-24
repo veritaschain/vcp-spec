@@ -1,0 +1,19 @@
+{
+  "status": "internal negative controls passed",
+  "date_jst": "2026-10-24T21:42:38.327532+09:00",
+  "base_commit": "9b88e318aeb9575de66047ed49c8ab86c2879487",
+  "cases": [
+    {
+      "scenario": "changed-event-hash",
+      "exit_code": 1,
+      "last_stderr_line": "RuntimeError: exact_regeneration: expected True, got False"
+    },
+    {
+      "scenario": "omitted-proof-record",
+      "exit_code": 1,
+      "last_stderr_line": "RuntimeError: exact_regeneration: expected True, got False"
+    }
+  ],
+  "independent_reproduction": "unestablished",
+  "limitations": "Temporary copies only; no fixed distribution or signed source record was changed."
+}

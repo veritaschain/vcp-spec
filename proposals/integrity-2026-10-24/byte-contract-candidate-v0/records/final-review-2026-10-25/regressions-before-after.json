@@ -1,0 +1,37 @@
+{
+  "reviewed_head": "93e57393a25487622ae29a2b44160088cc70078e",
+  "status": "internal review; unadopted; independent reproduction unestablished",
+  "before": {
+    "empty-node": {
+      "scenario": "Node substitute returns empty JSON without checking any vectors",
+      "head": "93e57393a25487622ae29a2b44160088cc70078e",
+      "exit_code": 0,
+      "status": "internal candidate-vector checks passed",
+      "node_crosscheck": {}
+    },
+    "trust-coverage": {
+      "scenario": "test-only mutation ignores ProducerID/StreamID/KeyID in trust lookup",
+      "suite_completed": true,
+      "checked_groups": 61
+    },
+    "parser-encoding": {
+      "utf8_bom_bytes_accepted": {},
+      "utf16_bytes_accepted": {}
+    }
+  },
+  "after": {
+    "empty-node": {
+      "exit_code": 1,
+      "stdout_empty": true,
+      "last_stderr_line": "contract.Rejected: object fields"
+    },
+    "trust-coverage": {
+      "exit_code": 1,
+      "last_stderr_line": "RuntimeError: untrusted_identity_not_pass: expected 'unknown', got 'pass'"
+    },
+    "parser-encoding": {
+      "utf8_bom_bytes": "rejected",
+      "utf16_bytes": "rejected"
+    }
+  }
+}
