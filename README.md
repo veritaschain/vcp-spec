@@ -113,7 +113,7 @@ VCP produces evidence relevant to regimes such as:
 
 | Body | Document | Status |
 |------|----------|--------|
-| IETF | [`draft-kamimura-scitt-vcp-03`](https://datatracker.ietf.org/doc/draft-kamimura-scitt-vcp/) | Individual Internet-Draft, active. Not adopted by any IETF Working Group; no standing in the IETF standards process |
+| IETF | [`draft-kamimura-scitt-vcp-04`](https://datatracker.ietf.org/doc/draft-kamimura-scitt-vcp/) | Individual Internet-Draft, active. Not adopted by any IETF Working Group; no standing in the IETF standards process |
 
 The SCITT architecture and COSE Receipts that VCP v1.2 aligns with (opt-in) are
 now published as **RFC 9943** and **RFC 9942** (June 2026).
