@@ -1,0 +1,2062 @@
+{
+  "status": "UNADOPTED_DISCUSSION_DRAFT",
+  "independent_reproduction": "not_established",
+  "base_commit": "e984d85311f57338065570d7679ddff92718001b",
+  "fields": [
+    {
+      "id": "N001",
+      "path": "Header.TimestampISO",
+      "group": "Header",
+      "schema": {
+        "pointer": "/$defs/Header/properties/TimestampISO",
+        "context": "all structured events",
+        "constraints": {
+          "type": "string",
+          "format": "date-time",
+          "description": "ISO 8601 / RFC 3339 timestamp, UTC, up to nanosecond precision."
+        },
+        "required_in_containing_object": true
+      },
+      "current": "Explicit schema field; exact scalar constraints attached.",
+      "current_unit": "RFC 3339 date-time string; Header description specifies UTC and up to ns.",
+      "references": [
+        {
+          "source": "annex",
+          "lines": [
+            534,
+            537
+          ]
+        }
+      ],
+      "candidate_class": "UTC_NS",
+      "presence": "Required within its containing schema object; ancestors/conditional context still control presence. No null allowed by this scalar schema; no new default proposed.",
+      "migration_notes": "New narrower UTC lexical subset; exact pair checking where Header.TimestampInt is present. Do not rewrite old ISO strings.",
+      "candidate_unit": "UTC date-time with exactly 9 fractional digits; maps exactly to TIME_NS."
+    },
+    {
+      "id": "N002",
+      "path": "Header.TimestampInt",
+      "group": "Header",
+      "schema": {
+        "pointer": "/$defs/Header/properties/TimestampInt",
+        "context": "all structured events",
+        "constraints": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Nanoseconds since the Unix epoch (UTC), as a 64-bit integer.",
+          "$comment": "Values exceed 2^53; parsers must preserve 64-bit integer precision."
+        },
+        "required_in_containing_object": true
+      },
+      "current": "Explicit schema field; exact scalar constraints attached. No maximum enforced.",
+      "current_unit": "Epoch nanoseconds; description says 64-bit, schema only enforces minimum 0.",
+      "references": [
+        {
+          "source": "annex",
+          "lines": [
+            534,
+            537
+          ]
+        },
+        {
+          "source": "body",
+          "lines": [
+            951,
+            961
+          ]
+        }
+      ],
+      "candidate_class": "TIME_NS",
+      "presence": "Required within its containing schema object; ancestors/conditional context still control presence. No null allowed by this scalar schema; no new default proposed.",
+      "migration_notes": "JSON integer to exact decimal string changes hashed/signed bytes; range is newly bounded. Preserve original evidence.",
+      "candidate_unit": "Nanoseconds since 1970-01-01T00:00:00Z on the explicitly selected Unix-time convention (no leap-second counting)."
+    },
+    {
+      "id": "N003",
+      "path": "Header.SequenceNum",
+      "group": "Header",
+      "schema": {
+        "pointer": "/$defs/Header/properties/SequenceNum",
+        "context": "all structured events",
+        "constraints": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Monotonically increasing sequence number within the Actor's chain."
+        },
+        "required_in_containing_object": true
+      },
+      "current": "Explicit schema field; exact scalar constraints attached. No maximum enforced.",
+      "current_unit": "Event ordinal within the Actor chain; schema says monotonically increasing; origin/step and maximum unspecified.",
+      "references": [],
+      "candidate_class": "UINT63",
+      "presence": "Required within its containing schema object; ancestors/conditional context still control presence. No null allowed by this scalar schema; no new default proposed.",
+      "migration_notes": "Propose no wrap, strict increase per (ActorID,ChainID); gaps are not themselves proof of missing real activity. New upper bound; do not renumber old chains.",
+      "candidate_unit": "Count of events/occurrences (specified by field); SequenceNum is an ordinal."
+    },
+    {
+      "id": "N004",
+      "path": "Header.SCITTAlignment.RegistrationPolicy.IssuedAt",
+      "group": "Header",
+      "schema": {
+        "pointer": "/$defs/SCITTAlignment/properties/RegistrationPolicy/properties/IssuedAt",
+        "context": "all structured events",
+        "constraints": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "required_in_containing_object": false
+      },
+      "current": "Explicit schema field; exact scalar constraints attached. No maximum enforced.",
+      "current_unit": "Epoch nanoseconds under Annex §3.4 structured-encoding rule; not restated on this schema property.",
+      "references": [
+        {
+          "source": "annex",
+          "lines": [
+            534,
+            537
+          ]
+        },
+        {
+          "source": "annex",
+          "lines": [
+            933,
+            954
+          ]
+        }
+      ],
+      "candidate_class": "TIME_NS",
+      "presence": "Optional within its containing schema object; ancestors/conditional context still control presence. No null allowed by this scalar schema; no new default proposed.",
+      "migration_notes": "JSON integer to exact decimal string changes hashed/signed bytes; range is newly bounded. Preserve original evidence.",
+      "candidate_unit": "Nanoseconds since 1970-01-01T00:00:00Z on the explicitly selected Unix-time convention (no leap-second counting)."
+    },
+    {
+      "id": "N005",
+      "path": "Payload.VCP-TRADE.Price",
+      "group": "TRADE",
+      "schema": {
+        "pointer": "/$defs/Payload/properties/VCP-TRADE/properties/Price",
+        "context": "all structured events",
+        "constraints": {
+          "type": "string",
+          "pattern": "^-?[0-9]+(\\.[0-9]+)?$",
+          "$comment": "Specification Section 4.2.2: all financial numeric values MUST be encoded as strings to avoid IEEE 754 precision loss under RFC 8785 canonicalization."
+        },
+        "required_in_containing_object": false
+      },
+      "current": "Explicit schema field; exact scalar constraints attached.",
+      "current_unit": "Order price; currency/instrument quantity basis not specified here.",
+      "references": [
+        {
+          "source": "body",
+          "lines": [
+            407,
+            415
+          ]
+        },
+        {
+          "source": "inherited",
+          "lines": [
+            330,
+            370
+          ]
+        }
+      ],
+      "candidate_class": "DEC_SIGNED",
+      "presence": "Optional within its containing schema object; ancestors/conditional context still control presence. No null allowed by this scalar schema; no new default proposed.",
+      "migration_notes": "Already a decimal string. Preserve its exact lexeme (including trailing zeros); proposed size bounds and unit/scale policy can narrow accepted inputs. No blanket integer conversion.",
+      "candidate_unit": "Quote-currency units per instrument unit, with tick/scale and permitted sign from an authenticated instrument policy."
+    },
+    {
+      "id": "N006",
+      "path": "Payload.VCP-TRADE.Quantity",
+      "group": "TRADE",
+      "schema": {
+        "pointer": "/$defs/Payload/properties/VCP-TRADE/properties/Quantity",
+        "context": "all structured events",
+        "constraints": {
+          "type": "string",
+          "pattern": "^-?[0-9]+(\\.[0-9]+)?$",
+          "$comment": "Specification Section 4.2.2: all financial numeric values MUST be encoded as strings to avoid IEEE 754 precision loss under RFC 8785 canonicalization."
+        },
+        "required_in_containing_object": false
+      },
+      "current": "Explicit schema field; exact scalar constraints attached.",
+      "current_unit": "Quantity; instrument/lot/contract unit not specified here.",
+      "references": [
+        {
+          "source": "body",
+          "lines": [
+            407,
+            415
+          ]
+        },
+        {
+          "source": "inherited",
+          "lines": [
+            330,
+            370
+          ]
+        }
+      ],
+      "candidate_class": "DEC_NONNEG",
+      "presence": "Optional within its containing schema object; ancestors/conditional context still control presence. No null allowed by this scalar schema; no new default proposed.",
+      "migration_notes": "Already a decimal string. Preserve its exact lexeme (including trailing zeros); proposed size bounds and unit/scale policy can narrow accepted inputs. No blanket integer conversion.",
+      "candidate_unit": "Instrument units defined by policy (shares/contracts/base-asset/lot conversion explicit)."
+    },
+    {
+      "id": "N007",
+      "path": "Payload.VCP-TRADE.ExecutedQty",
+      "group": "TRADE",
+      "schema": {
+        "pointer": "/$defs/Payload/properties/VCP-TRADE/properties/ExecutedQty",
+        "context": "all structured events",
+        "constraints": {
+          "type": "string",
+          "pattern": "^-?[0-9]+(\\.[0-9]+)?$",
+          "$comment": "Specification Section 4.2.2: all financial numeric values MUST be encoded as strings to avoid IEEE 754 precision loss under RFC 8785 canonicalization."
+        },
+        "required_in_containing_object": false
+      },
+      "current": "Explicit schema field; exact scalar constraints attached.",
+      "current_unit": "Quantity; instrument/lot/contract unit not specified here.",
+      "references": [
+        {
+          "source": "body",
+          "lines": [
+            407,
+            415
+          ]
+        },
+        {
+          "source": "inherited",
+          "lines": [
+            330,
+            370
+          ]
+        }
+      ],
+      "candidate_class": "DEC_NONNEG",
+      "presence": "Optional within its containing schema object; ancestors/conditional context still control presence. No null allowed by this scalar schema; no new default proposed.",
+      "migration_notes": "Already a decimal string. Preserve its exact lexeme (including trailing zeros); proposed size bounds and unit/scale policy can narrow accepted inputs. No blanket integer conversion.",
+      "candidate_unit": "Instrument units on the same basis as Quantity."
+    },
+    {
+      "id": "N008",
+      "path": "Payload.VCP-TRADE.RemainingQty",
+      "group": "TRADE",
+      "schema": {
+        "pointer": "/$defs/Payload/properties/VCP-TRADE/properties/RemainingQty",
+        "context": "all structured events",
+        "constraints": {
+          "type": "string",
+          "pattern": "^-?[0-9]+(\\.[0-9]+)?$",
+          "$comment": "Specification Section 4.2.2: all financial numeric values MUST be encoded as strings to avoid IEEE 754 precision loss under RFC 8785 canonicalization."
+        },
+        "required_in_containing_object": false
+      },
+      "current": "Explicit schema field; exact scalar constraints attached.",
+      "current_unit": "Quantity; instrument/lot/contract unit not specified here.",
+      "references": [
+        {
+          "source": "body",
+          "lines": [
+            407,
+            415
+          ]
+        },
+        {
+          "source": "inherited",
+          "lines": [
+            330,
+            370
+          ]
+        }
+      ],
+      "candidate_class": "DEC_NONNEG",
+      "presence": "Optional within its containing schema object; ancestors/conditional context still control presence. No null allowed by this scalar schema; no new default proposed.",
+      "migration_notes": "Already a decimal string. Preserve its exact lexeme (including trailing zeros); proposed size bounds and unit/scale policy can narrow accepted inputs. No blanket integer conversion.",
+      "candidate_unit": "Instrument units on the same basis as Quantity."
+    },
+    {
+      "id": "N009",
+      "path": "Payload.VCP-TRADE.ExecutionPrice",
+      "group": "TRADE",
+      "schema": {
+        "pointer": "/$defs/Payload/properties/VCP-TRADE/properties/ExecutionPrice",
+        "context": "all structured events",
+        "constraints": {
+          "type": "string",
+          "pattern": "^-?[0-9]+(\\.[0-9]+)?$",
+          "$comment": "Specification Section 4.2.2: all financial numeric values MUST be encoded as strings to avoid IEEE 754 precision loss under RFC 8785 canonicalization."
+        },
+        "required_in_containing_object": false
+      },
+      "current": "Explicit schema field; exact scalar constraints attached.",
+      "current_unit": "Fill price; currency/instrument quantity basis not specified here.",
+      "references": [
+        {
+          "source": "body",
+          "lines": [
+            407,
+            415
+          ]
+        },
+        {
+          "source": "inherited",
+          "lines": [
+            330,
+            370
+          ]
+        }
+      ],
+      "candidate_class": "DEC_SIGNED",
+      "presence": "Optional within its containing schema object; ancestors/conditional context still control presence. No null allowed by this scalar schema; no new default proposed.",
+      "migration_notes": "Already a decimal string. Preserve its exact lexeme (including trailing zeros); proposed size bounds and unit/scale policy can narrow accepted inputs. No blanket integer conversion.",
+      "candidate_unit": "Quote-currency units per instrument unit, same explicit price basis as order/reference policy."
+    },
+    {
+      "id": "N010",
+      "path": "Payload.VCP-TRADE.Commission",
+      "group": "TRADE",
+      "schema": {
+        "pointer": "/$defs/Payload/properties/VCP-TRADE/properties/Commission",
+        "context": "all structured events",
+        "constraints": {
+          "type": "string",
+          "pattern": "^-?[0-9]+(\\.[0-9]+)?$",
+          "$comment": "Specification Section 4.2.2: all financial numeric values MUST be encoded as strings to avoid IEEE 754 precision loss under RFC 8785 canonicalization."
+        },
+        "required_in_containing_object": false
+      },
+      "current": "Explicit schema field; exact scalar constraints attached.",
+      "current_unit": "Commission amount; fee currency not specified here.",
+      "references": [
+        {
+          "source": "body",
+          "lines": [
+            407,
+            415
+          ]
+        },
+        {
+          "source": "inherited",
+          "lines": [
+            330,
+            370
+          ]
+        }
+      ],
+      "candidate_class": "DEC_SIGNED",
+      "presence": "Optional within its containing schema object; ancestors/conditional context still control presence. No null allowed by this scalar schema; no new default proposed.",
+      "migration_notes": "Already a decimal string. Preserve its exact lexeme (including trailing zeros); proposed size bounds and unit/scale policy can narrow accepted inputs. No blanket integer conversion.",
+      "candidate_unit": "Fee-currency units specified by policy; do not assume it equals quote Currency; negative rebates permitted if declared."
+    },
+    {
+      "id": "N011",
+      "path": "Payload.VCP-TRADE.Slippage",
+      "group": "TRADE",
+      "schema": {
+        "pointer": "/$defs/Payload/properties/VCP-TRADE/properties/Slippage",
+        "context": "all structured events",
+        "constraints": {
+          "type": "string",
+          "pattern": "^-?[0-9]+(\\.[0-9]+)?$",
+          "$comment": "Specification Section 4.2.2: all financial numeric values MUST be encoded as strings to avoid IEEE 754 precision loss under RFC 8785 canonicalization."
+        },
+        "required_in_containing_object": false
+      },
+      "current": "Explicit schema field; exact scalar constraints attached.",
+      "current_unit": "Slippage amount; absolute/relative unit and sign convention not specified here.",
+      "references": [
+        {
+          "source": "body",
+          "lines": [
+            407,
+            415
+          ]
+        },
+        {
+          "source": "inherited",
+          "lines": [
+            330,
+            370
+          ]
+        }
+      ],
+      "candidate_class": "DEC_SIGNED",
+      "presence": "Optional within its containing schema object; ancestors/conditional context still control presence. No null allowed by this scalar schema; no new default proposed.",
+      "migration_notes": "Already a decimal string. Preserve its exact lexeme (including trailing zeros); proposed size bounds and unit/scale policy can narrow accepted inputs. No blanket integer conversion.",
+      "candidate_unit": "Signed execution-price minus declared reference-price in price units; alternate bps/cost conventions require a distinct mapping, not silent conversion."
+    },
+    {
+      "id": "N012",
+      "path": "Payload.VCP-GOV.ConfidenceScore",
+      "group": "GOV",
+      "schema": {
+        "pointer": "/$defs/Payload/properties/VCP-GOV/properties/ConfidenceScore",
+        "context": "all structured events",
+        "constraints": {
+          "type": [
+            "string",
+            "number"
+          ],
+          "description": "Confidence in [0.0, 1.0]. String encoding is RECOMMENDED for precision (Specification Section 5.1.1)."
+        },
+        "required_in_containing_object": false
+      },
+      "current": "Explicit schema field; exact scalar constraints attached.",
+      "current_unit": "Unitless confidence [0,1] described, but neither schema range nor numeric-string grammar enforced.",
+      "references": [
+        {
+          "source": "inherited",
+          "lines": [
+            400,
+            411
+          ]
+        }
+      ],
+      "candidate_class": "RATIO01",
+      "presence": "Optional within its containing schema object; ancestors/conditional context still control presence. No null allowed by this scalar schema; no new default proposed.",
+      "migration_notes": "Current schema permits number|string; candidate accepts decimal strings only and checks [0,1]. Distinct from nested DecisionFactors.ConfidenceScore; no alias or silent promotion.",
+      "candidate_unit": "Unitless fraction in [0,1], not a percentage value in [0,100]."
+    },
+    {
+      "id": "N013",
+      "path": "Payload.VCP-PRIVACY.ErasureDetails.Scope.AffectedEventCount",
+      "group": "ERASURE",
+      "schema": {
+        "pointer": "/$defs/ErasureDetails/properties/Scope/properties/AffectedEventCount",
+        "context": "all structured events",
+        "constraints": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "required_in_containing_object": true
+      },
+      "current": "Explicit schema field; exact scalar constraints attached. No maximum enforced.",
+      "current_unit": "Affected event count; schema minimum 1.",
+      "references": [
+        {
+          "source": "annex",
+          "lines": [
+            534,
+            537
+          ]
+        },
+        {
+          "source": "annex",
+          "lines": [
+            517,
+            552
+          ]
+        }
+      ],
+      "candidate_class": "POS63",
+      "presence": "Required within its containing schema object; ancestors/conditional context still control presence. No null allowed by this scalar schema; no new default proposed.",
+      "migration_notes": "Verify explicit EventIDs count/order/endpoints or resolve source range; no continuity inferred from UUIDs. Candidate bound new; preserve old signed payload.",
+      "candidate_unit": "Count of affected events."
+    },
+    {
+      "id": "N014",
+      "path": "Payload.VCP-PRIVACY.ErasureDetails.Authorization.AuthorizationTimestamp",
+      "group": "ERASURE",
+      "schema": {
+        "pointer": "/$defs/ErasureDetails/properties/Authorization/properties/AuthorizationTimestamp",
+        "context": "all structured events",
+        "constraints": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "required_in_containing_object": true
+      },
+      "current": "Explicit schema field; exact scalar constraints attached. No maximum enforced.",
+      "current_unit": "Epoch nanoseconds under Annex §3.4 structured-encoding rule; not restated on this schema property.",
+      "references": [
+        {
+          "source": "annex",
+          "lines": [
+            534,
+            537
+          ]
+        },
+        {
+          "source": "annex",
+          "lines": [
+            517,
+            552
+          ]
+        }
+      ],
+      "candidate_class": "TIME_NS",
+      "presence": "Required within its containing schema object; ancestors/conditional context still control presence. No null allowed by this scalar schema; no new default proposed.",
+      "migration_notes": "JSON integer to exact decimal string changes hashed/signed bytes; range is newly bounded. Preserve original evidence. Authorization <= destruction <= event timestamp; approval ordering requires its own policy, not a rule inferred from CHECKPOINT.",
+      "candidate_unit": "Nanoseconds since 1970-01-01T00:00:00Z on the explicitly selected Unix-time convention (no leap-second counting)."
+    },
+    {
+      "id": "N015",
+      "path": "Payload.VCP-PRIVACY.ErasureDetails.Authorization.ApprovalChain[].ApprovalTimestamp",
+      "group": "ERASURE",
+      "schema": {
+        "pointer": "/$defs/Approval/properties/ApprovalTimestamp",
+        "context": "all structured events",
+        "constraints": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "required_in_containing_object": true
+      },
+      "current": "Explicit schema field; exact scalar constraints attached. No maximum enforced.",
+      "current_unit": "Epoch nanoseconds under Annex §3.4 structured-encoding rule; not restated on this schema property.",
+      "references": [
+        {
+          "source": "annex",
+          "lines": [
+            534,
+            537
+          ]
+        },
+        {
+          "source": "annex",
+          "lines": [
+            517,
+            552
+          ]
+        }
+      ],
+      "candidate_class": "TIME_NS",
+      "presence": "Required within its containing schema object; ancestors/conditional context still control presence. No null allowed by this scalar schema; no new default proposed.",
+      "migration_notes": "JSON integer to exact decimal string changes hashed/signed bytes; range is newly bounded. Preserve original evidence. Authorization <= destruction <= event timestamp; approval ordering requires its own policy, not a rule inferred from CHECKPOINT.",
+      "candidate_unit": "Nanoseconds since 1970-01-01T00:00:00Z on the explicitly selected Unix-time convention (no leap-second counting)."
+    },
+    {
+      "id": "N016",
+      "path": "Payload.VCP-PRIVACY.ErasureDetails.CryptoShredding.DestructionTimestamp",
+      "group": "ERASURE",
+      "schema": {
+        "pointer": "/$defs/ErasureDetails/properties/CryptoShredding/properties/DestructionTimestamp",
+        "context": "all structured events",
+        "constraints": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "required_in_containing_object": true
+      },
+      "current": "Explicit schema field; exact scalar constraints attached. No maximum enforced.",
+      "current_unit": "Epoch nanoseconds under Annex §3.4 structured-encoding rule; not restated on this schema property.",
+      "references": [
+        {
+          "source": "annex",
+          "lines": [
+            534,
+            537
+          ]
+        },
+        {
+          "source": "annex",
+          "lines": [
+            517,
+            552
+          ]
+        }
+      ],
+      "candidate_class": "TIME_NS",
+      "presence": "Required within its containing schema object; ancestors/conditional context still control presence. No null allowed by this scalar schema; no new default proposed.",
+      "migration_notes": "JSON integer to exact decimal string changes hashed/signed bytes; range is newly bounded. Preserve original evidence. Authorization <= destruction <= event timestamp; approval ordering requires its own policy, not a rule inferred from CHECKPOINT.",
+      "candidate_unit": "Nanoseconds since 1970-01-01T00:00:00Z on the explicitly selected Unix-time convention (no leap-second counting)."
+    },
+    {
+      "id": "N017",
+      "path": "Security.MerkleIndex",
+      "group": "Security",
+      "schema": {
+        "pointer": "/$defs/Security/properties/MerkleIndex",
+        "context": "all structured events",
+        "constraints": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "required_in_containing_object": false
+      },
+      "current": "Explicit schema field; exact scalar constraints attached. No maximum enforced.",
+      "current_unit": "Zero-based leaf position; prose int32, schema minimum 0 only.",
+      "references": [
+        {
+          "source": "body",
+          "lines": [
+            1077,
+            1105
+          ]
+        }
+      ],
+      "candidate_class": "INDEX31",
+      "presence": "Optional within its containing schema object; ancestors/conditional context still control presence. No null allowed by this scalar schema; no new default proposed.",
+      "migration_notes": "Must be less than authenticated AnchorRecord.EventCount; string conversion changes enclosing bytes. Without authenticated count, size-bound result is unassessed.",
+      "candidate_unit": "Zero-based position within the identified batch/party topology."
+    },
+    {
+      "id": "N018",
+      "path": "PolicyIdentification.RegistrationPolicy.EffectiveDate",
+      "group": "PolicyIdentification",
+      "schema": {
+        "pointer": "/$defs/PolicyIdentification/properties/RegistrationPolicy/properties/EffectiveDate",
+        "context": "all structured events",
+        "constraints": {
+          "type": "integer"
+        },
+        "required_in_containing_object": false
+      },
+      "current": "Explicit schema field; exact scalar constraints attached. No maximum enforced.",
+      "current_unit": "Epoch nanoseconds under Annex §3.4 structured-encoding rule; not restated on this schema property.",
+      "references": [
+        {
+          "source": "annex",
+          "lines": [
+            534,
+            537
+          ]
+        },
+        {
+          "source": "body",
+          "lines": [
+            423,
+            443
+          ]
+        }
+      ],
+      "candidate_class": "TIME_NS",
+      "presence": "Optional within its containing schema object; ancestors/conditional context still control presence. No null allowed by this scalar schema; no new default proposed.",
+      "migration_notes": "JSON integer to exact decimal string changes hashed/signed bytes; range is newly bounded. Preserve original evidence. Current schema permits negatives and has no minimum/maximum; pre-epoch values require legacy retention, not clamping.",
+      "candidate_unit": "Nanoseconds since 1970-01-01T00:00:00Z on the explicitly selected Unix-time convention (no leap-second counting)."
+    },
+    {
+      "id": "N019",
+      "path": "PolicyIdentification.RegistrationPolicy.ExpirationDate",
+      "group": "PolicyIdentification",
+      "schema": {
+        "pointer": "/$defs/PolicyIdentification/properties/RegistrationPolicy/properties/ExpirationDate",
+        "context": "all structured events",
+        "constraints": {
+          "type": "integer"
+        },
+        "required_in_containing_object": false
+      },
+      "current": "Explicit schema field; exact scalar constraints attached. No maximum enforced.",
+      "current_unit": "Epoch nanoseconds under Annex §3.4 structured-encoding rule; not restated on this schema property.",
+      "references": [
+        {
+          "source": "annex",
+          "lines": [
+            534,
+            537
+          ]
+        },
+        {
+          "source": "body",
+          "lines": [
+            423,
+            443
+          ]
+        }
+      ],
+      "candidate_class": "TIME_NS",
+      "presence": "Optional within its containing schema object; ancestors/conditional context still control presence. No null allowed by this scalar schema; no new default proposed.",
+      "migration_notes": "JSON integer to exact decimal string changes hashed/signed bytes; range is newly bounded. Preserve original evidence. Current schema permits negatives and has no minimum/maximum; pre-epoch values require legacy retention, not clamping.",
+      "candidate_unit": "Nanoseconds since 1970-01-01T00:00:00Z on the explicitly selected Unix-time convention (no leap-second counting)."
+    },
+    {
+      "id": "N020",
+      "path": "Payload.VCP-RECOVERY.Announcement.ScheduledTime",
+      "group": "RECOVERY",
+      "schema": {
+        "pointer": "/$defs/RecoveryAnnouncement/properties/ScheduledTime",
+        "context": "SYS_RECOVERY_ANNOUNCE",
+        "constraints": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "required_in_containing_object": true
+      },
+      "current": "Explicit schema field; exact scalar constraints attached.",
+      "current_unit": "RFC 3339 date-time string; Header description specifies UTC and up to ns.",
+      "references": [
+        {
+          "source": "annex",
+          "lines": [
+            534,
+            537
+          ]
+        },
+        {
+          "source": "annex",
+          "lines": [
+            312,
+            348
+          ]
+        }
+      ],
+      "candidate_class": "UTC_NS",
+      "presence": "Required within its containing schema object; ancestors/conditional context still control presence. No null allowed by this scalar schema; no new default proposed.",
+      "migration_notes": "New narrower UTC lexical subset; exact pair checking where Header.TimestampInt is present. Do not rewrite old ISO strings. Preserve 24h/72h advance notice and authentic referenced-notice checks.",
+      "candidate_unit": "UTC date-time with exactly 9 fractional digits; maps exactly to TIME_NS."
+    },
+    {
+      "id": "N021",
+      "path": "Payload.VCP-RECOVERY.RecoveryAction.EmergencyOverride.ApprovalChain[].ApprovalTimestamp",
+      "group": "RECOVERY",
+      "schema": {
+        "pointer": "/$defs/Approval/properties/ApprovalTimestamp",
+        "context": "SYS_CHECKPOINT",
+        "constraints": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "required_in_containing_object": true
+      },
+      "current": "Explicit schema field; exact scalar constraints attached. No maximum enforced.",
+      "current_unit": "Epoch nanoseconds under Annex §3.4 structured-encoding rule; not restated on this schema property.",
+      "references": [
+        {
+          "source": "annex",
+          "lines": [
+            534,
+            537
+          ]
+        },
+        {
+          "source": "annex",
+          "lines": [
+            312,
+            348
+          ]
+        }
+      ],
+      "candidate_class": "TIME_NS",
+      "presence": "Required within its containing schema object; ancestors/conditional context still control presence. No null allowed by this scalar schema; no new default proposed. This is the emergency=true authorization route; the normal notice route does not admit this approval chain.",
+      "migration_notes": "JSON integer to exact decimal string changes hashed/signed bytes; range is newly bounded. Preserve original evidence. CHECKPOINT emergency approval times <= event time; per-human authorization is separate.",
+      "candidate_unit": "Nanoseconds since 1970-01-01T00:00:00Z on the explicitly selected Unix-time convention (no leap-second counting)."
+    },
+    {
+      "id": "N022",
+      "path": "Payload.VCP-GOV.AuditDetails.ReviewedAt",
+      "group": "RECOVERY",
+      "schema": {
+        "pointer": "/$defs/AuditDetails/properties/ReviewedAt",
+        "context": "SYS_AUDIT",
+        "constraints": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "required_in_containing_object": true
+      },
+      "current": "Explicit schema field; exact scalar constraints attached. No maximum enforced.",
+      "current_unit": "Epoch nanoseconds under Annex §3.4 structured-encoding rule; not restated on this schema property.",
+      "references": [
+        {
+          "source": "annex",
+          "lines": [
+            534,
+            537
+          ]
+        },
+        {
+          "source": "annex",
+          "lines": [
+            312,
+            348
+          ]
+        }
+      ],
+      "candidate_class": "TIME_NS",
+      "presence": "Required within its containing schema object; ancestors/conditional context still control presence. No null allowed by this scalar schema; no new default proposed.",
+      "migration_notes": "JSON integer to exact decimal string changes hashed/signed bytes; range is newly bounded. Preserve original evidence. Preserve referenced incident/checkpoint and <=72h review checks; no invented zero for a missing review.",
+      "candidate_unit": "Nanoseconds since 1970-01-01T00:00:00Z on the explicitly selected Unix-time convention (no leap-second counting)."
+    },
+    {
+      "id": "N023",
+      "path": "Payload.VCP-ANCHOR.MigrationDetails.OldAnchorTarget.LastAnchorTimestamp",
+      "group": "MIGRATION",
+      "schema": {
+        "pointer": "/$defs/MigrationDetails/properties/OldAnchorTarget/properties/LastAnchorTimestamp",
+        "context": "SYS_ANCHOR_MIGRATION",
+        "constraints": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "required_in_containing_object": true
+      },
+      "current": "Explicit schema field; exact scalar constraints attached. No maximum enforced.",
+      "current_unit": "Epoch nanoseconds under Annex §3.4 structured-encoding rule; not restated on this schema property.",
+      "references": [
+        {
+          "source": "annex",
+          "lines": [
+            534,
+            537
+          ]
+        },
+        {
+          "source": "annex",
+          "lines": [
+            1204,
+            1260
+          ]
+        }
+      ],
+      "candidate_class": "TIME_NS",
+      "presence": "Required within its containing schema object; ancestors/conditional context still control presence. No null allowed by this scalar schema; no new default proposed.",
+      "migration_notes": "JSON integer to exact decimal string changes hashed/signed bytes; range is newly bounded. Preserve original evidence.",
+      "candidate_unit": "Nanoseconds since 1970-01-01T00:00:00Z on the explicitly selected Unix-time convention (no leap-second counting)."
+    },
+    {
+      "id": "N024",
+      "path": "Payload.VCP-ANCHOR.MigrationDetails.NewAnchorTarget.FirstAnchorTimestamp",
+      "group": "MIGRATION",
+      "schema": {
+        "pointer": "/$defs/MigrationDetails/properties/NewAnchorTarget/properties/FirstAnchorTimestamp",
+        "context": "SYS_ANCHOR_MIGRATION",
+        "constraints": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "required_in_containing_object": true
+      },
+      "current": "Explicit schema field; exact scalar constraints attached. No maximum enforced.",
+      "current_unit": "Epoch nanoseconds under Annex §3.4 structured-encoding rule; not restated on this schema property.",
+      "references": [
+        {
+          "source": "annex",
+          "lines": [
+            534,
+            537
+          ]
+        },
+        {
+          "source": "annex",
+          "lines": [
+            1204,
+            1260
+          ]
+        }
+      ],
+      "candidate_class": "TIME_NS",
+      "presence": "Required within its containing schema object; ancestors/conditional context still control presence. No null allowed by this scalar schema; no new default proposed.",
+      "migration_notes": "JSON integer to exact decimal string changes hashed/signed bytes; range is newly bounded. Preserve original evidence.",
+      "candidate_unit": "Nanoseconds since 1970-01-01T00:00:00Z on the explicitly selected Unix-time convention (no leap-second counting)."
+    },
+    {
+      "id": "N025",
+      "path": "Payload.VCP-ANCHOR.MigrationDetails.DualAnchorPeriod.StartTimestamp",
+      "group": "MIGRATION",
+      "schema": {
+        "pointer": "/$defs/MigrationDetails/properties/DualAnchorPeriod/properties/StartTimestamp",
+        "context": "SYS_ANCHOR_MIGRATION",
+        "constraints": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "required_in_containing_object": true
+      },
+      "current": "Explicit schema field; exact scalar constraints attached. No maximum enforced.",
+      "current_unit": "Epoch nanoseconds under Annex §3.4 structured-encoding rule; not restated on this schema property.",
+      "references": [
+        {
+          "source": "annex",
+          "lines": [
+            534,
+            537
+          ]
+        },
+        {
+          "source": "annex",
+          "lines": [
+            1204,
+            1260
+          ]
+        }
+      ],
+      "candidate_class": "TIME_NS",
+      "presence": "Required within its containing schema object; ancestors/conditional context still control presence. No null allowed by this scalar schema; no new default proposed.",
+      "migration_notes": "JSON integer to exact decimal string changes hashed/signed bytes; range is newly bounded. Preserve original evidence.",
+      "candidate_unit": "Nanoseconds since 1970-01-01T00:00:00Z on the explicitly selected Unix-time convention (no leap-second counting)."
+    },
+    {
+      "id": "N026",
+      "path": "Payload.VCP-ANCHOR.MigrationDetails.DualAnchorPeriod.EndTimestamp",
+      "group": "MIGRATION",
+      "schema": {
+        "pointer": "/$defs/MigrationDetails/properties/DualAnchorPeriod/properties/EndTimestamp",
+        "context": "SYS_ANCHOR_MIGRATION",
+        "constraints": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "required_in_containing_object": true
+      },
+      "current": "Explicit schema field; exact scalar constraints attached. No maximum enforced.",
+      "current_unit": "Epoch nanoseconds under Annex §3.4 structured-encoding rule; not restated on this schema property.",
+      "references": [
+        {
+          "source": "annex",
+          "lines": [
+            534,
+            537
+          ]
+        },
+        {
+          "source": "annex",
+          "lines": [
+            1204,
+            1260
+          ]
+        }
+      ],
+      "candidate_class": "TIME_NS",
+      "presence": "Required within its containing schema object; ancestors/conditional context still control presence. No null allowed by this scalar schema; no new default proposed.",
+      "migration_notes": "JSON integer to exact decimal string changes hashed/signed bytes; range is newly bounded. Preserve original evidence.",
+      "candidate_unit": "Nanoseconds since 1970-01-01T00:00:00Z on the explicitly selected Unix-time convention (no leap-second counting)."
+    },
+    {
+      "id": "N027",
+      "path": "Payload.VCP-ANCHOR.MigrationDetails.DualAnchorPeriod.OverlapEventCount",
+      "group": "MIGRATION",
+      "schema": {
+        "pointer": "/$defs/MigrationDetails/properties/DualAnchorPeriod/properties/OverlapEventCount",
+        "context": "SYS_ANCHOR_MIGRATION",
+        "constraints": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "required_in_containing_object": true
+      },
+      "current": "Explicit schema field; exact scalar constraints attached. No maximum enforced.",
+      "current_unit": "Overlapping event count; schema minimum 0.",
+      "references": [
+        {
+          "source": "annex",
+          "lines": [
+            534,
+            537
+          ]
+        },
+        {
+          "source": "annex",
+          "lines": [
+            1204,
+            1260
+          ]
+        }
+      ],
+      "candidate_class": "UINT63",
+      "presence": "Required within its containing schema object; ancestors/conditional context still control presence. No null allowed by this scalar schema; no new default proposed.",
+      "migration_notes": "Actual overlap evidence still required. Count 0 is not an absent count. Type/bound changes require a new format.",
+      "candidate_unit": "Count of events/occurrences (specified by field); SequenceNum is an ordinal."
+    },
+    {
+      "id": "N028",
+      "path": "Payload.VCP-ANCHOR.MigrationDetails.TierSpecificRTO.MaxOutageDuration",
+      "group": "MIGRATION",
+      "schema": {
+        "pointer": "/$defs/MigrationDetails/properties/TierSpecificRTO/properties/MaxOutageDuration",
+        "context": "SYS_ANCHOR_MIGRATION",
+        "constraints": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "required_in_containing_object": true
+      },
+      "current": "Explicit schema field; exact scalar constraints attached. No maximum enforced.",
+      "current_unit": "Whole seconds, explicitly excepted by Annex §3.4.",
+      "references": [
+        {
+          "source": "annex",
+          "lines": [
+            534,
+            537
+          ]
+        },
+        {
+          "source": "annex",
+          "lines": [
+            1204,
+            1260
+          ]
+        }
+      ],
+      "candidate_class": "SECONDS63",
+      "presence": "Required within its containing schema object; ancestors/conditional context still control presence. No null allowed by this scalar schema; no new default proposed.",
+      "migration_notes": "Only wire type changes; do not multiply the stored seconds into nanoseconds. Tier thresholds remain unchanged.",
+      "candidate_unit": "Whole seconds (unchanged)."
+    },
+    {
+      "id": "N029",
+      "path": "Payload.VCP-ANCHOR.MigrationDetails.TierSpecificRTO.FailoverDeadline",
+      "group": "MIGRATION",
+      "schema": {
+        "pointer": "/$defs/MigrationDetails/properties/TierSpecificRTO/properties/FailoverDeadline",
+        "context": "SYS_ANCHOR_MIGRATION",
+        "constraints": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "required_in_containing_object": true
+      },
+      "current": "Explicit schema field; exact scalar constraints attached. No maximum enforced.",
+      "current_unit": "Epoch nanoseconds under Annex §3.4 structured-encoding rule; not restated on this schema property.",
+      "references": [
+        {
+          "source": "annex",
+          "lines": [
+            534,
+            537
+          ]
+        },
+        {
+          "source": "annex",
+          "lines": [
+            1204,
+            1260
+          ]
+        }
+      ],
+      "candidate_class": "TIME_NS",
+      "presence": "Required within its containing schema object; ancestors/conditional context still control presence. No null allowed by this scalar schema; no new default proposed.",
+      "migration_notes": "JSON integer to exact decimal string changes hashed/signed bytes; range is newly bounded. Preserve original evidence. Absolute timestamp in fixture, not the relative 30min/4h/7day deadline interval from §7.3.2; trigger/start evidence is required to relate them.",
+      "candidate_unit": "Nanoseconds since 1970-01-01T00:00:00Z on the explicitly selected Unix-time convention (no leap-second counting)."
+    },
+    {
+      "id": "N030",
+      "path": "Payload.VCP-ANCHOR.FailoverDetails.TriggerCondition.FailureCount",
+      "group": "FAILOVER",
+      "schema": {
+        "pointer": "/$defs/FailoverDetails/properties/TriggerCondition/properties/FailureCount",
+        "context": "SYS_ANCHOR_FAILOVER",
+        "constraints": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "required_in_containing_object": true
+      },
+      "current": "Explicit schema field; exact scalar constraints attached. No maximum enforced.",
+      "current_unit": "Failure or queued-event count, respectively; schema minimum 0.",
+      "references": [
+        {
+          "source": "annex",
+          "lines": [
+            534,
+            537
+          ]
+        },
+        {
+          "source": "annex",
+          "lines": [
+            1341,
+            1398
+          ]
+        }
+      ],
+      "candidate_class": "UINT63",
+      "presence": "Required within its containing schema object; ancestors/conditional context still control presence. No null allowed by this scalar schema; no new default proposed.",
+      "migration_notes": "Do not convert an absent count to zero. Queued-event endpoint obligations for Count>0 and actual queue reconciliation remain separate.",
+      "candidate_unit": "Count of events/occurrences (specified by field); SequenceNum is an ordinal."
+    },
+    {
+      "id": "N031",
+      "path": "Payload.VCP-ANCHOR.FailoverDetails.TriggerCondition.TotalDowntimeSec",
+      "group": "FAILOVER",
+      "schema": {
+        "pointer": "/$defs/FailoverDetails/properties/TriggerCondition/properties/TotalDowntimeSec",
+        "context": "SYS_ANCHOR_FAILOVER",
+        "constraints": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "required_in_containing_object": true
+      },
+      "current": "Explicit schema field; exact scalar constraints attached. No maximum enforced.",
+      "current_unit": "Whole seconds, explicitly named *Sec and covered by Annex §3.4.",
+      "references": [
+        {
+          "source": "annex",
+          "lines": [
+            534,
+            537
+          ]
+        },
+        {
+          "source": "annex",
+          "lines": [
+            1341,
+            1398
+          ]
+        }
+      ],
+      "candidate_class": "SECONDS63",
+      "presence": "Required within its containing schema object; ancestors/conditional context still control presence. No null allowed by this scalar schema; no new default proposed.",
+      "migration_notes": "Type conversion only; no unit change. Preserve > thresholds and cross-event evidence.",
+      "candidate_unit": "Whole seconds (unchanged)."
+    },
+    {
+      "id": "N032",
+      "path": "Payload.VCP-ANCHOR.FailoverDetails.TriggerCondition.LastSuccessfulAnchor",
+      "group": "FAILOVER",
+      "schema": {
+        "pointer": "/$defs/FailoverDetails/properties/TriggerCondition/properties/LastSuccessfulAnchor",
+        "context": "SYS_ANCHOR_FAILOVER",
+        "constraints": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "required_in_containing_object": true
+      },
+      "current": "Explicit schema field; exact scalar constraints attached. No maximum enforced.",
+      "current_unit": "Epoch nanoseconds under Annex §3.4 structured-encoding rule; not restated on this schema property.",
+      "references": [
+        {
+          "source": "annex",
+          "lines": [
+            534,
+            537
+          ]
+        },
+        {
+          "source": "annex",
+          "lines": [
+            1341,
+            1398
+          ]
+        }
+      ],
+      "candidate_class": "TIME_NS",
+      "presence": "Required within its containing schema object; ancestors/conditional context still control presence. No null allowed by this scalar schema; no new default proposed.",
+      "migration_notes": "JSON integer to exact decimal string changes hashed/signed bytes; range is newly bounded. Preserve original evidence. This is an absolute timestamp despite the name, not an anchor counter; missing success is not epoch 0.",
+      "candidate_unit": "Nanoseconds since 1970-01-01T00:00:00Z on the explicitly selected Unix-time convention (no leap-second counting)."
+    },
+    {
+      "id": "N033",
+      "path": "Payload.VCP-ANCHOR.FailoverDetails.PrimaryAnchor.LastAttemptTimestamp",
+      "group": "FAILOVER",
+      "schema": {
+        "pointer": "/$defs/FailoverDetails/properties/PrimaryAnchor/properties/LastAttemptTimestamp",
+        "context": "SYS_ANCHOR_FAILOVER",
+        "constraints": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "required_in_containing_object": true
+      },
+      "current": "Explicit schema field; exact scalar constraints attached. No maximum enforced.",
+      "current_unit": "Epoch nanoseconds under Annex §3.4 structured-encoding rule; not restated on this schema property.",
+      "references": [
+        {
+          "source": "annex",
+          "lines": [
+            534,
+            537
+          ]
+        },
+        {
+          "source": "annex",
+          "lines": [
+            1341,
+            1398
+          ]
+        }
+      ],
+      "candidate_class": "TIME_NS",
+      "presence": "Required within its containing schema object; ancestors/conditional context still control presence. No null allowed by this scalar schema; no new default proposed.",
+      "migration_notes": "JSON integer to exact decimal string changes hashed/signed bytes; range is newly bounded. Preserve original evidence.",
+      "candidate_unit": "Nanoseconds since 1970-01-01T00:00:00Z on the explicitly selected Unix-time convention (no leap-second counting)."
+    },
+    {
+      "id": "N034",
+      "path": "Payload.VCP-ANCHOR.FailoverDetails.SecondaryAnchor.ActivationTimestamp",
+      "group": "FAILOVER",
+      "schema": {
+        "pointer": "/$defs/FailoverDetails/properties/SecondaryAnchor/properties/ActivationTimestamp",
+        "context": "SYS_ANCHOR_FAILOVER",
+        "constraints": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "required_in_containing_object": true
+      },
+      "current": "Explicit schema field; exact scalar constraints attached. No maximum enforced.",
+      "current_unit": "Epoch nanoseconds under Annex §3.4 structured-encoding rule; not restated on this schema property.",
+      "references": [
+        {
+          "source": "annex",
+          "lines": [
+            534,
+            537
+          ]
+        },
+        {
+          "source": "annex",
+          "lines": [
+            1341,
+            1398
+          ]
+        }
+      ],
+      "candidate_class": "TIME_NS",
+      "presence": "Required within its containing schema object; ancestors/conditional context still control presence. No null allowed by this scalar schema; no new default proposed.",
+      "migration_notes": "JSON integer to exact decimal string changes hashed/signed bytes; range is newly bounded. Preserve original evidence.",
+      "candidate_unit": "Nanoseconds since 1970-01-01T00:00:00Z on the explicitly selected Unix-time convention (no leap-second counting)."
+    },
+    {
+      "id": "N035",
+      "path": "Payload.VCP-ANCHOR.FailoverDetails.QueuedEvents.Count",
+      "group": "FAILOVER",
+      "schema": {
+        "pointer": "/$defs/FailoverDetails/properties/QueuedEvents/properties/Count",
+        "context": "SYS_ANCHOR_FAILOVER",
+        "constraints": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "required_in_containing_object": true
+      },
+      "current": "Explicit schema field; exact scalar constraints attached. No maximum enforced.",
+      "current_unit": "Failure or queued-event count, respectively; schema minimum 0.",
+      "references": [
+        {
+          "source": "annex",
+          "lines": [
+            534,
+            537
+          ]
+        },
+        {
+          "source": "annex",
+          "lines": [
+            1341,
+            1398
+          ]
+        }
+      ],
+      "candidate_class": "UINT63",
+      "presence": "Required within its containing schema object; ancestors/conditional context still control presence. No null allowed by this scalar schema; no new default proposed.",
+      "migration_notes": "Do not convert an absent count to zero. Queued-event endpoint obligations for Count>0 and actual queue reconciliation remain separate.",
+      "candidate_unit": "Count of events/occurrences (specified by field); SequenceNum is an ordinal."
+    },
+    {
+      "id": "N036",
+      "path": "AnchorRecord.Timestamp",
+      "group": "ANCHOR",
+      "schema": null,
+      "current": "Prose record; not part of the event schema. Repeated in Appendix E.3.",
+      "current_unit": "Anchor time; int64 in body; unit not locally restated. Candidate explicitly uses epoch ns.",
+      "references": [
+        {
+          "source": "body",
+          "lines": [
+            1023,
+            1043
+          ]
+        }
+      ],
+      "candidate_class": "TIME_NS",
+      "presence": "Required in body AnchorRecord example.",
+      "migration_notes": "New signed-record mapping required; this is not Header.TimestampInt or an external service-authenticated time.",
+      "candidate_unit": "Nanoseconds since 1970-01-01T00:00:00Z on the explicitly selected Unix-time convention (no leap-second counting)."
+    },
+    {
+      "id": "N037",
+      "path": "AnchorRecord.EventCount",
+      "group": "ANCHOR",
+      "schema": null,
+      "current": "Prose field; not in event schema.",
+      "current_unit": "Events in batch; int32 in body; signedness/lower bound not otherwise stated.",
+      "references": [
+        {
+          "source": "body",
+          "lines": [
+            1023,
+            1043
+          ]
+        }
+      ],
+      "candidate_class": "POS31",
+      "presence": "Shown without explicit REQUIRED comment; candidate requires it for any nonempty signed batch.",
+      "migration_notes": "Propose nonempty batches and authenticated count; legacy root-only signatures do not authenticate this field. Empty batches remain unsupported.",
+      "candidate_unit": "Count of batch events or parties (specified by field)."
+    },
+    {
+      "id": "N038",
+      "path": "AnchorRecord.AnchorTarget.Confirmations",
+      "group": "ANCHOR",
+      "schema": null,
+      "current": "Prose AnchorTarget extension; outside event schema.",
+      "current_unit": "Number of confirmations at anchor time; int32.",
+      "references": [
+        {
+          "source": "annex",
+          "lines": [
+            475,
+            495
+          ]
+        }
+      ],
+      "candidate_class": "UINT31",
+      "presence": "EnhancedMonitoring is REQUIRED for Class C/D; no inferred default time/count for other targets.",
+      "migration_notes": "Proposed epoch ns for times; confirmation count is not elapsed time. Target-specific finality/receipt semantics and signatures remain a separate mapping gate.",
+      "candidate_unit": "Count of events/confirmations (specified by field)."
+    },
+    {
+      "id": "N039",
+      "path": "AnchorRecord.AnchorTarget.FinalityTimestamp",
+      "group": "ANCHOR",
+      "schema": null,
+      "current": "Prose AnchorTarget extension; outside event schema.",
+      "current_unit": "Time finality achieved; int64; unit not locally restated.",
+      "references": [
+        {
+          "source": "annex",
+          "lines": [
+            475,
+            495
+          ]
+        }
+      ],
+      "candidate_class": "TIME_NS",
+      "presence": "EnhancedMonitoring is REQUIRED for Class C/D; no inferred default time/count for other targets.",
+      "migration_notes": "Proposed epoch ns for times; confirmation count is not elapsed time. Target-specific finality/receipt semantics and signatures remain a separate mapping gate.",
+      "candidate_unit": "Nanoseconds since 1970-01-01T00:00:00Z on the explicitly selected Unix-time convention (no leap-second counting)."
+    },
+    {
+      "id": "N040",
+      "path": "AnchorRecord.AnchorTarget.EnhancedMonitoring.LastHealthCheck",
+      "group": "ANCHOR",
+      "schema": null,
+      "current": "Prose AnchorTarget extension; outside event schema.",
+      "current_unit": "Time of last health check; int64; unit not locally restated.",
+      "references": [
+        {
+          "source": "annex",
+          "lines": [
+            475,
+            495
+          ]
+        }
+      ],
+      "candidate_class": "TIME_NS",
+      "presence": "EnhancedMonitoring is REQUIRED for Class C/D; no inferred default time/count for other targets.",
+      "migration_notes": "Proposed epoch ns for times; confirmation count is not elapsed time. Target-specific finality/receipt semantics and signatures remain a separate mapping gate.",
+      "candidate_unit": "Nanoseconds since 1970-01-01T00:00:00Z on the explicitly selected Unix-time convention (no leap-second counting)."
+    },
+    {
+      "id": "N041",
+      "path": "Payload.VCP-XREF.SharedEventKey.Timestamp",
+      "group": "XREF",
+      "schema": null,
+      "current": "VCP-XREF object is open in schema; these fields are not typed there.",
+      "current_unit": "int64 timestamp; body verification multiplies ToleranceMs by 1,000,000, indicating ns comparison.",
+      "references": [
+        {
+          "source": "body",
+          "lines": [
+            524,
+            630
+          ]
+        }
+      ],
+      "candidate_class": "TIME_NS",
+      "presence": "Presence/optionality not fully specified at this path; a future mapping must decide it. No default/null coercion.",
+      "migration_notes": "Require explicit source encoding/unit before migration; exact arithmetic for difference and tolerance.",
+      "candidate_unit": "Nanoseconds since 1970-01-01T00:00:00Z on the explicitly selected Unix-time convention (no leap-second counting)."
+    },
+    {
+      "id": "N042",
+      "path": "Payload.VCP-XREF.SharedEventKey.ToleranceMs",
+      "group": "XREF",
+      "schema": null,
+      "current": "Prose only; schema object open.",
+      "current_unit": "Milliseconds, int32; examples 100; nonnegative bound not stated.",
+      "references": [
+        {
+          "source": "body",
+          "lines": [
+            524,
+            630
+          ]
+        }
+      ],
+      "candidate_class": "MILLISECONDS31",
+      "presence": "Presence/optionality not fully specified at this path; a future mapping must decide it. No default/null coercion.",
+      "migration_notes": "Keep milliseconds; multiply by 1,000,000 only in comparison arithmetic, using non-overflowing integers. Inclusive match at equal tolerance.",
+      "candidate_unit": "Whole milliseconds (unchanged)."
+    },
+    {
+      "id": "N043",
+      "path": "Payload.VCP-XREF.PartyIndex",
+      "group": "XREF",
+      "schema": null,
+      "current": "Prose only; not constrained inside open VCP-XREF schema.",
+      "current_unit": "Zero-based position, 0=initiator; int32.",
+      "references": [
+        {
+          "source": "annex",
+          "lines": [
+            1540,
+            1573
+          ]
+        }
+      ],
+      "candidate_class": "INDEX31",
+      "presence": "TotalParties is SHOULD in §9.6; multi-actor extension is optional. Missing total means unassessed index bound, not automatic success.",
+      "migration_notes": "Candidate index < trusted/validated TotalParties; topology and role consistency need policy. Cross-party observed times do not prove causality without clock/trust evidence.",
+      "candidate_unit": "Zero-based position within the identified batch/party topology."
+    },
+    {
+      "id": "N044",
+      "path": "Payload.VCP-XREF.UpstreamParty.ReceivedTimestamp",
+      "group": "XREF",
+      "schema": null,
+      "current": "Prose only; not constrained inside open VCP-XREF schema.",
+      "current_unit": "int64; epoch ns for structured encoding, not locally restated.",
+      "references": [
+        {
+          "source": "annex",
+          "lines": [
+            1540,
+            1573
+          ]
+        }
+      ],
+      "candidate_class": "TIME_NS",
+      "presence": "TotalParties is SHOULD in §9.6; multi-actor extension is optional. Missing total means unassessed index bound, not automatic success.",
+      "migration_notes": "Candidate index < trusted/validated TotalParties; topology and role consistency need policy. Cross-party observed times do not prove causality without clock/trust evidence.",
+      "candidate_unit": "Nanoseconds since 1970-01-01T00:00:00Z on the explicitly selected Unix-time convention (no leap-second counting)."
+    },
+    {
+      "id": "N045",
+      "path": "Payload.VCP-XREF.DownstreamParties[].ForwardedTimestamp",
+      "group": "XREF",
+      "schema": null,
+      "current": "Prose only; not constrained inside open VCP-XREF schema.",
+      "current_unit": "int64; epoch ns for structured encoding, not locally restated.",
+      "references": [
+        {
+          "source": "annex",
+          "lines": [
+            1540,
+            1573
+          ]
+        }
+      ],
+      "candidate_class": "TIME_NS",
+      "presence": "TotalParties is SHOULD in §9.6; multi-actor extension is optional. Missing total means unassessed index bound, not automatic success.",
+      "migration_notes": "Candidate index < trusted/validated TotalParties; topology and role consistency need policy. Cross-party observed times do not prove causality without clock/trust evidence.",
+      "candidate_unit": "Nanoseconds since 1970-01-01T00:00:00Z on the explicitly selected Unix-time convention (no leap-second counting)."
+    },
+    {
+      "id": "N046",
+      "path": "Payload.VCP-XREF.ChainMetadata.TotalParties",
+      "group": "XREF",
+      "schema": null,
+      "current": "Prose only; not constrained inside open VCP-XREF schema.",
+      "current_unit": "Party count, int32; no lower bound stated.",
+      "references": [
+        {
+          "source": "annex",
+          "lines": [
+            1540,
+            1573
+          ]
+        }
+      ],
+      "candidate_class": "POS31",
+      "presence": "TotalParties is SHOULD in §9.6; multi-actor extension is optional. Missing total means unassessed index bound, not automatic success.",
+      "migration_notes": "Candidate index < trusted/validated TotalParties; topology and role consistency need policy. Cross-party observed times do not prove causality without clock/trust evidence.",
+      "candidate_unit": "Count of batch events or parties (specified by field)."
+    },
+    {
+      "id": "N047",
+      "path": "Payload.VCP-RECOVERY.RecoveryConstraints.MaxSkipEvents",
+      "group": "RECOVERY",
+      "schema": null,
+      "current": "Prose only at these paths; BreakPoint/ChainValidation are open in CHECKPOINT, RecoveryConstraints is not explicitly defined in schema.",
+      "current_unit": "Maximum skipped events; int32; tier caps 10/100/1000.",
+      "references": [
+        {
+          "source": "annex",
+          "lines": [
+            93,
+            160
+          ]
+        }
+      ],
+      "candidate_class": "UINT31",
+      "presence": "Presence/optionality not fully specified at this path; a future mapping must decide it. No default/null coercion.",
+      "migration_notes": "General recovery prose is not a complete SYS_CHECKPOINT schema. Preserve SKIP limits and anchor-boundary rule; no new recovery operation authorized.",
+      "candidate_unit": "Count of events/confirmations (specified by field)."
+    },
+    {
+      "id": "N048",
+      "path": "Payload.VCP-RECOVERY.RecoveryConstraints.MaxSkipDuration",
+      "group": "RECOVERY",
+      "schema": null,
+      "current": "Prose only at these paths; BreakPoint/ChainValidation are open in CHECKPOINT, RecoveryConstraints is not explicitly defined in schema.",
+      "current_unit": "int64 duration; no wire unit assigned here and not covered by *Sec exception.",
+      "references": [
+        {
+          "source": "annex",
+          "lines": [
+            93,
+            160
+          ]
+        }
+      ],
+      "candidate_class": "DURATION_NS63",
+      "presence": "Presence/optionality not fully specified at this path; a future mapping must decide it. No default/null coercion.",
+      "migration_notes": "General recovery prose is not a complete SYS_CHECKPOINT schema. Preserve SKIP limits and anchor-boundary rule; no new recovery operation authorized. Candidate chooses ns explicitly (1s/60s/3600s = 1000000000/60000000000/3600000000000); historical unit cannot be inferred from integer magnitude.",
+      "candidate_unit": "Nanoseconds of elapsed duration (new explicit choice)."
+    },
+    {
+      "id": "N049",
+      "path": "Payload.VCP-RECOVERY.BreakPoint.BreakTimestamp",
+      "group": "RECOVERY",
+      "schema": null,
+      "current": "Prose only at these paths; BreakPoint/ChainValidation are open in CHECKPOINT, RecoveryConstraints is not explicitly defined in schema.",
+      "current_unit": "int64; epoch ns in structured encoding.",
+      "references": [
+        {
+          "source": "annex",
+          "lines": [
+            93,
+            160
+          ]
+        }
+      ],
+      "candidate_class": "TIME_NS",
+      "presence": "Presence/optionality not fully specified at this path; a future mapping must decide it. No default/null coercion.",
+      "migration_notes": "General recovery prose is not a complete SYS_CHECKPOINT schema. Preserve SKIP limits and anchor-boundary rule; no new recovery operation authorized.",
+      "candidate_unit": "Nanoseconds since 1970-01-01T00:00:00Z on the explicitly selected Unix-time convention (no leap-second counting)."
+    },
+    {
+      "id": "N050",
+      "path": "Payload.VCP-RECOVERY.RecoveryAction.RecoveredEvents",
+      "group": "RECOVERY",
+      "schema": null,
+      "current": "Prose only at these paths; BreakPoint/ChainValidation are open in CHECKPOINT, RecoveryConstraints is not explicitly defined in schema.",
+      "current_unit": "Recovered event count; int32.",
+      "references": [
+        {
+          "source": "annex",
+          "lines": [
+            93,
+            160
+          ]
+        }
+      ],
+      "candidate_class": "UINT31",
+      "presence": "Presence/optionality not fully specified at this path; a future mapping must decide it. No default/null coercion.",
+      "migration_notes": "General recovery prose is not a complete SYS_CHECKPOINT schema. Preserve SKIP limits and anchor-boundary rule; no new recovery operation authorized. SYS_CHECKPOINT RecoveryAction.additionalProperties=false currently rejects RecoveredEvents; keep general recovery versus CHECKPOINT contexts separate.",
+      "candidate_unit": "Count of events/confirmations (specified by field)."
+    },
+    {
+      "id": "N051",
+      "path": "Payload.VCP-RECOVERY.ChainValidation.AnchorVerificationTimestamp",
+      "group": "RECOVERY",
+      "schema": null,
+      "current": "Prose only at these paths; BreakPoint/ChainValidation are open in CHECKPOINT, RecoveryConstraints is not explicitly defined in schema.",
+      "current_unit": "int64; epoch ns in structured encoding.",
+      "references": [
+        {
+          "source": "annex",
+          "lines": [
+            93,
+            160
+          ]
+        }
+      ],
+      "candidate_class": "TIME_NS",
+      "presence": "Presence/optionality not fully specified at this path; a future mapping must decide it. No default/null coercion.",
+      "migration_notes": "General recovery prose is not a complete SYS_CHECKPOINT schema. Preserve SKIP limits and anchor-boundary rule; no new recovery operation authorized.",
+      "candidate_unit": "Nanoseconds since 1970-01-01T00:00:00Z on the explicitly selected Unix-time convention (no leap-second counting)."
+    },
+    {
+      "id": "N052",
+      "path": "Payload.VCP-GOV.Governance.ApprovalTimestamp",
+      "group": "GOV",
+      "schema": null,
+      "current": "Inherited prose inside open VCP-GOV; not schema-typed.",
+      "current_unit": "int64; unit not locally stated; structured encoding rule provides ns.",
+      "references": [
+        {
+          "source": "inherited",
+          "lines": [
+            380,
+            417
+          ]
+        }
+      ],
+      "candidate_class": "TIME_NS",
+      "presence": "Presence/optionality not fully specified at this path; a future mapping must decide it. No default/null coercion.",
+      "migration_notes": "Do not confuse governance approval with erasure/checkpoint approval; authorization/signature and presence mapping remain open.",
+      "candidate_unit": "Nanoseconds since 1970-01-01T00:00:00Z on the explicitly selected Unix-time convention (no leap-second counting)."
+    },
+    {
+      "id": "N053",
+      "path": "Payload.VCP-GOV.DecisionFactors.Features[].Value",
+      "group": "GOV",
+      "schema": null,
+      "current": "Inherited prose; DecisionFactors permits array|object with unconstrained contents; other added members are open.",
+      "current_unit": "Feature value as string; may be numeric or categorical.",
+      "references": [
+        {
+          "source": "inherited",
+          "lines": [
+            380,
+            417
+          ]
+        }
+      ],
+      "candidate_class": "TYPED_FEATURE",
+      "presence": "Presence/optionality not fully specified at this path; a future mapping must decide it. No default/null coercion.",
+      "migration_notes": "Do not parse all feature strings as numbers. Policy must identify type, unit, scale and bounds per feature.",
+      "candidate_unit": "Per-feature declared type/unit/scale/bounds; categorical strings remain categorical."
+    },
+    {
+      "id": "N054",
+      "path": "Payload.VCP-GOV.DecisionFactors.Features[].Weight",
+      "group": "GOV",
+      "schema": null,
+      "current": "Inherited prose; DecisionFactors permits array|object with unconstrained contents; other added members are open.",
+      "current_unit": "Weight string; normalization/unit/range not specified.",
+      "references": [
+        {
+          "source": "inherited",
+          "lines": [
+            380,
+            417
+          ]
+        }
+      ],
+      "candidate_class": "DEC_SIGNED",
+      "presence": "Presence/optionality not fully specified at this path; a future mapping must decide it. No default/null coercion.",
+      "migration_notes": "Candidate signed decimal with policy-defined model units; no assumed [0,1] bound or sum=1.",
+      "candidate_unit": "Signed model weight in the unit declared for that model/feature; no normalization assumed."
+    },
+    {
+      "id": "N055",
+      "path": "Payload.VCP-GOV.DecisionFactors.Features[].Contribution",
+      "group": "GOV",
+      "schema": null,
+      "current": "Inherited prose; DecisionFactors permits array|object with unconstrained contents; other added members are open.",
+      "current_unit": "SHAP/LIME contribution string; output unit/range unspecified.",
+      "references": [
+        {
+          "source": "inherited",
+          "lines": [
+            380,
+            417
+          ]
+        }
+      ],
+      "candidate_class": "DEC_SIGNED",
+      "presence": "Presence/optionality not fully specified at this path; a future mapping must decide it. No default/null coercion.",
+      "migration_notes": "Candidate signed decimal in the declared model-output units; never reinterpret as a probability.",
+      "candidate_unit": "Signed model-output units identified by explanation policy (including transform/base value)."
+    },
+    {
+      "id": "N056",
+      "path": "Payload.VCP-GOV.DecisionFactors.ConfidenceScore",
+      "group": "GOV",
+      "schema": null,
+      "current": "Inherited prose; DecisionFactors permits array|object with unconstrained contents; other added members are open.",
+      "current_unit": "Unitless confidence 0.0–1.0 string.",
+      "references": [
+        {
+          "source": "inherited",
+          "lines": [
+            380,
+            417
+          ]
+        }
+      ],
+      "candidate_class": "RATIO01",
+      "presence": "Presence/optionality not fully specified at this path; a future mapping must decide it. No default/null coercion.",
+      "migration_notes": "Distinct path from VCP-GOV.ConfidenceScore; reject conflicting dual representations in a future mapping, do not pick whichever passes.",
+      "candidate_unit": "Unitless fraction in [0,1], not a percentage value in [0,100]."
+    },
+    {
+      "id": "N057",
+      "path": "Payload.VCP-GOV.PerformanceMetadata.SamplingRate",
+      "group": "GOV",
+      "schema": null,
+      "current": "Inherited prose; DecisionFactors permits array|object with unconstrained contents; other added members are open.",
+      "current_unit": "Unitless sample fraction; 1.0=100%, 0.1=10%.",
+      "references": [
+        {
+          "source": "inherited",
+          "lines": [
+            380,
+            417
+          ]
+        }
+      ],
+      "candidate_class": "RATIO01",
+      "presence": "Presence/optionality not fully specified at this path; a future mapping must decide it. No default/null coercion.",
+      "migration_notes": "Candidate [0,1]; zero is explicit no sampling, absent is unknown. Sampled evidence is not full coverage.",
+      "candidate_unit": "Unitless fraction in [0,1], not a percentage value in [0,100]."
+    },
+    {
+      "id": "N058",
+      "path": "Payload.VCP-GOV.PerformanceMetadata.LatencyImpact",
+      "group": "GOV",
+      "schema": null,
+      "current": "Inherited prose; DecisionFactors permits array|object with unconstrained contents; other added members are open.",
+      "current_unit": "Microseconds added, as string.",
+      "references": [
+        {
+          "source": "inherited",
+          "lines": [
+            380,
+            417
+          ]
+        }
+      ],
+      "candidate_class": "DEC_NONNEG",
+      "presence": "Presence/optionality not fully specified at this path; a future mapping must decide it. No default/null coercion.",
+      "migration_notes": "Preserve microseconds and fractional precision; do not confuse with integer ns timestamps or tier latency thresholds.",
+      "candidate_unit": "Microseconds added, allowing fractional microseconds."
+    },
+    {
+      "id": "N059",
+      "path": "Payload.VCP-RISK.RiskProfile.LastModified",
+      "group": "RISK",
+      "schema": null,
+      "current": "Inherited prose; VCP-RISK is an open object.",
+      "current_unit": "int64; local unit unspecified, ns under structured rule.",
+      "references": [
+        {
+          "source": "inherited",
+          "lines": [
+            426,
+            463
+          ]
+        }
+      ],
+      "candidate_class": "TIME_NS",
+      "presence": "Presence/optionality not fully specified at this path; a future mapping must decide it. No default/null coercion.",
+      "migration_notes": "New exact string changes event bytes; authenticated policy identity/version and no-default rule required.",
+      "candidate_unit": "Nanoseconds since 1970-01-01T00:00:00Z on the explicitly selected Unix-time convention (no leap-second counting)."
+    },
+    {
+      "id": "N060",
+      "path": "Payload.VCP-RISK.ParametersSnapshot.MaxOrderSize",
+      "group": "RISK",
+      "schema": null,
+      "current": "Inherited example string; not schema-typed, not an independently defined numeric range.",
+      "current_unit": "Order quantity limit; unit missing.",
+      "references": [
+        {
+          "source": "inherited",
+          "lines": [
+            426,
+            463
+          ]
+        }
+      ],
+      "candidate_class": "DEC_NONNEG",
+      "presence": "Presence/optionality not fully specified at this path; a future mapping must decide it. No default/null coercion.",
+      "migration_notes": "Candidate nonnegative exact decimal. Unit, scale, instrument/currency and policy bounds must be identified; no requirement to stop/reject operations is created.",
+      "candidate_unit": "Instrument quantity units identified by risk policy."
+    },
+    {
+      "id": "N061",
+      "path": "Payload.VCP-RISK.ParametersSnapshot.MaxPositionSize",
+      "group": "RISK",
+      "schema": null,
+      "current": "Inherited example string; not schema-typed, not an independently defined numeric range.",
+      "current_unit": "Position quantity limit; unit missing.",
+      "references": [
+        {
+          "source": "inherited",
+          "lines": [
+            426,
+            463
+          ]
+        }
+      ],
+      "candidate_class": "DEC_NONNEG",
+      "presence": "Presence/optionality not fully specified at this path; a future mapping must decide it. No default/null coercion.",
+      "migration_notes": "Candidate nonnegative exact decimal. Unit, scale, instrument/currency and policy bounds must be identified; no requirement to stop/reject operations is created.",
+      "candidate_unit": "Instrument quantity units identified by risk policy; limit magnitude, not signed net position."
+    },
+    {
+      "id": "N062",
+      "path": "Payload.VCP-RISK.ParametersSnapshot.DailyExposureLimit",
+      "group": "RISK",
+      "schema": null,
+      "current": "Inherited example string; not schema-typed, not an independently defined numeric range.",
+      "current_unit": "Exposure limit; amount/currency basis missing.",
+      "references": [
+        {
+          "source": "inherited",
+          "lines": [
+            426,
+            463
+          ]
+        }
+      ],
+      "candidate_class": "DEC_NONNEG",
+      "presence": "Presence/optionality not fully specified at this path; a future mapping must decide it. No default/null coercion.",
+      "migration_notes": "Candidate nonnegative exact decimal. Unit, scale, instrument/currency and policy bounds must be identified; no requirement to stop/reject operations is created.",
+      "candidate_unit": "Risk-policy currency amount; net/gross exposure, valuation and daily window explicit."
+    },
+    {
+      "id": "N063",
+      "path": "Payload.VCP-RISK.ParametersSnapshot.ExposureUtilization",
+      "group": "RISK",
+      "schema": null,
+      "current": "Inherited example string; not schema-typed, not an independently defined numeric range.",
+      "current_unit": "Utilization string, example 0.75; denominator/unit and upper bound not explicitly stated.",
+      "references": [
+        {
+          "source": "inherited",
+          "lines": [
+            426,
+            463
+          ]
+        }
+      ],
+      "candidate_class": "DEC_NONNEG",
+      "presence": "Presence/optionality not fully specified at this path; a future mapping must decide it. No default/null coercion.",
+      "migration_notes": "Candidate nonnegative exact decimal. Unit, scale, instrument/currency and policy bounds must be identified; no requirement to stop/reject operations is created. Values >1 are retained to represent a breached limit, not clipped to 1.",
+      "candidate_unit": "Unitless exposure/limit ratio, allowed to exceed 1; zero denominator is undefined, never zero-filled."
+    },
+    {
+      "id": "N064",
+      "path": "Payload.VCP-RISK.ParametersSnapshot.VaRLimit",
+      "group": "RISK",
+      "schema": null,
+      "current": "Inherited example string; not schema-typed, not an independently defined numeric range.",
+      "current_unit": "Value-at-risk limit; currency, horizon and confidence level missing.",
+      "references": [
+        {
+          "source": "inherited",
+          "lines": [
+            426,
+            463
+          ]
+        }
+      ],
+      "candidate_class": "DEC_NONNEG",
+      "presence": "Presence/optionality not fully specified at this path; a future mapping must decide it. No default/null coercion.",
+      "migration_notes": "Candidate nonnegative exact decimal. Unit, scale, instrument/currency and policy bounds must be identified; no requirement to stop/reject operations is created.",
+      "candidate_unit": "Risk-policy currency amount, horizon/confidence/valuation basis explicitly identified."
+    },
+    {
+      "id": "N065",
+      "path": "Payload.VCP-RISK.ParametersSnapshot.CurrentVaR",
+      "group": "RISK",
+      "schema": null,
+      "current": "Inherited example string; not schema-typed, not an independently defined numeric range.",
+      "current_unit": "Current value-at-risk; currency, horizon and confidence level missing.",
+      "references": [
+        {
+          "source": "inherited",
+          "lines": [
+            426,
+            463
+          ]
+        }
+      ],
+      "candidate_class": "DEC_NONNEG",
+      "presence": "Presence/optionality not fully specified at this path; a future mapping must decide it. No default/null coercion.",
+      "migration_notes": "Candidate nonnegative exact decimal. Unit, scale, instrument/currency and policy bounds must be identified; no requirement to stop/reject operations is created.",
+      "candidate_unit": "Same amount basis as VaRLimit; sign convention must be reviewed if a legacy model reports negative loss."
+    },
+    {
+      "id": "N066",
+      "path": "Payload.VCP-RISK.ParametersSnapshot.ThrottleRate",
+      "group": "RISK",
+      "schema": null,
+      "current": "Inherited example string; not schema-typed, not an independently defined numeric range.",
+      "current_unit": "Orders per second (explicit comment).",
+      "references": [
+        {
+          "source": "inherited",
+          "lines": [
+            426,
+            463
+          ]
+        }
+      ],
+      "candidate_class": "DEC_NONNEG",
+      "presence": "Presence/optionality not fully specified at this path; a future mapping must decide it. No default/null coercion.",
+      "migration_notes": "Candidate nonnegative exact decimal. Unit, scale, instrument/currency and policy bounds must be identified; no requirement to stop/reject operations is created. Fractional orders/s allowed as an average rate; burst/window semantics need policy, no integer rounding.",
+      "candidate_unit": "Orders per second averaged over the policy window; fractional rate allowed; burst limit specified separately."
+    },
+    {
+      "id": "N067",
+      "path": "Payload.VCP-RISK.TriggeredControls[].TriggerValue",
+      "group": "RISK",
+      "schema": null,
+      "current": "Inherited prose; open risk object.",
+      "current_unit": "Example quantity string; unit/type depend on ControlName.",
+      "references": [
+        {
+          "source": "inherited",
+          "lines": [
+            451,
+            463
+          ]
+        }
+      ],
+      "candidate_class": "TYPED_CONTROL",
+      "presence": "Presence/optionality not fully specified at this path; a future mapping must decide it. No default/null coercion.",
+      "migration_notes": "Require a typed control policy; reject unknown semantics for candidate conformance, preserve evidence as unassessed. Not all controls use quantity units.",
+      "candidate_unit": "Per-control declared type/unit/scale/bounds; no implicit quantity conversion."
+    },
+    {
+      "id": "N068",
+      "path": "Payload.VCP-RISK.TriggeredControls[].Timestamp",
+      "group": "RISK",
+      "schema": null,
+      "current": "Inherited prose; not schema-typed.",
+      "current_unit": "int64; ns under structured rule.",
+      "references": [
+        {
+          "source": "inherited",
+          "lines": [
+            451,
+            463
+          ]
+        }
+      ],
+      "candidate_class": "TIME_NS",
+      "presence": "Presence/optionality not fully specified at this path; a future mapping must decide it. No default/null coercion.",
+      "migration_notes": "Explicitly retain operation time, distinct from the event capture timestamp; ordering/trust is separate.",
+      "candidate_unit": "Nanoseconds since 1970-01-01T00:00:00Z on the explicitly selected Unix-time convention (no leap-second counting)."
+    },
+    {
+      "id": "N069",
+      "path": "Payload.VCP-PRIVACY.Pseudonymization.RetentionPeriod",
+      "group": "OTHER",
+      "schema": null,
+      "current": "Inherited prose; not schema-typed.",
+      "current_unit": "ISO 8601 calendar duration string, example P7Y; not a timestamp.",
+      "references": [
+        {
+          "source": "inherited",
+          "lines": [
+            470,
+            491
+          ]
+        }
+      ],
+      "candidate_class": "CALENDAR",
+      "presence": "Presence/optionality not fully specified at this path; a future mapping must decide it. No default/null coercion.",
+      "migration_notes": "Preserve calendar representation. A duration containing years/months cannot be mapped to seconds without a start/calendar/policy. Range and lexical subset remain open; no retention/legal requirement changed.",
+      "candidate_unit": "Calendar duration, preserved; range/subset unresolved."
+    },
+    {
+      "id": "N070",
+      "path": "SecondaryAnchorConfiguration.Secondary.LastHealthCheck",
+      "group": "CONFIG",
+      "schema": null,
+      "current": "Configuration example, not event/AnchorTarget field.",
+      "current_unit": "Explicit RFC 3339 example string.",
+      "references": [
+        {
+          "source": "annex",
+          "lines": [
+            1401,
+            1427
+          ]
+        }
+      ],
+      "candidate_class": "UTC_NS",
+      "presence": "Presence/optionality not fully specified at this path; a future mapping must decide it. No default/null coercion.",
+      "migration_notes": "Do not globally convert LastHealthCheck by name: the AnchorTarget field is int64, this configuration field is a date string.",
+      "candidate_unit": "UTC date-time with exactly 9 fractional digits; maps exactly to TIME_NS."
+    },
+    {
+      "id": "N071",
+      "path": "SCITTReceipt.payload.tree_size",
+      "group": "EXTERNAL",
+      "schema": null,
+      "current": "Conceptual external COSE receipt; not VCP event schema.",
+      "current_unit": "Example 12345 in conceptual COSE receipt; exact encoding/profile unspecified.",
+      "references": [
+        {
+          "source": "annex",
+          "lines": [
+            1003,
+            1018
+          ]
+        }
+      ],
+      "candidate_class": "EXTERNAL_INTEGER",
+      "presence": "Presence/optionality not fully specified at this path; a future mapping must decide it. No default/null coercion.",
+      "migration_notes": "Do not change CBOR/service-signed values into VCP decimal strings. Candidate adapter checks exact nonnegative values and index<size under the chosen service profile; limits/mapping remain unresolved.",
+      "candidate_unit": "External service-tree count/index; selected receipt profile controls representation/range."
+    },
+    {
+      "id": "N072",
+      "path": "SCITTReceipt.payload.leaf_index",
+      "group": "EXTERNAL",
+      "schema": null,
+      "current": "Conceptual external COSE receipt; not VCP event schema.",
+      "current_unit": "Example 12344; index into service tree, not necessarily VCP batch.",
+      "references": [
+        {
+          "source": "annex",
+          "lines": [
+            1003,
+            1018
+          ]
+        }
+      ],
+      "candidate_class": "EXTERNAL_INTEGER",
+      "presence": "Presence/optionality not fully specified at this path; a future mapping must decide it. No default/null coercion.",
+      "migration_notes": "Do not change CBOR/service-signed values into VCP decimal strings. Candidate adapter checks exact nonnegative values and index<size under the chosen service profile; limits/mapping remain unresolved.",
+      "candidate_unit": "External service-tree count/index; selected receipt profile controls representation/range."
+    },
+    {
+      "id": "N073",
+      "path": "LegacyHeader.Timestamp",
+      "group": "LEGACY",
+      "schema": null,
+      "current": "Legacy flat Header example; structured v1.2 requires TimestampInt instead.",
+      "current_unit": "Inherited Int64 epoch ns, but Appendix C illustrates ns/us/ms separately.",
+      "references": [
+        {
+          "source": "inherited",
+          "lines": [
+            296,
+            324
+          ]
+        }
+      ],
+      "candidate_class": "TIME_NS",
+      "presence": "Presence/optionality not fully specified at this path; a future mapping must decide it. No default/null coercion.",
+      "migration_notes": "Old aliases/units are not accepted by guessing. Annotate identified legacy interpretation separately; do not rename signed keys.",
+      "candidate_unit": "Nanoseconds since 1970-01-01T00:00:00Z on the explicitly selected Unix-time convention (no leap-second counting)."
+    },
+    {
+      "id": "N074",
+      "path": "LegacyHeader.EventType",
+      "group": "LEGACY",
+      "schema": null,
+      "current": "Legacy numeric enum; structured schema requires a registered string EventType.",
+      "current_unit": "Int8 event code, example 2; an identifier, not a measured quantity.",
+      "references": [
+        {
+          "source": "inherited",
+          "lines": [
+            296,
+            324
+          ]
+        }
+      ],
+      "candidate_class": "ENUM_CODE",
+      "presence": "Presence/optionality not fully specified at this path; a future mapping must decide it. No default/null coercion.",
+      "migration_notes": "Explicitly excluded from scalar decimal-string conversion; a separate enum mapping is required. No code/register changes here.",
+      "candidate_unit": "Registered code; excluded from quantity conversion."
+    }
+  ]
+}
