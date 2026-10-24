@@ -167,6 +167,15 @@ in the normative annex, is in
   "a new immutable event". The property the protocol provides is
   tamper-evidence (append-only records), and conformance does not constitute
   compliance (see Legal scope above).
+- **Status and cross-party language.** §1.1 calls VCP "a global standard
+  specification"; it has not been adopted by any established standards body.
+  §1.1 also says the chain of evidence "establishes truth"; it makes
+  alteration and post-anchor omission detectable, not the recorded content
+  true. §5.6 (VCP-XREF) says "Guarantee: Unless both parties collude", lists
+  "Prevent payout disputes" as a use case and calls the result "non-repudiable
+  evidence". The property provided is that one party's omission or
+  modification is detectable by the other when both parties record and do
+  not collude; the evidential weight is for competent authorities and courts.
 - **Completeness language.** §1.1 (note "Completeness Guarantees"), §2.2.3,
   §6.0 and Appendix D speak of "completeness guarantees", say that "no required
   events were omitted" and call event batches "provably complete". The property
