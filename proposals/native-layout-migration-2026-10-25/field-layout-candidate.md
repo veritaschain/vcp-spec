@@ -43,13 +43,20 @@ the committed Header. Identifier namespace/uniqueness, producer-to-actor roles,
 delegation and key authority still require a recorded decision. Do not equate
 an ActorID to a legal identity or infer authority from a key carried by the event.
 
-For the first candidate, prefer a single actor/chain and both identical policy
-bindings across a batch. A future AnchorStatement binds those identities,
-bindings, schemes, count, endpoints, root, claimed creation time and intended
-target. Compare all of them with actual supplied events. Mixed-policy or
-mixed-actor batches are unsupported pending a separate design; no permissive
-fallback is inferred. Existing native requirements are not restricted by this
-unadopted proposal.
+For the first candidate, prefer a single actor/chain across a batch, with each
+policy binding identical across its events. The registration and numeric
+bindings need not equal each other. A future AnchorStatement binds those
+identities, bindings, schemes, count, endpoints, root, claimed creation time and
+intended target. Recompute root/count/endpoints from the complete ordered batch
+and compare event-derived identities, schemes and policy bindings with its events.
+A subset and valid inclusion proofs do not establish these full-batch checks;
+unavailable checks remain UNASSESSED, and any demonstrated mismatch remains FAIL.
+The anchor's claimed creation time and intended target are not event fields to
+equate with that list. Check them separately under the selected time policy and
+receipt/target mapping; signing those claims does not establish external time
+or successful delivery. Mixed-policy or mixed-actor batches are unsupported
+pending a separate design; no permissive fallback is inferred. Existing native
+requirements are not restricted by this unadopted proposal.
 
 ## L-02 — Disposition of every inventoried numeric path
 
@@ -186,10 +193,11 @@ are open decisions. Until supplied, this is not a native conformance policy.
 Prefer the PR #11/12 field-specific scalar candidates unchanged for discussion:
 canonical unsigned decimal strings for integer quantities; exact decimal
 strings for financial/model values, preserving accepted lexical spelling. The
-20-integer/18-fractional-digit decimal capacity and signed-31/63-bit maxima are
-proposed domain bounds, not present-schema or JCS bounds. Negative prices and
-rebates remain policy-dependent; confidence is [0,1] while utilization need not
-be. Boolean fields with genuine boolean semantics remain booleans.
+20-integer/18-fractional-digit decimal capacity and maxima of 2^31−1 / 2^63−1
+(the positive maxima of signed 32-/64-bit integers) are proposed domain bounds,
+not present-schema or JCS bounds. Negative prices and rebates remain
+policy-dependent; confidence is [0,1] while utilization need not be. Boolean
+fields with genuine boolean semantics remain booleans.
 
 | Quantity / inventory anchor | Stored unit proposal | Permitted arithmetic proposal; no silent wire rewrite |
 | --- | --- | --- |
@@ -220,10 +228,12 @@ Worked **arithmetic examples, not executed migration vectors**:
 - Converting `75 percent` to ratio `0.75` is meaningful only for an identified
   percent-valued source. A value `"75"` already labeled `ratio` is invalid, not
   an invitation for a verifier to divide it by 100.
-- Equal strings numerically, such as `"1"`, `"1.0"`, `"01.00"` or signed zero,
-  retain different string bytes when already accepted. The verifier does not
-  normalize them. A new derived record's output spelling requires a specified
-  rule recorded with the transformation; that rule is not selected here.
+- Numerically equal strings such as `"1"`, `"1.0"` and `"01.00"` retain
+  different string bytes when already accepted. Separately, `"0"` and `"-0"`
+  compare equal arithmetically but retain different bytes. The verifier does
+  not normalize either group. A new derived record's output spelling requires
+  a specified rule recorded with the transformation; that rule is not selected
+  here.
 
 For units, always distinguish calculation used to **compare** immutable evidence
 from transformation used to **create** new evidence. Current deadlines, retry
@@ -255,9 +265,13 @@ selected convention; a paired 2025 string is inconsistent, not a choice of two
 equivalent encodings. An optional corrected attestation needs explicit source
 evidence/authority and does not validate or replace the original pair.
 
-Offsets, lower-case/variable-fraction spellings, pre-epoch times and wider
-capacity require explicit source interpretation and an exact, separately
-approved transformation before any new-format output. Syntactic right-padding
+Offsets and lower-case/variable-fraction spellings require explicit source
+interpretation and an exact, separately approved transformation before any
+new-format output. The resulting instant still has to lie within TIME_NS.
+An instant before the epoch or beyond the proposed maximum cannot be made
+eligible merely by changing its spelling or unit; preserve it as unsupported
+by this candidate. Wider capacity or a different epoch needs a separate format
+decision, not an offset, clamp or relabeling of the value. Syntactic right-padding
 can preserve a known value, but cannot prove nine-digit measurement accuracy.
 Do not fill a missing original counterpart and report the source pair verified.
 

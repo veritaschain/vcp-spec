@@ -105,3 +105,31 @@ and that only the three new Markdown files differ from the pinned baseline.
 That is documentation validation, not a new protocol or independent reproduction
 test. The ordinary repository CI, if successful, validates its existing tests;
 it does not execute or adopt the new prose candidate.
+
+### Final document review — 2026-10-25
+
+Review began at `2a1a377823b816dffc2b2b454cf4c8395d4dee1f`. The following
+clarifications were made within these proposed documents only:
+
+- Separate event-derived full-batch binding checks from anchor time and target
+  evidence. A subset/proof cannot establish full-list checks, and a signed time
+  or target claim is not independent timestamp or delivery evidence. Each policy
+  role is consistent across the batch; the two roles need not share one binding.
+- Separate ISO spelling conversion from target capacity. A known instant outside
+  TIME_NS remains unsupported by this candidate after lexical conversion; it
+  cannot be moved into range by shifting the epoch or relabeling units.
+- State integer maxima explicitly as 2^31−1 / 2^63−1 (signed 32-/64-bit maxima),
+  and keep equivalent spellings of one separate from equivalent spellings of zero.
+
+These are corrections to design prose, not findings of newly executed protocol
+failures or an adoption decision. The complete native schema, byte contracts,
+authority rules and migration vectors remain open. Integration of the documents
+does not establish independent third-party reproduction.
+
+The final documentation audit verified all 15 pinned source fingerprints, all
+74 inventory dispositions without omissions or duplicates, and 13 cited case
+IDs plus the historical PR #14 counts. Local Markdown parsing checked nine
+tables and four relative links/anchors. Exact arithmetic separately confirmed
+the two illustrated epoch conversions and the unit/decimal equivalences; these
+are prose calculations, not native migration tests. All 201 baseline tracked
+files remain byte-identical, with only these three new Markdown files added.

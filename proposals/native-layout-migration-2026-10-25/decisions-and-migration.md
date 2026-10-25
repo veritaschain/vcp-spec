@@ -73,6 +73,7 @@ authority. Keep all unanswered conditions visible. Examples:
 | Timestamp magnitude looks like seconds or us, but unit is undocumented | No magnitude/digit-count inference; retain as unresolved |
 | Ns and ISO disagree under an identified source basis/pair rule | Original consistency FAIL; do not select a winner silently. A later correction is a new attributed claim |
 | Decimal value is outside target capacity or needs unspecified rounding | No target candidate value under this exact-conversion option; preserve source |
+| Known instant is before epoch zero or above the proposed TIME_NS maximum | Unsupported by this target candidate even if its source ISO spelling can be normalized; no epoch shift, clipping or unit relabeling |
 | Equal ratio text uses trailing/leading zeros | Preserve accepted source lexeme for an unchanged quantity; no verifier normalization |
 | Missing policy bytes or unconfigured authority | Do not invent approved policy. Binding/interpretation/authority remain unassessed as appropriate |
 | Approval timestamp/object is signed and would change | Block reuse as a valid new approval; require separate authorized reissuance or retain the original evidence only |
