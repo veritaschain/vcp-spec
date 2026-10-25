@@ -10,7 +10,7 @@
 
 **Production Ready** — Released. GA declared 2026-07-06 (Release Candidate RC1 published 2026-05-31); tag `v1.2.0` (commit `b23acb2`, 2026-10-09) on the validated correction commit, not the earlier PR #1 merge.
 
-v1.2 is a **protocol-compatible / certification-stricter** update over v1.1. It introduces **zero breaking changes**: all v1.0 and v1.1 events remain valid and verifiable under v1.2. The complete normative specification of every change is provided in this directory as the normative annex VSO-SPEC-CHANGE-001 (see Documents below).
+v1.2 adds features and stricter certification requirements over v1.1. Historical v1.0/v1.1 records retain their original validation context and signed bytes; this is not a guarantee that every old-format event passes the v1.2 schema. Known Header and EventType divergences prevent an unconditional backward-compatibility claim (see Known issues). Assess producer/verifier compatibility against the declared version and policy. This informative clarification does not amend the frozen specifications or schemas. The normative annex VSO-SPEC-CHANGE-001 is provided in this directory (see Documents below).
 
 The 2026-10-09 GA consistency correction changes the untagged pre-GA ERASURE encoding and adds the five Annex system codes to the schema. **This is not technically identical to RC1.** See [GA consistency and compatibility](GA-CONSISTENCY.md) for migration, validation scope and release gates. The 2026-07-06 GA declaration is historical; it is not evidence of a tag or completed release.
 
@@ -32,7 +32,7 @@ v1.2 strengthens operational integrity (VCP-RECOVERY), reconciles append-only au
 | 8 | Reference implementation benchmarks | Informative | §8 |
 | 9 | Multi-actor chain linking (cross-party VCP-XREF) | Normative (when used) | §9 |
 
-**Certification:** VC-Certified v1.2 additionally requires the strengthened VCP-RECOVERY constraints and a documented anchor continuity plan. v1.0/v1.1-certified implementations remain protocol-compatible but must meet these constraints for v1.2 certification.
+**Certification:** VC-Certified v1.2 additionally requires the strengthened VCP-RECOVERY constraints and a documented anchor continuity plan. Prior-version certification alone does not establish v1.2 schema compatibility or v1.2 certification; these must be assessed separately against the applicable requirements and known divergences.
 
 **Post-quantum:** `DILITHIUM2` (ML-DSA / FIPS 204) and `FALCON512` (FN-DSA / FIPS 206 draft) advance from *FUTURE* to *EXPERIMENTAL*. `Ed25519` remains the DEFAULT; PQC is not yet a certification requirement.
 
@@ -46,8 +46,10 @@ with VSO's honest-scoping policy, the following distinctions apply.
 - The v1.2 specification text (EN/JA/ZH), its normative annex
   (VSO-SPEC-CHANGE-001), and the canonical JSON Schema are stable and
   frozen only by the verified release tag. Future tagged-artifact changes require errata or a new version.
-- v1.2 is protocol-compatible with v1.0/v1.1: zero breaking changes;
-  historical v1.0/v1.1 events retain their original validation context. Untagged v1.2 ERASURE migration is explicitly breaking (Annex §3.4.3).
+- Historical v1.0/v1.1 events retain their original validation context and signed bytes.
+  Acceptance by a v1.2 verifier or schema is a separate compatibility question;
+  known Header and EventType divergences rule out a blanket guarantee.
+  Untagged v1.2 ERASURE migration is explicitly breaking (Annex §3.4.3).
 - An IETF SCITT profile aligned with v1.2 exists as an individual
   Internet-Draft ([draft-kamimura-scitt-vcp](https://datatracker.ietf.org/doc/draft-kamimura-scitt-vcp/)).
 
@@ -177,7 +179,7 @@ VCP is the first implementation profile of the VAP family. [The current VAP stat
 
 ## Relationship to v1.1
 
-v1.2 does not restructure the protocol. It extends v1.1 with the changes listed above. To migrate from v1.1, see Section 10.4 of the specification; no data migration is required.
+v1.2 extends v1.1 with the changes listed above, but the current schema does not accept every old event type or header layout. See Section 10.4 of the specification, the known issues above, and [GA-CONSISTENCY.md](GA-CONSISTENCY.md) when assessing producer and verifier migration. Preserve original signed records and evaluate them in their original version/policy context; do not rewrite them simply to satisfy the v1.2 schema. Migration needs for future event production and verifier support are implementation-specific. The pre-GA v1.2 ERASURE migration is a separate, explicitly breaking case.
 
 ---
 
