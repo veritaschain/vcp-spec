@@ -34,6 +34,8 @@ jobs:
         run: python experiments/numeric-byte-binding-v0/run.py --output "${{ runner.temp }}/binding-${{ matrix.python }}.json"
       - name: Internal byte and Ed25519 crosscheck
         run: node experiments/numeric-byte-binding-v0/crosscheck.cjs "${{ runner.temp }}/binding-${{ matrix.python }}.json" > "${{ runner.temp }}/crosscheck-${{ matrix.python }}.json"
+      - name: Report crosscheck regression controls
+        run: node experiments/numeric-byte-binding-v0/test_crosscheck.cjs "${{ runner.temp }}/binding-${{ matrix.python }}.json" > "${{ runner.temp }}/crosscheck-controls-${{ matrix.python }}.json"
       - name: Save internal experimental output
         if: always()
         uses: actions/upload-artifact@v4
@@ -42,5 +44,6 @@ jobs:
           path: |
             ${{ runner.temp }}/binding-${{ matrix.python }}.json
             ${{ runner.temp }}/crosscheck-${{ matrix.python }}.json
+            ${{ runner.temp }}/crosscheck-controls-${{ matrix.python }}.json
           if-no-files-found: error
           retention-days: 30

@@ -1,0 +1,58 @@
+{
+  "status": "UNADOPTED",
+  "independent_reproduction": "not_established",
+  "report_sha256": "0dcd915cd0a78aa8f1755b4d464db0c77bf5573cd52f2b6aad6bc39358de0ae4",
+  "node": "v24.19.0",
+  "tests": 8,
+  "all_controls_matched": true,
+  "results": [
+    {
+      "name": "unmodified-positive-control",
+      "exit_code": 0,
+      "expected_acceptance": true,
+      "matched": true
+    },
+    {
+      "name": "invented-unavailable-signature",
+      "exit_code": 1,
+      "expected_acceptance": false,
+      "matched": true
+    },
+    {
+      "name": "changed-comparison-reference",
+      "exit_code": 1,
+      "expected_acceptance": false,
+      "matched": true
+    },
+    {
+      "name": "missing-available-signature",
+      "exit_code": 1,
+      "expected_acceptance": false,
+      "matched": true
+    },
+    {
+      "name": "invented-invalid-anchor-message",
+      "exit_code": 1,
+      "expected_acceptance": false,
+      "matched": true
+    },
+    {
+      "name": "changed-byte-relation",
+      "exit_code": 1,
+      "expected_acceptance": false,
+      "matched": true
+    },
+    {
+      "name": "swapped-diagnostic-availability",
+      "exit_code": 1,
+      "expected_acceptance": false,
+      "matched": true
+    },
+    {
+      "name": "false-independent-reproduction-claim",
+      "exit_code": 1,
+      "expected_acceptance": false,
+      "matched": true
+    }
+  ]
+}

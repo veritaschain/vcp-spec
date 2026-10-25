@@ -52,55 +52,82 @@ const expectedIds = fixture.cases.map(c => c.id);
 assert.equal(new Set(expectedIds).size, 45);
 assert.deepEqual(report.cases.map(c => c.id), expectedIds);
 let signatures = 0, eventHashes = 0, externalHashes = 0, diagnostics = 0;
-const actualCounts = {};
+const actualCounts = {}, recomputedTraces = {};
 for (let i = 0; i < fixture.cases.length; i++) {
-  const c = fixture.cases[i], r = report.cases[i], t = r.actual.trace, b = c.bundle;
+  const c = fixture.cases[i], r = report.cases[i], b = c.bundle, expected = {};
+  assert.equal(r.reference, c.reference, c.id + ': reference');
   assert.deepEqual(r.expected, c.expected, c.id);
   assert.deepEqual(r.actual.checks, c.expected.checks, c.id);
   assert.equal(r.actual.covered_checks_result, c.expected.covered_checks_result);
-  assert.deepEqual(r.relations, c.expected.relations);
   assert.equal(r.matched, true);
+  assert.equal(r.actual.status, 'UNADOPTED');
+  assert.equal(r.actual.independent_reproduction, 'not_established');
+  for (const key of ['native_vcp_conformance', 'real_identity_and_authorization', 'external_receipt_and_time']) {
+    assert.equal(r.actual[key], 'not_assessed');
+  }
+  assert.equal(r.actual.transport_used_for_semantics, false);
   actualCounts[r.actual.covered_checks_result] = (actualCounts[r.actual.covered_checks_result] || 0) + 1;
-  if ('event_hash' in t) {
+  // The fixed fixture expectations select available byte operations; report
+  // field presence must never decide what is checked. Shape/semantic outcomes
+  // are still not independently derived by this restricted byte crosscheck.
+  if (c.expected.checks.event_shape === 'PASS') {
     const event = JSON.parse(b.event_json), canonical = rawJcs(event), preimage = prefixed('EVENT', event);
-    assert.equal(t.event_jcs_hex, canonical.toString('hex'), c.id);
-    assert.equal(t.event_preimage_hex, preimage.toString('hex'));
-    assert.equal(t.event_hash, digest(preimage));
+    expected.event_jcs_hex = canonical.toString('hex');
+    expected.event_preimage_hex = preimage.toString('hex');
+    expected.event_hash = digest(preimage);
     const leaf = digest(Buffer.concat([Buffer.from([0]), Buffer.from(sha(preimage), 'hex')]));
-    assert.equal(t.leaf_hash, leaf);
-    assert.equal(t.root_hash, leaf); // This suite supplies exactly one event.
+    expected.leaf_hash = leaf;
+    expected.root_hash = leaf; // This suite supplies exactly one event.
     eventHashes++;
-  } else assert.equal(c.expected.checks.event_shape, 'FAIL');
-  if ('diagnostic_jcs_hex' in t) {
+  }
+  if (c.expected.checks.event_parse === 'PASS') {
     const bytes = rawJcs(JSON.parse(b.event_json), true);
-    assert.equal(t.diagnostic_jcs_hex, bytes.toString('hex'));
-    assert.equal(t.diagnostic_jcs_hash, sha(bytes));
+    expected.diagnostic_jcs_hex = bytes.toString('hex');
+    expected.diagnostic_jcs_hash = sha(bytes);
     diagnostics++;
   }
-  assert.equal(t.policy_digest, digest(Buffer.from(b.policy_hex, 'hex')));
+  expected.policy_digest = digest(Buffer.from(b.policy_hex, 'hex'));
   for (const role of ['event', 'anchor']) {
-    if (role + '_signature_preimage_hex' in t) {
+    const encodingValid = c.expected.checks[role + '_signature_encoding'] === 'PASS';
+    let sig;
+    if (encodingValid) {
+      sig = Buffer.from(b[role + '_signature'], 'base64');
+      assert.equal(sig.length, 64);
+      assert.equal(sig.toString('base64'), b[role + '_signature']);
+      expected[role + '_signature'] = sig.toString('hex');
+    }
+    const shape = role === 'event' ? 'event_statement_shape' : 'anchor_shape';
+    if (c.expected.checks[shape] === 'PASS') {
       const preimage = prefixed(role.toUpperCase() + '-SIGNATURE', b[role + '_statement']);
-      assert.equal(t[role + '_signature_preimage_hex'], preimage.toString('hex'));
-      assert.equal(t[role + '_signature_message_hash'], sha(preimage));
-      if (r.actual.checks[role + '_signature_encoding'] === 'PASS') {
-        const sig = Buffer.from(b[role + '_signature'], 'base64');
-        assert.equal(sig.length, 64);
-        assert.equal(sig.toString('base64'), b[role + '_signature']);
-        assert.equal(t[role + '_signature'], sig.toString('hex'));
+      expected[role + '_signature_preimage_hex'] = preimage.toString('hex');
+      expected[role + '_signature_message_hash'] = sha(preimage);
+      if (encodingValid) {
         const valid = crypto.verify(null, preimage, keys[role], sig);
         assert.equal(r.actual.checks[role + '_crypto'], valid ? 'PASS' : 'FAIL', c.id + ':' + role);
         signatures++;
       } else assert.equal(r.actual.checks[role + '_crypto'], 'UNASSESSED');
-    } else assert.equal(c.expected.checks[role + '_shape'], 'FAIL');
+    } else assert.equal(r.actual.checks[role + '_crypto'], 'UNASSESSED');
   }
-  if ('external_preimage_hex' in t) {
+  if (c.expected.checks.anchor_shape === 'PASS' && c.expected.checks.anchor_signature_encoding === 'PASS') {
     const preimage = prefixed('EXTERNAL-COMMITMENT', {AnchorStatement:b.anchor_statement, Signature:b.anchor_signature});
-    assert.equal(t.external_preimage_hex, preimage.toString('hex'));
-    assert.equal(t.external_commitment, digest(preimage));
+    expected.external_preimage_hex = preimage.toString('hex');
+    expected.external_commitment = digest(preimage);
     assert.equal(r.actual.checks.external_binding, b.external_commitment === digest(preimage) ? 'PASS' : 'FAIL');
     externalHashes++;
   }
+  assert.deepEqual(r.actual.trace, expected, c.id + ': complete byte trace');
+  recomputedTraces[c.id] = expected;
+}
+for (let i = 0; i < fixture.cases.length; i++) {
+  const c = fixture.cases[i], r = report.cases[i], observed = {};
+  const trace = recomputedTraces[c.id], reference = recomputedTraces[c.reference];
+  assert(reference, 'unknown reference');
+  for (const name of Object.keys(c.expected.relations)) {
+    observed[name] = !(name in trace) || !(name in reference) ? 'UNAVAILABLE' :
+      trace[name] === reference[name] ? 'SAME' : 'CHANGED';
+  }
+  assert.deepEqual(observed, c.expected.relations, c.id + ': fixture relations');
+  assert.deepEqual(r.relations, observed, c.id + ': report relations');
 }
 assert.equal(eventHashes, 40);
 assert.equal(signatures, 88);
@@ -116,5 +143,5 @@ console.log(JSON.stringify({status:'UNADOPTED', independent_reproduction:'not_es
   experiment:fixture.experiment, node:process.version, openssl:process.versions.openssl,
   report_sha256:sha(fs.readFileSync(reportPath)), crosscheck_sha256:sha(fs.readFileSync(__filename)),
   cases:45, candidate_event_hashes:eventHashes, actual_ed25519_checks:signatures,
-  external_commitments:externalHashes, diagnostic_jcs:diagnostics,
+  external_commitments:externalHashes, diagnostic_jcs:diagnostics, byte_relations_checked:450,
   internal_byte_and_crypto_crosscheck:'PASS', semantic_crosscheck:'not_performed'}, null, 2));

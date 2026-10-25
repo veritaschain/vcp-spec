@@ -14,7 +14,7 @@ import fixtures
 CASE_COUNT = 45
 REGRESSION_COUNT = 20
 FILES = {"common.py", "checker.py", "fixtures.py", "run.py", "test_regressions.py",
-         "crosscheck.cjs", "README.md", "requirements.txt", "sources.json", "data/cases.json"}
+         "crosscheck.cjs", "test_crosscheck.cjs", "README.md", "FINAL_REVIEW.md", "requirements.txt", "sources.json", "data/cases.json"}
 
 
 def manifest_check(root=m.HERE):

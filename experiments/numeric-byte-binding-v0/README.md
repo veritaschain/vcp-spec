@@ -109,6 +109,7 @@ From the repository root, with a virtual environment already activated:
 python -m pip install -r experiments/numeric-byte-binding-v0/requirements.txt
 python experiments/numeric-byte-binding-v0/run.py --output /tmp/numeric-binding-run.json
 node experiments/numeric-byte-binding-v0/crosscheck.cjs /tmp/numeric-binding-run.json
+node experiments/numeric-byte-binding-v0/test_crosscheck.cjs /tmp/numeric-binding-run.json
 ```
 
 Use a new output filename per run; the Python runner refuses overwrite. After
@@ -128,15 +129,29 @@ available Ed25519 verifications (including expected failures). It does **not**
 implement the full candidate schema, semantic/unit rules, arbitrary JCS input,
 or a second complete verifier. It reads the local Python report; a passing
 crosscheck is not a fresh independent reproduction or host authentication.
+Availability is selected from the fixed case expectations, never from fields
+that happen to remain in the report. The entire byte trace must match; extra or
+missing fields are rejected. All 450 byte relations are recomputed against the
+fixed reference cases. The final command runs eight positive/negative controls
+for modified reports, including invented unavailable signatures, omitted bytes,
+changed references and false per-case independence claims. Shape/semantic
+expectations and numeric detail are not independently re-evaluated by Node.
 
 [manifest.json](manifest.json) pins new code, data, documentation and source
 fingerprints. Its own bytes and each runtime/dependency version are recorded in
 each run. Generated records are excluded from the manifest to avoid a circular
 hash; [records](records/) contains separate Python 3.12/3.14 internal runs and
-Node crosschecks. The repository commit pins their bytes and provenance.
+Node crosschecks. Use the `final-review-*` records for the corrected crosscheck.
+The initial records are retained byte-for-byte as historical executions at
+`02b98c44cf973edc5ce704d8360cb8042caaac36`; reproduce their original manifest and
+crosscheck at that commit, not against the corrected manifest. The repository
+commit pins record bytes; it does not authenticate the execution host.
 Expected tally: **45 cases (12 PASS, 30 FAIL, 3 UNASSESSED), all matching their
 expectations; 20 regressions without skips or expected failures**. These are
 internal synthetic results only.
+The final-review runs also pass **eight Node report-regression controls** per
+runtime. See [the review record](FINAL_REVIEW.md) for the reproduced issue and
+scope of the repair.
 
 ## Unresolved decisions and migration implications
 
