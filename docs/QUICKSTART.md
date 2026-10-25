@@ -146,11 +146,11 @@ def main():
     
     print()
     if is_valid:
-        print("✅ VERIFIED: Proof is mathematically valid!")
-        print("   → Verified locally on YOUR machine")
-        print("   → No server trust required")
+        print("✅ MATCH against API-supplied root (not independently anchored)")
+        print("   → Path folded locally on YOUR machine")
+        print("   → Root and path both came from the API")
     else:
-        print("❌ FAILED: Proof verification failed!")
+        print("❌ NO MATCH: path does not fold to the API-supplied root")
     
     # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
     # Done
@@ -162,15 +162,20 @@ def main():
     print("Next steps:")
     print("  📖 Specification:  https://github.com/veritaschain/vcp-spec")
     print("  🔍 Explorer GUI:   https://veritaschain.org/explorer/app/")
-    print("  ℹ️  VC-Certified:   https://veritaschain.org/certified/ (issued by accredited CABs, not VSO)")
+    print("  ℹ️  VC-Certified:   https://veritaschain.org/certified/ (scheme requires CABs independent of VSO; the only registered CAB is not independent)")
 
 
 def verify_merkle_proof(event_hash: str, proof_path: list, merkle_root: str) -> bool:
     """
-    Verify Merkle proof locally (RFC 6962 compliant).
+    Check the API-supplied audit path against the API-supplied root by folding
+    the raw event hash with plain SHA-256(left || right) and no 0x00/0x01
+    prefixes. This matches neither RFC 6962 nor the VCP v1.2 §6.2.1 example
+    builder (see Known issues, research observation P3).
+    For an RFC 6962 verifier, see https://github.com/veritaschain/vcp-sdk
+    (pre-release, first-party).
     
-    This function runs entirely on your machine.
-    No server trust required!
+    This function runs on your machine, but the root it compares against
+    comes from the same API; the root is not independently anchored here.
     """
     try:
         current = bytes.fromhex(event_hash)
@@ -221,9 +226,9 @@ Merkle Root:  xyz789abc123def456ghi789jkl0mno1...
 Tree Size:    1,048,576
 Proof Steps:  20
 
-✅ VERIFIED: Proof is mathematically valid!
-   → Verified locally on YOUR machine
-   → No server trust required
+✅ MATCH against API-supplied root (not independently anchored)
+   → Path folded locally on YOUR machine
+   → Root and path both came from the API
 
 ============================================================
 🎉 Quick Start Complete!
@@ -232,8 +237,19 @@ Proof Steps:  20
 Next steps:
   📖 Specification:  https://github.com/veritaschain/vcp-spec
   🔍 Explorer GUI:   https://veritaschain.org/explorer/app/
-  ℹ️  VC-Certified:   https://veritaschain.org/certified/ (issued by accredited CABs, not VSO)
+  ℹ️  VC-Certified:   https://veritaschain.org/certified/ (scheme requires CABs independent of VSO; the only registered CAB is not independent)
 ```
+
+> **What the local check does (and does not do).** `verify_merkle_proof` checks
+> the API-supplied audit path against the API-supplied root by folding the raw
+> event hash with plain SHA-256(left || right). It applies no `0x00`/`0x01`
+> domain-separation prefixes, so it matches neither RFC 6962 nor the VCP v1.2
+> §6.2.1 example builder, which does use them (research observation P3; see
+> [Known issues](../README.md#-known-issues-in-v12-informative)). Because the
+> root comes from the same API, a match shows internal consistency only, not
+> independent anchoring. For an RFC 6962 verifier, see
+> [veritaschain/vcp-sdk](https://github.com/veritaschain/vcp-sdk) (pre-release,
+> first-party).
 
 ---
 
@@ -267,6 +283,12 @@ interface MerkleProof {
   tree_size: number;
 }
 
+// Checks the API-supplied audit path against the API-supplied root by folding
+// the raw event hash with plain SHA-256(left || right) and no 0x00/0x01
+// prefixes. This matches neither RFC 6962 nor the VCP v1.2 §6.2.1 example
+// builder (see Known issues, research observation P3).
+// For an RFC 6962 verifier, see https://github.com/veritaschain/vcp-sdk
+// (pre-release, first-party).
 function verifyMerkleProof(proof: MerkleProof): boolean {
   try {
     let current = Buffer.from(proof.event_hash, 'hex');
@@ -318,9 +340,9 @@ async function main() {
     const proof: MerkleProof = await proofRes.json();
     
     const isValid = verifyMerkleProof(proof);
-    console.log(`\n${isValid ? '✅ VERIFIED' : '❌ FAILED'}: Merkle proof`);
+    console.log(`\n${isValid ? '✅ MATCH' : '❌ NO MATCH'}: against API-supplied root (not independently anchored)`);
     if (isValid) {
-      console.log('   → Verified locally on YOUR machine');
+      console.log('   → Path folded locally on YOUR machine; root came from the API');
     }
   }
   
@@ -342,17 +364,28 @@ npx tsx quickstart.ts
 
 ## 📊 Event Types Reference
 
+Codes from the VCP v1.0 fixed registry (v1.0 §3.2.1), as used by the Explorer
+API samples. The v1.2 schema identifies event types by name; `PRT`, `REJ`, `ALG`,
+`AUD`, `REC` and `SNC` are not in its `EventType` enum (see Known issues).
+
 | Code | Type | Description |
 |------|------|-------------|
-| 1 | `SIG` | Trading signal generated |
-| 2 | `ORD` | Order submitted |
+| 1 | `SIG` | Signal/decision generated |
+| 2 | `ORD` | Order sent |
 | 3 | `ACK` | Order acknowledged |
-| 4 | `EXE` | Order executed (fill) |
-| 5 | `CXL` | Order cancelled |
+| 4 | `EXE` | Full execution |
+| 5 | `PRT` | Partial fill |
 | 6 | `REJ` | Order rejected |
-| 20 | `RSK` | Risk snapshot |
-| 90 | `HBT` | Heartbeat |
-| 91 | `ERR` | System error |
+| 7 | `CXL` | Order cancelled |
+| 8 | `MOD` | Order modified |
+| 9 | `CLS` | Position closed |
+| 20 | `ALG` | Algorithm update |
+| 21 | `RSK` | Risk parameter change |
+| 22 | `AUD` | Audit request |
+| 98 | `HBT` | Heartbeat |
+| 99 | `ERR` | Error |
+| 100 | `REC` | Recovery |
+| 101 | `SNC` | Clock sync status |
 
 ---
 
@@ -384,9 +417,13 @@ export VCP_API_KEY="your-actual-key"
 - Check your internet connection
 - Verify the API is accessible: `curl https://explorer.veritaschain.org/api/v1/system/status`
 
-### "Merkle proof verification failed"
-- This is expected if using demo/sample data
-- With real events, verification should always pass
+### "NO MATCH" from the Merkle check
+- This is expected if using demo/sample data (the
+  [vcp-explorer-api](https://github.com/veritaschain/vcp-explorer-api) README
+  states that its server currently returns mock data)
+- The quickstart check folds plain SHA-256 pairs without RFC 6962 prefixes, so a
+  path from an RFC 6962 tree, or from the §6.2.1 example builder, will not match
+  (research observation P3)
 
 ---
 
@@ -398,7 +435,7 @@ export VCP_API_KEY="your-actual-key"
 | 🛠️ SDK Development | [SDK Specification](https://github.com/veritaschain/vcp-sdk-spec) |
 | 🔍 Explore Events | [VCP Explorer GUI](https://veritaschain.org/explorer/app/) |
 | 🔌 MT4/MT5 Integration | [Sidecar Guide](https://github.com/veritaschain/vcp-sidecar-guide) |
-| ℹ️ Certification scheme | [VC-Certified](https://veritaschain.org/certified/) — certificates are issued by accredited Conformity Assessment Bodies, not by VSO |
+| ℹ️ Certification scheme | [VC-Certified](https://veritaschain.org/certified/) — the scheme requires Conformity Assessment Bodies independent of the scheme owner, not VSO; the only registered CAB, VeritasChain Co., Ltd., operates VSO and is not independent |
 
 ---
 
