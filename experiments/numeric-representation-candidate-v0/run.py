@@ -4,6 +4,7 @@ import argparse
 import hashlib
 import json
 import platform
+import re
 import subprocess
 import sys
 from collections import Counter
@@ -17,6 +18,18 @@ ROOT = HERE.parents[1]
 CONTRACT = "vcp-numeric-experiment-v0"
 BASE = "16018dd405cad45bd8b11a7dc2278f6d95111ea6"
 OPERATIONS = {"scalar", "iso_pair", "index_bound", "within_tolerance", "duration_add", "sequence"}
+SOURCE_FILES = {
+    "proposals/numeric-fields-2026-10-25/README.md",
+    "proposals/numeric-fields-2026-10-25/inventory.json",
+    "proposals/numeric-fields-2026-10-25/inventory.md",
+    "proposals/numeric-fields-2026-10-25/sources.json",
+    "spec/v1.2/VCP-Specification-v1_2_en.md",
+    "spec/v1.2/vcp-event-v1.2.json",
+    "spec/v1.2/VSO-SPEC-CHANGE-001.md",
+    "VCP-Specification-v1_0_en.md",
+}
+EXPERIMENT_FILES = {"checker.py", "generate_vectors.py", "run.py", "test_checker.py",
+                    "data/field-map.json", "data/vectors.json"}
 
 
 def digest(raw):
@@ -91,13 +104,27 @@ def raw_input(case):
     raise ValueError("invalid raw transport")
 
 
-def verify_setup():
-    manifest = read_json(HERE / "manifest.json")
+def validate_manifest(manifest):
+    required = {"contract", "status", "source_commit", "vector_count", "regression_count", "sources", "experiment"}
+    if type(manifest) is not dict or set(manifest) != required:
+        raise ValueError("invalid manifest envelope")
     if (manifest["contract"], manifest["status"], manifest["source_commit"]) != (CONTRACT, "UNADOPTED", BASE):
         raise ValueError("manifest context mismatch")
+    for key in ("vector_count", "regression_count"):
+        if type(manifest[key]) is not int or manifest[key] <= 0:
+            raise ValueError("invalid manifest count: " + key)
+    for group, expected_files in (("sources", SOURCE_FILES), ("experiment", EXPERIMENT_FILES)):
+        entries = manifest[group]
+        if type(entries) is not dict or set(entries) != expected_files:
+            raise ValueError("incomplete/unexpected " + group + " file inventory")
+        if any(type(sha) is not str or not re.fullmatch(r"[0-9a-f]{64}", sha) for sha in entries.values()):
+            raise ValueError("invalid SHA-256 in " + group)
+
+
+def verify_setup():
+    manifest = read_json(HERE / "manifest.json")
+    validate_manifest(manifest)
     for root, group in ((ROOT, "sources"), (HERE, "experiment")):
-        if not manifest[group]:
-            raise ValueError("empty hash manifest")
         for name, sha in manifest[group].items():
             path = PurePosixPath(name)
             if path.is_absolute() or ".." in path.parts or "\\" in name:

@@ -3,6 +3,7 @@
 import copy
 import hashlib
 import json
+import shutil
 import subprocess
 import sys
 import tempfile
@@ -31,6 +32,64 @@ class NumericExperimentTests(unittest.TestCase):
         self.assertFalse(run.same({"n": 1}, {"n": 1.0}))
         self.assertEqual(self.check("json-number-9007199254740993")["operation_result"], "FAIL")
         self.assertEqual(self.check("exact-string-9007199254740993")["values"]["exact_integer"], "9007199254740993")
+
+    def test_extreme_number_exponents_return_structured_failure(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "input.json"
+            for name in ("number-exponent-too-large", "number-exponent-too-negative"):
+                case = self.cases[name]
+                path.write_bytes(run.raw_input(case))
+                with self.subTest(name=name):
+                    self.assertTrue(run.same(self.check(name), case["expected"]))
+                    process = subprocess.run([sys.executable, str(checker.HERE / "checker.py"), str(path)], capture_output=True, check=False)
+                    self.assertEqual(process.returncode, 1)
+                    self.assertTrue(run.same(json.loads(process.stdout), case["expected"]))
+                    self.assertEqual(process.stderr, b"")
+
+    def test_manifest_inventory_and_types_are_closed(self):
+        original = run.read_json(checker.HERE / "manifest.json")
+        run.validate_manifest(original)
+        for group in ("sources", "experiment"):
+            for change in ("remove", "add", "empty", "invalid_hash", "hash_type"):
+                manifest = copy.deepcopy(original)
+                name = next(iter(manifest[group]))
+                if change == "remove":
+                    del manifest[group][name]
+                elif change == "add":
+                    manifest[group]["extra.json"] = "0" * 64
+                elif change == "empty":
+                    manifest[group] = {}
+                else:
+                    manifest[group][name] = "not-a-hash" if change == "invalid_hash" else 0
+                with self.subTest(group=group, change=change), self.assertRaises(ValueError):
+                    run.validate_manifest(manifest)
+        for key, value in (("vector_count", True), ("regression_count", 0), ("regression_count", 18.0),
+                           ("status", "ADOPTED"), ("unexpected", "value")):
+            with self.subTest(key=key, value=value), self.assertRaises(ValueError):
+                run.validate_manifest(dict(original, **{key: value}))
+
+    def test_omitted_changed_source_copy_is_rejected(self):
+        # Mutate only an isolated temporary copy, never the repository sources.
+        original = run.read_json(checker.HERE / "manifest.json")
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            experiment = root / "experiments/numeric-representation-candidate-v0"
+            experiment.mkdir(parents=True)
+            for group, source, destination in (("sources", checker.ROOT, root), ("experiment", checker.HERE, experiment)):
+                for name in original[group]:
+                    target = destination / name
+                    target.parent.mkdir(parents=True, exist_ok=True)
+                    shutil.copyfile(source / name, target)
+            omitted = "spec/v1.2/VCP-Specification-v1_2_en.md"
+            changed = root / omitted
+            changed.write_bytes(changed.read_bytes() + b"\nTemporary negative-control copy only.\n")
+            del original["sources"][omitted]
+            (experiment / "manifest.json").write_text(json.dumps(original))
+            with patch.object(run, "ROOT", root), patch.object(run, "HERE", experiment), \
+                 patch.object(checker, "ROOT", root), patch.object(checker, "HERE", experiment), \
+                 patch.object(generate_vectors, "HERE", experiment), \
+                 self.assertRaisesRegex(ValueError, "sources file inventory"):
+                run.verify_setup()
 
     def test_duplicate_keys_and_nonfinite_rejected(self):
         for raw in (b'{"a":1,"a":2}', b'{"a":{"b":0,"b":false}}', b'{"a":NaN}', b'{"a":Infinity}', b'{"a":-Infinity}'):

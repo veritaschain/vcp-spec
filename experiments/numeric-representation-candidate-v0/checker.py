@@ -6,7 +6,7 @@ import json
 import re
 import sys
 from datetime import date
-from decimal import Decimal
+from decimal import Decimal, DecimalException
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
@@ -70,6 +70,10 @@ def parse_json(raw, limit=262144):
         return value
     except InvalidInput:
         raise
+    except DecimalException as error:
+        # JSON number tokens are not candidate quantity strings. Even extreme
+        # exponents must yield a structured rejection, never an uncaught trap.
+        raise InvalidInput("json_number_range") from error
     except (ValueError, RecursionError) as error:
         raise InvalidInput("json_syntax") from error
 

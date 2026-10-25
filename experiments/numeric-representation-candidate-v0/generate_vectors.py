@@ -289,6 +289,8 @@ def build():
         ("nested-duplicate", '{"operation":"sequence","previous":{"actor":"a","actor":"b"}}', "duplicate_key"),
         ("nonfinite-nan", '{"value":NaN}', "non_json_constant"),
         ("nonfinite-infinity", '{"value":Infinity}', "non_json_constant"),
+        ("number-exponent-too-large", '{"operation":"scalar","field":"N004","value":1e9223372036854775808,"unit":"unix_ns"}', "json_number_range"),
+        ("number-exponent-too-negative", '{"operation":"scalar","field":"N004","value":1e-9223372036854775809,"unit":"unix_ns"}', "json_number_range"),
         ("trailing-data", '{} {}', "json_syntax"),
         ("bom", '\ufeff{}', "json_syntax"),
         ("lone-surrogate", '{"operation":"\\ud800"}', "invalid_unicode_scalar"),

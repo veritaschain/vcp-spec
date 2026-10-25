@@ -1,0 +1,63 @@
+{
+  "status": "UNADOPTED",
+  "independent_reproduction": "not_established",
+  "reviewed_initial_head": "5914539ea1c8930d0f6723a923e82bc72fee3ce0",
+  "scope": "Internal before/after controls; modifications only in isolated temporary copies",
+  "controls": [
+    {
+      "kind": "numeric_exponent",
+      "input": "{\"operation\":\"scalar\",\"field\":\"N004\",\"value\":1e9223372036854775808,\"unit\":\"unix_ns\"}",
+      "unhandled_exception": "InvalidOperation",
+      "error": "[<class 'decimal.InvalidOperation'>]",
+      "after": {
+        "contract": "vcp-numeric-experiment-v0",
+        "operation": null,
+        "checks": {
+          "syntax": {
+            "status": "FAIL",
+            "code": "json_number_range"
+          }
+        },
+        "operation_result": "FAIL",
+        "values": {},
+        "status": "UNADOPTED",
+        "protocol_conformance": "not_assessed",
+        "authentication": "not_assessed",
+        "independent_reproduction": "not_established"
+      }
+    },
+    {
+      "kind": "numeric_exponent",
+      "input": "{\"operation\":\"scalar\",\"field\":\"N004\",\"value\":1e-9223372036854775809,\"unit\":\"unix_ns\"}",
+      "unhandled_exception": "InvalidOperation",
+      "error": "[<class 'decimal.InvalidOperation'>]",
+      "after": {
+        "contract": "vcp-numeric-experiment-v0",
+        "operation": null,
+        "checks": {
+          "syntax": {
+            "status": "FAIL",
+            "code": "json_number_range"
+          }
+        },
+        "operation_result": "FAIL",
+        "values": {},
+        "status": "UNADOPTED",
+        "protocol_conformance": "not_assessed",
+        "authentication": "not_assessed",
+        "independent_reproduction": "not_established"
+      }
+    },
+    {
+      "kind": "missing_manifest_entry",
+      "copy_only": true,
+      "omitted_source": "spec/v1.2/VCP-Specification-v1_2_en.md",
+      "changed_copy_accepted": true,
+      "vector_count": 533,
+      "after": {
+        "rejected": true,
+        "error": "incomplete/unexpected sources file inventory"
+      }
+    }
+  ]
+}

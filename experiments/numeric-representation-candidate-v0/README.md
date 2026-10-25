@@ -34,8 +34,10 @@ expectations matched with no skipped or expected-failure tests. A mismatch exits
 The separate [experimental CI workflow](../../.github/workflows/numeric-representation-experiment.yml)
 uses the same command on Python 3.12 and 3.14. The existing v1.2 schema workflow is
 unchanged. CI runs are internal automated executions, not independent third-party
-reproduction. Checked-in local execution records are described in
-[review-record.md](review-record.md).
+reproduction. Current local execution records and the two final-review fixes are
+described in [final-review-2026-10-25.md](final-review-2026-10-25.md). The initial
+[review-record.md](review-record.md) and its 533-case/15-test reports are preserved
+as historical results for commit `5914539ea1c8930d0f6723a923e82bc72fee3ce0`.
 
 To inspect one input, create a new research-request JSON file, for example:
 
@@ -56,7 +58,9 @@ The checker exits 0 for **PASS**, 1 for **FAIL**, and 2 for **UNASSESSED** or a
 setup error (the latter emits an error to stderr). It reads at most 262,145 bytes
 and rejects an input larger than 262,144 bytes. Inputs are never rewritten. It
 uses strict UTF-8 JSON, rejects duplicate keys, NaN/Infinity, lone surrogates,
-unknown/missing request members and non-string quantity substitutes. This
+unknown/missing request members and non-string quantity substitutes. Extreme
+JSON-number exponents beyond the exact parser's capacity produce a structured
+`FAIL / json_number_range`, not a traceback or a rounded value. This
 research envelope is closed; it is **not a proposed replacement VCP schema**.
 
 ## What the operations establish
@@ -74,7 +78,7 @@ For each operation, all subchecks are retained. Aggregation is **FAIL before
 UNASSESSED before PASS**; a failure does not erase unknown checks. Numeric results
 are always accompanied by `protocol_conformance: not_assessed`,
 `authentication: not_assessed`, `status: UNADOPTED`, and
-`independent_reproduction: not_established`. The immutable field map is local
+`independent_reproduction: not_established`. The hash-pinned field map is local
 review data, not an authority to label native input conformant.
 
 The [field map](data/field-map.json) projects all 74 inventory review entries,
@@ -88,12 +92,12 @@ actual unit or of a signed policy binding.
 
 ## Corpus and expectations
 
-The current corpus has **533 synthetic cases** with complete expected outputs:
+The current corpus has **535 synthetic cases** with complete expected outputs:
 
 | Expected operation outcome | Cases | Meaning |
 |---|---:|---|
 | PASS | 103 | The named limited numeric checks pass. |
-| FAIL | 366 | Deliberately invalid, inconsistent or out-of-range input is rejected. |
+| FAIL | 368 | Deliberately invalid, inconsistent or out-of-range input is rejected. |
 | UNASSESSED | 64 | Missing evidence or an unresolved mapping prevents a full operation result. |
 
 Coverage includes all nine integer classes; lower/upper/adjacent bounds;
@@ -115,7 +119,9 @@ oracle**. Review mistakes can be shared. By default the generator compares store
 bytes; `--write` replaces only this new experiment's `data/vectors.json`.
 
 [`manifest.json`](manifest.json) pins the eight source files and six executable/
-data files by SHA-256, plus case/test counts. The runner checks those hashes, the
+data files by SHA-256, plus case/test counts. The runner requires the complete,
+exact file lists, typed positive counts and valid SHA-256 strings before checking
+hashes: deleting a fingerprint cannot remove that file from the audit. It checks the
 field-map hash embedded in the checker, deterministic fixture bytes, all 74
 coverage IDs, all six operations, duplicate/missing cases and complete expected
 outputs. Reports include both expected and actual results, category counts,
@@ -125,11 +131,12 @@ receipts or proof of who ran the program. Preserve the report with the exact PR
 commit when reproducing. The record writer refuses overwrites, but no filesystem
 or release immutability is claimed.
 
-The 15 regression tests include negative controls for lost precision, false
+The 18 regression tests include negative controls for lost precision, false
 universal PASS, omitted unknown checks, empty results, altered unit catalogs,
 removed/duplicate cases, incomplete expectations, JSON type conflation,
 duplicate keys, skipped/expected-failure suites, CLI statuses and input
-preservation. No test depends on a `signature_valid` flag; such an extra member is
+preservation, extreme exponent traps and removal of a changed source copy from
+the manifest. No test depends on a `signature_valid` flag; such an extra member is
 rejected. No signatures are claimed to have been checked by this experiment.
 
 `lexeme` and `utf8_hex` preserve the decoded numeric **string content** exactly,

@@ -2,8 +2,8 @@
   "contract": "vcp-numeric-experiment-v0",
   "status": "UNADOPTED",
   "source_commit": "16018dd405cad45bd8b11a7dc2278f6d95111ea6",
-  "vector_count": 533,
-  "regression_count": 15,
+  "vector_count": 535,
+  "regression_count": 18,
   "sources": {
     "proposals/numeric-fields-2026-10-25/README.md": "9c890cbf76cdd86e03706d1e8d74abbf5a1c38cd44bbfbc71ad49b94af5e9531",
     "proposals/numeric-fields-2026-10-25/inventory.json": "28645bbdeb1da72a2cb71a703ecc1dab2a54f4f23971b65498e921699568cc63",
@@ -15,11 +15,11 @@
     "VCP-Specification-v1_0_en.md": "30289d062edacae448a45aca4395e34457530763e4012d70b6c3068ce2e1d013"
   },
   "experiment": {
-    "checker.py": "9fd2089c009ca8eb0dd20ca9e0d21150850a3ce7cf1e2d6909f15dcf86789b19",
-    "generate_vectors.py": "55dec7a573e8c693ae603d35511cf3ee95ff9e2e868b1a8e4fdfb4845c072896",
-    "run.py": "7aede9149212cc13ea0799e38097f3b2e6df7a048986919b8a061612c84e79cf",
-    "test_checker.py": "545f8d28ac67813456993458b324ccac6a06364305c901c028f070ad26cad2f5",
+    "checker.py": "73253d88be0974a1092735e4544c0317c3bc5e9aa2d30e4ad9fba6d66938c6ae",
+    "generate_vectors.py": "d85fc6781bbd22ad030f4aedeb3ac2e0cc5c24eca6c4f0d7deaa1012c96da8a0",
+    "run.py": "7c0a342762bedfc8d2795304ba5d838afb48e6b02b7408a7ed37aab4343a79f8",
+    "test_checker.py": "cd970c61d2338ece6ed8c0a2022d323bdc0ccbc25495997f710839fcb472be0b",
     "data/field-map.json": "8654db47dcaa97cd5095c424be5bb724a85fcceb34d9062978d227e1a5a3df63",
-    "data/vectors.json": "659eb4aa96f27d5eef77ea2a1086f7c37e42b261380c6ea11db2529f4c4e2b2c"
+    "data/vectors.json": "6a6812db1ebb66e0912fe7eb02378804403a5f3ad04f740341ac1018783efdd2"
   }
 }
