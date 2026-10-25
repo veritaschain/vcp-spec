@@ -61,9 +61,15 @@ The **canonical (normative) specification** of VCP is located under:
 | v1.1 | Published (no tagged release) | 2025-12-30 | [`/spec/v1.1/`](spec/v1.1/) |
 | v1.0 | Released (tag `v1.0.0`) | 2025-11-25 | [`/spec/v1.0/`](spec/v1.0/) |
 
-v1.2 is a protocol-compatible / certification-stricter update: zero breaking
-changes, all v1.0 and v1.1 events remain valid. Migration notes and
-compatibility considerations are documented inside each version directory.
+v1.2 adds features and stricter certification requirements. Historical v1.0/v1.1
+records retain their original validation context and signed bytes; this does not
+mean that every old-format event passes the v1.2 schema. Known Header and
+EventType divergences prevent an unconditional backward-compatibility claim.
+Assess producer/verifier compatibility against the declared version and policy;
+do not rewrite historical signed records to make them pass a newer schema.
+See the [known issues](spec/v1.2/README.md#known-issues-in-v12-informative) and
+version-specific migration notes. This is an informative clarification, not a
+change to the frozen specifications or schemas.
 
 GA was declared on 2026-07-06. The GA text was committed to this repository
 after that date; until that commit, this repository showed RC1. The `v1.2.0` tag
