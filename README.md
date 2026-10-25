@@ -202,6 +202,16 @@ and does **not** imply certification or regulatory approval. It is a
 first-party implementation: VSO and VeritasChain Co., Ltd. share a founder, and
 a first-party implementation is not independent validation.
 
+An offline core library for v1.2, [vcp-sdk](https://github.com/veritaschain/vcp-sdk)
+v0.1.0 (pre-release; Python, TypeScript, MQL5), is also available. It is written
+by VeritasChain Co., Ltd., so it is first-party as well and does not change the
+external-implementation count above. Where the v1.2 text is ambiguous it makes a
+choice of its own, listed in its
+[INTERPRETATIONS.md](https://github.com/veritaschain/vcp-sdk/blob/v0.1.0/INTERPRETATIONS.md)
+(for example, RFC 6962 trees rather than the §6.2.1 example builder, and integers
+canonicalised as exact digits). Those choices are not adopted by VSO change
+control. A `VALID` result from it is not a conformance claim.
+
 ---
 
 ## 🔒 License
