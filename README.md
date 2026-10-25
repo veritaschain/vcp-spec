@@ -135,7 +135,7 @@ builder and audit-path examples conflict with that requirement. The shown
 root-only AnchorRecord signature does not authenticate attached count, endpoint
 or policy metadata. Exact nanosecond integer handling also needs a portable
 canonicalization contract. These are the bounded observations P1, P2, P4, P6 and
-P8 in the [pinned research record](https://github.com/veritaschain/vap-spec/blob/9fa5fbc68075079b4599e16940e9078db976cd59/experiments/vcp-v1.2-integrity-alignment/README.md); P5 (added 2026-10-25) records that the VCP Merkle leaf input, `H(0x00 || EventHash)`, differs from the `H(0x00 || canonical(E))` of VAP v1.2 Mechanism B, a mapping item for the clause-level mapping; P3 separately concerns the quickstart verifier (its claims were corrected on 2026-10-25; the algorithm is unchanged).
+P8 in the [pinned research record](https://github.com/veritaschain/vap-spec/blob/9fa5fbc68075079b4599e16940e9078db976cd59/experiments/vcp-v1.2-integrity-alignment/README.md); P5, cited here from 2026-10-25, records that the VCP Merkle leaf input, `H(0x00 || EventHash)`, differs from the `H(0x00 || canonical(E))` of VAP v1.2 Mechanism B, a mapping item for the clause-level mapping; P3 separately concerns the quickstart verifier (its claims were corrected on 2026-10-25; the algorithm is unchanged).
 
 The numeric finding distinguishes library input rejection from precision loss:
 all 40 tested fixture timestamps are exactly binary64-representable, whereas
@@ -207,7 +207,7 @@ Recorded 2026-10-25:
   are issued by "VSO-accredited Conformity Assessment Bodies (CABs)", draws
   "Accredited CABs (multiple)" and lists "CAB accreditation" among VSO's
   responsibilities; §6.3.3 cites VSO-CAB-REQ-001 as "CAB Accreditation
-  Requirements". The JA and ZH translations say the same. The scheme requires
+  Requirements". The JA translation says the same; the ZH translation uses 认可 in §9.2 and "CAB认证要求" in §6.3.3. The scheme requires
   CABs that are independent of the scheme owner. The only registered CAB,
   VeritasChain Co., Ltd., operates VSO and is not independent of it (VAP v1.2
   §8.3, §10.1, ERRATA E-2026-10-21). VSO approval of a CAB is not
@@ -254,13 +254,15 @@ Recorded 2026-10-25:
   schema does not show conformance.
 - **Event envelope versus VAP §7.1.** The closed v1.2 schema rejects the VAP
   v1.2 §7.1 top-level `vap_version` member, has no counterpart of
-  `policy.vap_conformance`, and declares verification depth as a boolean
-  `HashChainValidation` (§5.5.2) rather than VAP's `sequence_mechanisms` list.
+  `policy.vap_conformance`, and declares verification depth as three booleans
+  (§5.5.2: `HashChainValidation`, `MerkleProofRequired`,
+  `ExternalAnchorRequired`; untyped in the schema) rather than VAP's
+  `sequence_mechanisms` list.
   This structural divergence is to be resolved in the clause-level mapping.
 - **ERASURE fields versus VAP §6.3.3.** VCP `ErasureDetails` (seven nested
   members) has no published mapping to the VAP fields
   `erasure_target_event_ids`, `erasure_reason`, `key_destruction_proof`,
-  `retention_exemption` and `operator_id`. The schema rejects `LEGAL_ORDER`,
+  `retention_exemption` and `operator_id`. The canonical `ErasureDetails.Reason.Code` enum rejects `LEGAL_ORDER`,
   which is in the VAP base `erasure_reason` enum (Annex §3.4.3 maps it to
   `COURT_ORDER` only with court-order evidence). VAP §6.3.4 requires
   `retention_exemption` where a retention duty overrides erasure; VCP keeps
@@ -270,7 +272,7 @@ Recorded 2026-10-25:
   supported algorithms, while §1.5.1 marks it DEPRECATED. The schema `HashAlgo`
   enum accepts `SHA3_512`, which §1.5.2 marks FUTURE. §9.1.1 and UID-001 make
   UUID v7 required at every tier, while the schema comment requires it at
-  Gold/Platinum only and accepts any RFC 9562 UUID, and v1.0 §4.1.1 allows v7
+  Gold/Platinum only and accepts any string in the 8-4-4-4-12 hex pattern (not only RFC 9562 UUIDs), and v1.0 §4.1.1 allows v7
   or v4. The §6.3.3 AnchorRecord `EventCount` is `int32`; VAP v1.2 §7.5
   `event_count` is `int64`.
 - **Module list.** §1.6 lists seven modules and omits `VCP-ANCHOR`, which §3.2.3

@@ -167,8 +167,10 @@ def main():
 
 def verify_merkle_proof(event_hash: str, proof_path: list, merkle_root: str) -> bool:
     """
-    Check the API-supplied audit path against the API-supplied root using the
-    VCP v1.2 §6.2 example construction (not RFC 6962; see Known issues P3).
+    Check the API-supplied audit path against the API-supplied root by folding
+    the raw event hash with plain SHA-256(left || right) and no 0x00/0x01
+    prefixes. This matches neither RFC 6962 nor the VCP v1.2 §6.2.1 example
+    builder (see Known issues, research observation P3).
     For an RFC 6962 verifier, see https://github.com/veritaschain/vcp-sdk
     (pre-release, first-party).
     
@@ -239,10 +241,10 @@ Next steps:
 ```
 
 > **What the local check does (and does not do).** `verify_merkle_proof` checks
-> the API-supplied audit path against the API-supplied root using the VCP v1.2
-> §6.2 example construction. It is **not** RFC 6962: it starts from the raw
-> event hash and applies no `0x00`/`0x01` domain-separation prefixes (research
-> observation P3; see
+> the API-supplied audit path against the API-supplied root by folding the raw
+> event hash with plain SHA-256(left || right). It applies no `0x00`/`0x01`
+> domain-separation prefixes, so it matches neither RFC 6962 nor the VCP v1.2
+> §6.2.1 example builder, which does use them (research observation P3; see
 > [Known issues](../README.md#-known-issues-in-v12-informative)). Because the
 > root comes from the same API, a match shows internal consistency only, not
 > independent anchoring. For an RFC 6962 verifier, see
@@ -281,8 +283,10 @@ interface MerkleProof {
   tree_size: number;
 }
 
-// Checks the API-supplied audit path against the API-supplied root using the
-// VCP v1.2 §6.2 example construction (not RFC 6962; see Known issues P3).
+// Checks the API-supplied audit path against the API-supplied root by folding
+// the raw event hash with plain SHA-256(left || right) and no 0x00/0x01
+// prefixes. This matches neither RFC 6962 nor the VCP v1.2 §6.2.1 example
+// builder (see Known issues, research observation P3).
 // For an RFC 6962 verifier, see https://github.com/veritaschain/vcp-sdk
 // (pre-release, first-party).
 function verifyMerkleProof(proof: MerkleProof): boolean {
@@ -417,8 +421,9 @@ export VCP_API_KEY="your-actual-key"
 - This is expected if using demo/sample data (the
   [vcp-explorer-api](https://github.com/veritaschain/vcp-explorer-api) README
   states that its server currently returns mock data)
-- The quickstart check uses the §6.2 example construction, not RFC 6962, so a
-  path from an RFC 6962 tree will not match (research observation P3)
+- The quickstart check folds plain SHA-256 pairs without RFC 6962 prefixes, so a
+  path from an RFC 6962 tree, or from the §6.2.1 example builder, will not match
+  (research observation P3)
 
 ---
 

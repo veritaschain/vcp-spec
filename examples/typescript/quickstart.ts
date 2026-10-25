@@ -57,8 +57,10 @@ interface VcpEvent {
 }
 
 /**
- * Check the API-supplied audit path against the API-supplied root using the
- * VCP v1.2 §6.2 example construction (not RFC 6962; see Known issues P3).
+ * Check the API-supplied audit path against the API-supplied root by folding
+ * the raw event hash with plain SHA-256(left || right) and no 0x00/0x01
+ * prefixes. This matches neither RFC 6962 nor the VCP v1.2 §6.2.1 example
+ * builder (see Known issues, research observation P3).
  * For an RFC 6962 verifier, see https://github.com/veritaschain/vcp-sdk
  * (pre-release, first-party).
  *
@@ -203,7 +205,7 @@ async function main() {
       console.log('   → The API-supplied path folds to the API-supplied root');
       console.log('   → The fold was computed on YOUR machine');
       console.log('   → The root was not checked against an external anchor');
-      console.log('   → Construction: VCP v1.2 §6.2 example, not RFC 6962');
+      console.log('   → Construction: plain SHA-256 pairs, no RFC 6962 prefixes (P3)');
     } else {
       console.log('❌ NO MATCH: path does not fold to the API-supplied root');
       console.log();
