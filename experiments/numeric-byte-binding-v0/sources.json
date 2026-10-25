@@ -1,0 +1,14 @@
+{
+  "source_commit": "1131901d0b83f87c1c60674697574a60cc88fee1",
+  "status": "UNADOPTED",
+  "files": {
+    "proposals/integrity-2026-10-24/byte-contract-candidate-v0/contract.py": "4b0e1d0a739590163b0d55ebc3b52fd278b07a5b10698fac9e883c71f3706596",
+    "proposals/integrity-2026-10-24/byte-contract-candidate-v0/README.md": "5cb18c94048930f140bbb05f6679a683a694ea9630155c0c1093e61cb3dc7844",
+    "proposals/integrity-2026-10-24/byte-contract-candidate-v0/requirements.txt": "6245940e3b65e73edb34f73ca9e7c7d1161905f12984067c5e50e01ad97c4043",
+    "experiments/numeric-representation-candidate-v0/checker.py": "73253d88be0974a1092735e4544c0317c3bc5e9aa2d30e4ad9fba6d66938c6ae",
+    "experiments/numeric-representation-candidate-v0/data/field-map.json": "8654db47dcaa97cd5095c424be5bb724a85fcceb34d9062978d227e1a5a3df63",
+    "experiments/numeric-representation-candidate-v0/README.md": "ad125d880e1e27c92a6b8d4a13ba809f30db261e47e2fe4d5d5bad2f401e36ff",
+    "proposals/numeric-fields-2026-10-25/inventory.json": "28645bbdeb1da72a2cb71a703ecc1dab2a54f4f23971b65498e921699568cc63",
+    "proposals/numeric-fields-2026-10-25/README.md": "9c890cbf76cdd86e03706d1e8d74abbf5a1c38cd44bbfbc71ad49b94af5e9531"
+  }
+}

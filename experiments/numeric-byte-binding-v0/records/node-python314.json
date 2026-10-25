@@ -1,0 +1,16 @@
+{
+  "status": "UNADOPTED",
+  "independent_reproduction": "not_established",
+  "experiment": "urn:vcp-research:numeric-byte-binding:2026-10-25:v0",
+  "node": "v24.19.0",
+  "openssl": "3.5.7",
+  "report_sha256": "3183d488e5c685cfd172126dcc368b96bb7ec00585de9a539e19de3ca885e131",
+  "crosscheck_sha256": "3bded946e9c08bd2f7a7927c5fb8ddd5696514f7de422571ca9c806f1f73eafd",
+  "cases": 45,
+  "candidate_event_hashes": 40,
+  "actual_ed25519_checks": 88,
+  "external_commitments": 44,
+  "diagnostic_jcs": 44,
+  "internal_byte_and_crypto_crosscheck": "PASS",
+  "semantic_crosscheck": "not_performed"
+}

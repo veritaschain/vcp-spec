@@ -1,0 +1,49 @@
+name: Unadopted numeric byte binding experiment
+
+on:
+  pull_request:
+    paths:
+      - 'experiments/numeric-byte-binding-v0/**'
+      - 'experiments/numeric-representation-candidate-v0/**'
+      - 'proposals/integrity-2026-10-24/byte-contract-candidate-v0/**'
+      - 'proposals/numeric-fields-2026-10-25/**'
+      - '.github/workflows/numeric-byte-binding-experiment.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  synthetic-byte-binding:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.12', '3.14']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Install pinned research dependencies
+        run: python -m pip install -r experiments/numeric-byte-binding-v0/requirements.txt
+      - name: Run synthetic composition and regressions
+        run: python experiments/numeric-byte-binding-v0/run.py --output "${{ runner.temp }}/binding-${{ matrix.python }}.json"
+      - name: Internal byte and Ed25519 crosscheck
+        run: node experiments/numeric-byte-binding-v0/crosscheck.cjs "${{ runner.temp }}/binding-${{ matrix.python }}.json" > "${{ runner.temp }}/crosscheck-${{ matrix.python }}.json"
+      - name: Report crosscheck regression controls
+        run: node experiments/numeric-byte-binding-v0/test_crosscheck.cjs "${{ runner.temp }}/binding-${{ matrix.python }}.json" > "${{ runner.temp }}/crosscheck-controls-${{ matrix.python }}.json"
+      - name: Save internal experimental output
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: unadopted-byte-binding-python-${{ matrix.python }}
+          path: |
+            ${{ runner.temp }}/binding-${{ matrix.python }}.json
+            ${{ runner.temp }}/crosscheck-${{ matrix.python }}.json
+            ${{ runner.temp }}/crosscheck-controls-${{ matrix.python }}.json
+          if-no-files-found: error
+          retention-days: 30

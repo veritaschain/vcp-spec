@@ -1,0 +1,16 @@
+{
+  "head": "02b98c44cf973edc5ce704d8360cb8042caaac36",
+  "negative_evidence_probe_count": 63,
+  "crosscheck_report_mutations": [
+    {
+      "mutation": "unknown-signature-trace",
+      "exit_code": 0,
+      "output": "{\n  \"status\": \"UNADOPTED\",\n  \"independent_reproduction\": \"not_established\",\n  \"experiment\": \"urn:vcp-research:numeric-byte-binding:2026-10-25:v0\",\n  \"node\": \"v24.19.0\",\n  \"openssl\": \"3.5.7\",\n  \"report_sha256\": \"2c2a41b82b1814a738c099ec359b8bfcc6ad7fc41eed7ce44e69e14cfee2fecf\",\n  \"crosscheck_sha256\": \"3bded946e9c08bd2f7a7927c5fb8ddd5696514f7de422571ca9c806f1f73eafd\",\n  \"cases\": 45,\n  \"candidate_event_hashes\": 40,\n  \"actual_ed25519_checks\": 88,\n  \"external_commitments\": 44,\n  \"diagnostic_jcs\": 44,\n  \"internal_byte_and_crypto_crosscheck\": \"PASS\",\n  \"semantic_crosscheck\": \"not_performed\"\n}\n"
+    },
+    {
+      "mutation": "reference-change",
+      "exit_code": 0,
+      "output": "{\n  \"status\": \"UNADOPTED\",\n  \"independent_reproduction\": \"not_established\",\n  \"experiment\": \"urn:vcp-research:numeric-byte-binding:2026-10-25:v0\",\n  \"node\": \"v24.19.0\",\n  \"openssl\": \"3.5.7\",\n  \"report_sha256\": \"a262b5f7a866e20e6bcbaaba49c284827dc01724686202a7014bd645dcab613a\",\n  \"crosscheck_sha256\": \"3bded946e9c08bd2f7a7927c5fb8ddd5696514f7de422571ca9c806f1f73eafd\",\n  \"cases\": 45,\n  \"candidate_event_hashes\": 40,\n  \"actual_ed25519_checks\": 88,\n  \"external_commitments\": 44,\n  \"diagnostic_jcs\": 44,\n  \"internal_byte_and_crypto_crosscheck\": \"PASS\",\n  \"semantic_crosscheck\": \"not_performed\"\n}\n"
+    }
+  ]
+}
