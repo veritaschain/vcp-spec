@@ -36,9 +36,13 @@ curl -H "Authorization: Bearer $VCP_API_KEY" \
 
 ## 📋 Get API Key
 
-1. See the [Explorer API page](https://veritaschain.org/vcp/explorer-api/) (no self-service registration page is currently published)
-2. Create account
-3. Copy API key
+See the [Explorer API page](https://veritaschain.org/vcp/explorer-api/) (no self-service registration page is currently published).
+
+The quickstart Merkle checks compare an API-supplied path with an API-supplied
+root using the VCP v1.2 §6.2 example construction, not RFC 6962 (see
+[Known issues](../README.md#-known-issues-in-v12-informative), P3). For an RFC 6962
+verifier, see [veritaschain/vcp-sdk](https://github.com/veritaschain/vcp-sdk)
+(pre-release, first-party).
 
 ## 📖 More Information
 

@@ -338,13 +338,13 @@ For organizations starting from a low score, prioritize improvements based on:
 
 Multiple implementation approaches can satisfy the technical requirements described in this guide. Organizations should evaluate options based on their specific needs.
 
-### VCP as One Reference Profile
+### VCP as One Example Profile
 
-The VeritasChain Protocol (VCP) is **one example** of a complete, open-standard implementation designed for financial trading systems. It is referenced in this guide as a concrete example, not as a required or recommended solution.
+The VeritasChain Protocol (VCP) is **one example profile**, designed for financial trading systems; its VAP v1.2 alignment is under review (VAP v1.2 §10.4). It is referenced in this guide as a concrete example, not as a required or recommended solution.
 
 Organizations may:
 
-1. **Evaluate VCP** — Review the specification as one reference implementation
+1. **Evaluate VCP** — Review the specification as one example profile
 2. **Develop equivalent solutions** — Build custom implementations meeting the same technical requirements
 3. **Adopt industry alternatives** — Use other standards or vendor solutions that satisfy the criteria
 4. **Hybrid approach** — Combine elements from multiple sources

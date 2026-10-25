@@ -8,7 +8,7 @@
 
 ## Status
 
-**Production Ready** — GA 2026-07-06 (Release Candidate RC1 published 2026-05-31). Release target: `v1.2.0` on the validated correction commit, not the earlier PR #1 merge. Tag existence must be verified before downstream publication.
+**Production Ready** — Released. GA declared 2026-07-06 (Release Candidate RC1 published 2026-05-31); tag `v1.2.0` (commit `b23acb2`, 2026-10-09) on the validated correction commit, not the earlier PR #1 merge.
 
 v1.2 is a **protocol-compatible / certification-stricter** update over v1.1. It introduces **zero breaking changes**: all v1.0 and v1.1 events remain valid and verifiable under v1.2. The complete normative specification of every change is provided in this directory as the normative annex VSO-SPEC-CHANGE-001 (see Documents below).
 
@@ -81,8 +81,11 @@ with VSO's honest-scoping policy, the following distinctions apply.
   Until they do, GA is a statement about the specification, not the
   toolchain.
 
-Certification against VCP is performed by independent Conformity
-Assessment Bodies (CABs), not by VSO.
+The certification scheme requires that certification against VCP be performed
+by Conformity Assessment Bodies (CABs) that are independent of the scheme owner,
+not by VSO. The only registered CAB, VeritasChain Co., Ltd., operates VSO and is
+not independent of it; no independent CAB is registered (VAP v1.2 §8.3, §10.1,
+ERRATA E-2026-10-21).
 
 ## Documents
 
@@ -108,7 +111,7 @@ builder and audit-path examples conflict with that requirement. The shown
 root-only AnchorRecord signature does not authenticate attached count, endpoint
 or policy metadata. Exact nanosecond integer handling also needs a portable
 canonicalization contract. These are the bounded observations P1, P2, P4, P6 and
-P8 in the [pinned research record](https://github.com/veritaschain/vap-spec/blob/9fa5fbc68075079b4599e16940e9078db976cd59/experiments/vcp-v1.2-integrity-alignment/README.md); P3 separately concerns the quickstart verifier.
+P8 in the [pinned research record](https://github.com/veritaschain/vap-spec/blob/9fa5fbc68075079b4599e16940e9078db976cd59/experiments/vcp-v1.2-integrity-alignment/README.md); P5 (added 2026-10-25) records that the VCP Merkle leaf input, `H(0x00 || EventHash)`, differs from the `H(0x00 || canonical(E))` of VAP v1.2 Mechanism B, a mapping item for the clause-level mapping; P3 separately concerns the quickstart verifier (its claims were corrected on 2026-10-25; the algorithm is unchanged).
 
 The numeric finding distinguishes library input rejection from precision loss:
 all 40 tested fixture timestamps are exactly binary64-representable, whereas
@@ -134,6 +137,8 @@ The v1.2 text is unchanged in these respects; they are errata candidates for the
 | Location | Issue |
 |----------|-------|
 | §12 References | `draft-ietf-scitt-architecture` and `draft-ietf-cose-merkle-tree-proofs` are now **RFC 9943** and **RFC 9942** (June 2026) |
+| §12 References | `draft-kamimura-scitt-vcp` is cited under a former title, "SCITT Profile for Financial Trading Audit Trails — VCP". The current title is "A SCITT Profile for Verifiable Audit Trails in Algorithmic Trading: The VeritasChain Protocol (VCP)" (revision -05, 2026-10-24); it remains an individual Internet-Draft with no IETF standing |
+| §6.4, §6.4.1; `vcp-event-v1.2.json` | §6.4 names the anchor reference `AnchorReference`, and §6.4.1 lists `AnchorReference`, `MerkleRoot` and `MerkleIndex` as REQUIRED from v1.1. The v1.2 schema requires only `EventHash` and `SignAlgo` in `Security`, describes the three fields as VC-Certified requirements enforced by Registration Policy, and also accepts `AnchorRef`, the field name used by draft-kamimura-scitt-vcp. Whether the three fields are protocol or certification requirements, and which name is canonical, is to be settled in the next revision |
 | §6.3.3 Attested Database Examples; Annex §2.4, §8.8 | AWS QLDB reached end of support on 2025-07-31 |
 | §6.3.1 table | DILITHIUM2 / FALCON512 still shown as "Future (reserved)", while §1.4 and §1.5.1 give their v1.2 status as EXPERIMENTAL; §1.5.1 prevails |
 | §1.1 | "immutable" and "ensuring compliance with international regulations" — the property provided is tamper-evidence, and conformance does not constitute compliance (VAP v1.2 §1.6) |
@@ -149,6 +154,22 @@ The v1.2 text is unchanged in these respects; they are errata candidates for the
 | §2.1 tier table | Silver lists "Ed25519 (Delegated)"; the specification does not define delegated signing (who holds the key, what is delegated, and how the delegation is recorded) |
 
 The last three rows were found while writing [vcp-sdk](https://github.com/veritaschain/vcp-sdk) v0.1.0, a first-party, pre-release offline core for v1.2. Its [INTERPRETATIONS.md](https://github.com/veritaschain/vcp-sdk/blob/v0.1.0/INTERPRETATIONS.md) records the reading that library takes in each case (I-5, I-7). Those readings are the library's and are not adopted by VSO change control. The unit of `AnchorRecord.Timestamp` is covered by the [numeric-field inventory](../../proposals/numeric-fields-2026-10-25/).
+
+Recorded 2026-10-25:
+
+| Location | Issue |
+|----------|-------|
+| §9.2; §6.3.3 (VSO-CAB-REQ-001 reference); JA/ZH §9.2 | "VSO-accredited Conformity Assessment Bodies (CABs)", "Accredited CABs (multiple)", "CAB accreditation" as a VSO responsibility, and "CAB Accreditation Requirements" — the scheme requires CABs that are independent of the scheme owner; the only registered CAB, VeritasChain Co., Ltd., operates VSO and is not independent of it (VAP v1.2 §8.3, §10.1, ERRATA E-2026-10-21). VSO approval of a CAB is not accreditation in the ISO/IEC 17000 sense |
+| Annex §3.1, §3.3, §10.4, §10.8, Appendix B.2 | "for GDPR Article 17 compliance", "Immutability by design", "This single line achieves v1.2 Silver compliance" (`vcp-core-py`), "Zero-config compliance", "Do you need GDPR Article 17 compliance?" — `vcp-core-py` is not publicly available, so the configuration claim cannot be checked from published artifacts; tier conformance is not regulatory compliance (VAP v1.2 §1.6); crypto-shredding may support but does not determine Article 17 compliance (VAP v1.2 §6.3.4); the records are append-only and tamper-evident, not immutable |
+| §2.2.2, §2.2.3, §6.3.3 (anchor targets; AnchorRecord `AnchorTarget.Type`) | An attested database is accepted as an external anchor target and `DATABASE` is an AnchorRecord target type. VAP v1.2 §4.1.4 (INT-006) lists the anchor target classes profiles select from (RFC 3161 TSA, RFC 6962-class transparency log, public blockchain, SCITT transparency service, public timestamping service); an attested database is not among them, and `DATABASE` is not in the VAP §7.5 `anchor_target.type` enum. Mapping item for the clause-level mapping |
+| §4 ("unchanged from v1.0"); `vcp-event-v1.2.json` `Header`, `VCP-GOV` | The v1.0 §4.1.1 header fields `ClockSyncStatus`, `TimestampPrecision`, `VenueID`, `Symbol`, `AccountID` and `OperatorID` are rejected in `Header` by the closed v1.2 schema (`VenueID`, `Symbol`, `AccountID` are defined under `Payload.VCP-TRADE`; `ClockSyncStatus` and `TimestampPrecision` have no schema location). `VCP-GOV` defines no `LastApprovalBy`, `TestingRecordLink` or `OperatorID`, which VAP v1.2 §5.1.4 maps. See the unadopted [native-layout migration draft](../../proposals/native-layout-migration-2026-10-25/README.md) |
+| §3.1 diagram, §3.2, §8.1.3; §1.3; `vcp-event-v1.2.json` `EventType` | The §3.1 diagram uses `REJ` and `PRT`, §8.1.3 uses `SNC`, and §3.2 inherits the v1.0 core event types, which also include `ALG`, `AUD` and `REC` (v1.0 §3.2.1). None of these six is in the schema `EventType` enum, so such events fail schema validation; §1.3 "Full backward compatibility is guaranteed within the v1.x series" is not supported by the schema for these types |
+| §6.3.1, §5.5.3; `vcp-event-v1.2.json` `Security`, `PolicyIdentification` | The text requires every event to be signed and makes `ConformanceTier`, `RegistrationPolicy.Issuer` and `VerificationDepth` REQUIRED; the schema requires only `EventHash` and `SignAlgo` in `Security`, makes the top-level `PolicyIdentification` block optional and does not require `Issuer` or `VerificationDepth` in it. For the Merkle and anchor fields see the §6.4 / §6.4.1 row above. Schema validity is not conformance |
+| §5.5.2; `vcp-event-v1.2.json` (root) | The closed schema rejects the VAP v1.2 §7.1 top-level `vap_version` member, has no counterpart of `policy.vap_conformance`, and declares verification depth as a boolean `HashChainValidation` rather than VAP's `sequence_mechanisms` list. Structural divergence for the clause-level mapping |
+| §3.2.2; Annex §3.4, §3.4.3; `vcp-event-v1.2.json` `ErasureDetails` | VCP `ErasureDetails` has no published mapping to the VAP v1.2 §6.3.3 fields (`erasure_target_event_ids`, `erasure_reason`, `key_destruction_proof`, `retention_exemption`, `operator_id`). The schema rejects `LEGAL_ORDER`, which is in the VAP base `erasure_reason` enum (Annex §3.4.3 maps it to `COURT_ORDER` only with court-order evidence). VAP §6.3.4 requires `retention_exemption` where a retention duty overrides erasure; VCP keeps `RetentionExemption` outside `ErasureDetails`, and Annex §3.4 says not to emit a successful ERASURE event for data that remains decryptable |
+| §1.4; §1.5.2; §9.1.1, §9.1.2 (UID-001); §6.3.3 AnchorRecord | §1.4 lists `RSA_2048` as supported, while §1.5.1 marks it DEPRECATED. The schema `HashAlgo` enum accepts `SHA3_512`, which §1.5.2 marks FUTURE. UUID v7 is "Required" at every tier, while the schema comment requires it at Gold/Platinum only and accepts any RFC 9562 UUID, and v1.0 §4.1.1 allows v7 or v4. AnchorRecord `EventCount` is `int32`; VAP v1.2 §7.5 `event_count` is `int64` |
+| §1.6 | The core module list omits `VCP-ANCHOR`, which §3.2.3 and Annex §1.4.10 use for `Payload.VCP-ANCHOR.MigrationDetails` / `FailoverDetails` (`SYS_ANCHOR_MIGRATION`, `SYS_ANCHOR_FAILOVER`) |
+| JA / ZH translations | Partial translations. Omitted relative to the English text: §5.6.5 Cross-Reference Protocol, §5.6.6 Discrepancy Handling and §5.6.9 (JA/ZH §5.6.5–§5.6.6 correspond to English §5.6.7–§5.6.8); the bodies of §6.1–§6.2 (placeholders only), §6.3.1 and §6.3.2; the §6.3.3 subsections Acceptable Anchor Targets, Anchoring Record Schema and Silver Tier Anchoring Options; §6.4 and §6.4.1; §7.1 (placeholder only); §8.1.2 and §8.1.3; the Gold/Platinum steps of §10.2; Appendix E.3 AnchorRecord PQC Extension (JA/ZH E.3 corresponds to English E.4). The English text prevails |
 
 ## Relationship to VAP
 

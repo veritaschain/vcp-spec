@@ -33,18 +33,22 @@ headers = {"Authorization": f"Bearer {API_KEY}"} if API_KEY else {}
 
 def verify_merkle_proof(event_hash: str, proof_path: list, merkle_root: str) -> bool:
     """
-    Verify Merkle proof locally (RFC 6962 compliant).
-    
-    This function runs entirely on your machine.
-    No server trust required - that's the "Verify, Don't Trust" principle!
-    
+    Check the API-supplied audit path against the API-supplied root using the
+    VCP v1.2 §6.2 example construction (not RFC 6962; see Known issues P3).
+    For an RFC 6962 verifier, see https://github.com/veritaschain/vcp-sdk
+    (pre-release, first-party).
+
+    The path is folded on your machine, but the root it is compared with comes
+    from the same API, so a match shows internal consistency only; the root is
+    not independently anchored here.
+
     Args:
         event_hash: SHA-256 hash of the event (hex string)
         proof_path: List of sibling hashes with positions
         merkle_root: Expected Merkle root (hex string)
     
     Returns:
-        True if proof is valid, False otherwise
+        True if the path folds to merkle_root, False otherwise
     """
     try:
         current = bytes.fromhex(event_hash)
@@ -191,20 +195,20 @@ def main():
         
         print()
         if is_valid:
-            print("✅ VERIFIED: Proof is mathematically valid!")
+            print("✅ MATCH against API-supplied root (not independently anchored)")
             print()
             print("   What this means:")
-            print("   → The event exists in the Merkle tree")
-            print("   → The proof was verified on YOUR machine")
-            print("   → No server trust was required")
-            print("   → Any tampering would have been detected")
+            print("   → The API-supplied path folds to the API-supplied root")
+            print("   → The fold was computed on YOUR machine")
+            print("   → The root was not checked against an external anchor")
+            print("   → Construction: VCP v1.2 §6.2 example, not RFC 6962")
         else:
-            print("❌ FAILED: Proof verification failed!")
+            print("❌ NO MATCH: path does not fold to the API-supplied root")
             print()
             print("   This could mean:")
-            print("   → Data was tampered with")
+            print("   → The data or proof differs from what the root commits to")
             print("   → Proof is incomplete or corrupted")
-            print("   → There's a bug in the verification code")
+            print("   → The proof uses a different tree construction (e.g. RFC 6962)")
             
     except httpx.HTTPError as e:
         print(f"Error fetching proof: {e}")
@@ -249,14 +253,15 @@ A VCP event consists of three parts:
     print("You've just experienced the core of VCP:")
     print("  ✓ Queried the VCP Explorer API")
     print("  ✓ Retrieved a Merkle proof")
-    print("  ✓ Verified it locally (no server trust!)")
+    print("  ✓ Folded it locally against the API-supplied root")
     print()
     print("Next steps:")
     print("  📖 Full Spec:      https://github.com/veritaschain/vcp-spec")
     print("  🛠️  SDK Spec:       https://github.com/veritaschain/vcp-sdk-spec")
     print("  🔍 Explorer GUI:   https://veritaschain.org/explorer/app/")
     print("  🔌 MT4/MT5:        https://github.com/veritaschain/vcp-sidecar-guide")
-    print("  ℹ️  VC-Certified:   https://veritaschain.org/certified/ (issued by accredited CABs, not VSO)")
+    print("  ℹ️  VC-Certified:   https://veritaschain.org/certified/ (scheme requires CABs independent of VSO; the only registered CAB is not independent)")
+    print("  🔐 RFC 6962:       https://github.com/veritaschain/vcp-sdk (pre-release, first-party)")
     print()
 
 
