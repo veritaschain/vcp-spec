@@ -1,0 +1,374 @@
+{
+  "ContractID": "urn:vcp-research:native-layout-migration:2026-10-25:v0",
+  "Policies": {
+    "registration": "7b0a202022526f6c65223a2022726567697374726174696f6e222c0a202022506f6c6963794944223a202275726e3a7663702d72657365617263683a726567697374726174696f6e3a6c61796f75742d7630222c0a202022506f6c69637956657273696f6e223a202230222c0a202022436f6e74726163744944223a202275726e3a7663702d72657365617263683a6e61746976652d6c61796f75742d6d6967726174696f6e3a323032362d31302d32353a7630222c0a202022417574686f72697479223a20225055424c49432054455354204b455953204f4e4c59220a7d0a",
+    "numeric": "7b0a202022526f6c65223a20226e756d65726963222c0a202022506f6c6963794944223a202275726e3a7663702d72657365617263683a6e756d657269633a6c61796f75742d7630222c0a202022506f6c69637956657273696f6e223a202230222c0a202022436f6e74726163744944223a202275726e3a7663702d72657365617263683a6e61746976652d6c61796f75742d6d6967726174696f6e3a323032362d31302d32353a7630222c0a20202254696d654261736973223a2022756e69785f6e6f5f6c656170222c0a2020224669656c6473223a207b0a20202020224865616465722e54696d657374616d70496e74223a20226e73222c0a20202020224865616465722e53657175656e63654e756d223a20226f7264696e616c222c0a20202020225061796c6f61642e5643502d414e43484f522e4661696c6f76657244657461696c732e54726967676572436f6e646974696f6e2e546f74616c446f776e74696d65536563223a202273222c0a20202020225061796c6f61642e5643502d585245462e5368617265644576656e744b65792e546f6c6572616e63654d73223a20226d73222c0a20202020225061796c6f61642e5643502d474f562e436f6e666964656e636553636f7265223a2022726174696f222c0a20202020225061796c6f61642e5643502d474f562e506572666f726d616e63654d657461646174612e4c6174656e6379496d70616374223a20227573220a20207d2c0a202022446563696d616c456d697373696f6e223a2022707265736572766520616363657074656420736f75726365206c6578656d65222c0a202022526f756e64696e67223a2022666f7262696464656e220a7d0a"
+  },
+  "SourceArtifacts": [
+    {
+      "EntryID": "source-0",
+      "OriginalHex": "7b0a202022466f726d6174223a202275726e3a7663702d72657365617263683a7261772d736f757263653a323032362d31302d32353a7630222c0a2020224576656e744944223a202275726e3a7663702d72657365617263683a736f757263652d6576656e743a30222c0a2020224163746f724944223a202275726e3a7663702d72657365617263683a736f757263652d6163746f72222c0a202022436861696e4944223a202275726e3a7663702d72657365617263683a736f757263652d636861696e222c0a20202253657175656e63654e756d223a20302c0a20202254696d657374616d70496e74223a20313739323838363430303030303030303030302c0a20202254696d657374616d7049534f223a2022323032362d31302d32355430303a30303a30302e3030303030303030305a222c0a20202254696d654261736973223a2022756e69785f6e6f5f6c656170222c0a202022556e697473223a207b0a202020202254696d657374616d70496e74223a20226e73222c0a20202020224475726174696f6e4d73223a20226d73222c0a2020202022546f6c6572616e63654d73223a20226d73222c0a2020202022436f6e666964656e6365223a2022726174696f222c0a20202020224c6174656e63795573223a20227573220a20207d2c0a2020224475726174696f6e4d73223a202231303030222c0a202022546f6c6572616e63654d73223a20223130222c0a202022436f6e666964656e6365223a202230312e3030222c0a2020224c6174656e63795573223a2022302e303031220a7d0a",
+      "RetainedHex": "7b0a202022466f726d6174223a202275726e3a7663702d72657365617263683a7261772d736f757263653a323032362d31302d32353a7630222c0a2020224576656e744944223a202275726e3a7663702d72657365617263683a736f757263652d6576656e743a30222c0a2020224163746f724944223a202275726e3a7663702d72657365617263683a736f757263652d6163746f72222c0a202022436861696e4944223a202275726e3a7663702d72657365617263683a736f757263652d636861696e222c0a20202253657175656e63654e756d223a20302c0a20202254696d657374616d70496e74223a20313739323838363430303030303030303030302c0a20202254696d657374616d7049534f223a2022323032362d31302d32355430303a30303a30302e3030303030303030305a222c0a20202254696d654261736973223a2022756e69785f6e6f5f6c656170222c0a202022556e697473223a207b0a202020202254696d657374616d70496e74223a20226e73222c0a20202020224475726174696f6e4d73223a20226d73222c0a2020202022546f6c6572616e63654d73223a20226d73222c0a2020202022436f6e666964656e6365223a2022726174696f222c0a20202020224c6174656e63795573223a20227573220a20207d2c0a2020224475726174696f6e4d73223a202231303030222c0a202022546f6c6572616e63654d73223a20223130222c0a202022436f6e666964656e6365223a202230312e3030222c0a2020224c6174656e63795573223a2022302e303031220a7d0a",
+      "Signature": "Ntdnms0e13LS5cPMj8bh2OV592IHChE5GA7XiiSc9nzECxo0CZmqRWvnpfqEu95qsel+i4oFfxynRFWMdFG4BA==",
+      "RetainedSignature": "Ntdnms0e13LS5cPMj8bh2OV592IHChE5GA7XiiSc9nzECxo0CZmqRWvnpfqEu95qsel+i4oFfxynRFWMdFG4BA=="
+    },
+    {
+      "EntryID": "source-1",
+      "OriginalHex": "7b0a202022466f726d6174223a202275726e3a7663702d72657365617263683a7261772d736f757263653a323032362d31302d32353a7630222c0a2020224576656e744944223a202275726e3a7663702d72657365617263683a736f757263652d6576656e743a31222c0a2020224163746f724944223a202275726e3a7663702d72657365617263683a736f757263652d6163746f72222c0a202022436861696e4944223a202275726e3a7663702d72657365617263683a736f757263652d636861696e222c0a20202253657175656e63654e756d223a20312c0a20202254696d657374616d70496e74223a20313739323838363430303030303030303030312c0a20202254696d657374616d7049534f223a2022323032362d31302d32355430303a30303a30302e3030303030303030315a222c0a20202254696d654261736973223a2022756e69785f6e6f5f6c656170222c0a202022556e697473223a207b0a202020202254696d657374616d70496e74223a20226e73222c0a20202020224475726174696f6e4d73223a20226d73222c0a2020202022546f6c6572616e63654d73223a20226d73222c0a2020202022436f6e666964656e6365223a2022726174696f222c0a20202020224c6174656e63795573223a20227573220a20207d2c0a2020224475726174696f6e4d73223a202231303030222c0a202022546f6c6572616e63654d73223a20223130222c0a202022436f6e666964656e6365223a20222d30222c0a2020224c6174656e63795573223a2022302e303031220a7d0a",
+      "RetainedHex": "7b0a202022466f726d6174223a202275726e3a7663702d72657365617263683a7261772d736f757263653a323032362d31302d32353a7630222c0a2020224576656e744944223a202275726e3a7663702d72657365617263683a736f757263652d6576656e743a31222c0a2020224163746f724944223a202275726e3a7663702d72657365617263683a736f757263652d6163746f72222c0a202022436861696e4944223a202275726e3a7663702d72657365617263683a736f757263652d636861696e222c0a20202253657175656e63654e756d223a20312c0a20202254696d657374616d70496e74223a20313739323838363430303030303030303030312c0a20202254696d657374616d7049534f223a2022323032362d31302d32355430303a30303a30302e3030303030303030315a222c0a20202254696d654261736973223a2022756e69785f6e6f5f6c656170222c0a202022556e697473223a207b0a202020202254696d657374616d70496e74223a20226e73222c0a20202020224475726174696f6e4d73223a20226d73222c0a2020202022546f6c6572616e63654d73223a20226d73222c0a2020202022436f6e666964656e6365223a2022726174696f222c0a20202020224c6174656e63795573223a20227573220a20207d2c0a2020224475726174696f6e4d73223a202231303030222c0a202022546f6c6572616e63654d73223a20223130222c0a202022436f6e666964656e6365223a20222d30222c0a2020224c6174656e63795573223a2022302e303031220a7d0a",
+      "Signature": "edO1JTIPMCgUJLU0Z3X0AXCmV8r6PPNTo5TaYIZwbdmuauPPPNQ++QrNLGfkgkUY1r2MSSdrVNgG6IchIa1sCw==",
+      "RetainedSignature": "edO1JTIPMCgUJLU0Z3X0AXCmV8r6PPNTo5TaYIZwbdmuauPPPNQ++QrNLGfkgkUY1r2MSSdrVNgG6IchIa1sCw=="
+    },
+    {
+      "EntryID": "source-2",
+      "OriginalHex": "7b0a202022466f726d6174223a202275726e3a7663702d72657365617263683a7261772d736f757263653a323032362d31302d32353a7630222c0a2020224576656e744944223a202275726e3a7663702d72657365617263683a736f757263652d6576656e743a32222c0a2020224163746f724944223a202275726e3a7663702d72657365617263683a736f757263652d6163746f72222c0a202022436861696e4944223a202275726e3a7663702d72657365617263683a736f757263652d636861696e222c0a20202253657175656e63654e756d223a20322c0a20202254696d657374616d70496e74223a20313739323838363430303030303030303030322c0a20202254696d657374616d7049534f223a2022323032362d31302d32355430303a30303a30302e3030303030303030325a222c0a20202254696d654261736973223a2022756e69785f6e6f5f6c656170222c0a202022556e697473223a207b0a202020202254696d657374616d70496e74223a20226e73222c0a20202020224475726174696f6e4d73223a20226d73222c0a2020202022546f6c6572616e63654d73223a20226d73222c0a2020202022436f6e666964656e6365223a2022726174696f222c0a20202020224c6174656e63795573223a20227573220a20207d2c0a2020224475726174696f6e4d73223a202231303030222c0a202022546f6c6572616e63654d73223a20223130222c0a202022436f6e666964656e6365223a2022302e3735222c0a2020224c6174656e63795573223a2022302e303031220a7d0a",
+      "RetainedHex": "7b0a202022466f726d6174223a202275726e3a7663702d72657365617263683a7261772d736f757263653a323032362d31302d32353a7630222c0a2020224576656e744944223a202275726e3a7663702d72657365617263683a736f757263652d6576656e743a32222c0a2020224163746f724944223a202275726e3a7663702d72657365617263683a736f757263652d6163746f72222c0a202022436861696e4944223a202275726e3a7663702d72657365617263683a736f757263652d636861696e222c0a20202253657175656e63654e756d223a20322c0a20202254696d657374616d70496e74223a20313739323838363430303030303030303030322c0a20202254696d657374616d7049534f223a2022323032362d31302d32355430303a30303a30302e3030303030303030325a222c0a20202254696d654261736973223a2022756e69785f6e6f5f6c656170222c0a202022556e697473223a207b0a202020202254696d657374616d70496e74223a20226e73222c0a20202020224475726174696f6e4d73223a20226d73222c0a2020202022546f6c6572616e63654d73223a20226d73222c0a2020202022436f6e666964656e6365223a2022726174696f222c0a20202020224c6174656e63795573223a20227573220a20207d2c0a2020224475726174696f6e4d73223a202231303030222c0a202022546f6c6572616e63654d73223a20223130222c0a202022436f6e666964656e6365223a2022302e3735222c0a2020224c6174656e63795573223a2022302e303031220a7d0a",
+      "Signature": "D+AmqAvrwNUXep5fzqbrUpSAK0cFfvmCZJXP0kEvtHHYO03SIf9ci7oFxBtnzlvg9chXXIChrY9toZmynOXjBA==",
+      "RetainedSignature": "D+AmqAvrwNUXep5fzqbrUpSAK0cFfvmCZJXP0kEvtHHYO03SIf9ci7oFxBtnzlvg9chXXIChrY9toZmynOXjBA=="
+    }
+  ],
+  "PreservedEvidence": [
+    {
+      "ArtifactID": "old-proof",
+      "OriginalHex": "53594e544845544943204f524947494e414c20524f4f542f50524f4f462042595445530d0a30306666",
+      "RetainedHex": "53594e544845544943204f524947494e414c20524f4f542f50524f4f462042595445530d0a30306666"
+    },
+    {
+      "ArtifactID": "old-receipt",
+      "OriginalHex": "53594e54484554494320554e434f4e4e454354454420524543454950543b204e4f5420414e2045585445524e414c2054494d45204154544553544154494f4e0a",
+      "RetainedHex": "53594e54484554494320554e434f4e4e454354454420524543454950543b204e4f5420414e2045585445524e414c2054494d45204154544553544154494f4e0a"
+    }
+  ],
+  "Events": [
+    {
+      "Commitment": {
+        "ContractID": "urn:vcp-research:native-layout-migration:2026-10-25:v0",
+        "EventHashAlgorithm": "SHA-256",
+        "Header": {
+          "EventID": "urn:vcp-research:target-event:0",
+          "ActorID": "urn:vcp-research:converter",
+          "ChainID": "urn:vcp-research:derived-chain",
+          "SequenceNum": "0",
+          "EventType": "RESEARCH_LAYOUT_ONLY",
+          "PolicyID": "urn:vcp-research:registration:layout-v0",
+          "TimestampInt": "1792886400000000000",
+          "TimestampISO": "2026-10-25T00:00:00.000000000Z"
+        },
+        "Payload": {
+          "VCP-ANCHOR": {
+            "FailoverDetails": {
+              "TriggerCondition": {
+                "TotalDowntimeSec": "1"
+              }
+            }
+          },
+          "VCP-XREF": {
+            "SharedEventKey": {
+              "ToleranceMs": "10"
+            }
+          },
+          "VCP-GOV": {
+            "ConfidenceScore": "01.00",
+            "PerformanceMetadata": {
+              "LatencyImpact": "0.001"
+            }
+          }
+        },
+        "PolicyIdentification": {
+          "PolicyID": "urn:vcp-research:registration:layout-v0",
+          "Version": "0"
+        },
+        "RegistrationPolicyBinding": {
+          "PolicyID": "urn:vcp-research:registration:layout-v0",
+          "PolicyVersion": "0",
+          "PolicyDigest": "sha256:6e4f078079523ddd9afb1f06f017de71ed03ec19d3c40f53b5ca1831204783c4"
+        },
+        "NumericPolicyBinding": {
+          "PolicyID": "urn:vcp-research:numeric:layout-v0",
+          "PolicyVersion": "0",
+          "PolicyDigest": "sha256:5c0a7abd04aa5d0fbfc2a8d9980fbc376bfe2f4cc3f7157cfab4ba0ca713a5b7"
+        },
+        "Origin": {
+          "Kind": "derived",
+          "DerivationPlanDigest": "sha256:1041c90acb4ef3ca98e42afe73fcc44382f1a8e33a2907a5ceae4d7b0c2f8040",
+          "SourceEntryID": "source-0"
+        },
+        "ChainMode": "start",
+        "PreviousEventHash": null
+      },
+      "Statement": {
+        "ContractID": "urn:vcp-research:native-layout-migration:2026-10-25:v0",
+        "SignatureAlgorithm": "Ed25519",
+        "KeyID": "urn:vcp-research:key:layout:event-signature",
+        "EventHash": "sha256:3cc75e661e45abecd090d75cb3ca938fc2257500f193cd4243c8b58485813206",
+        "EventID": "urn:vcp-research:target-event:0",
+        "ActorID": "urn:vcp-research:converter",
+        "ChainID": "urn:vcp-research:derived-chain"
+      },
+      "Signature": "5zyL6fjFOW887jWzrWbwmWPMuhQhYCpcgPLYAziwTZa5bHp94GcFQwllfZChdo+B63xIUXPTWSCEomd/8ay6CA=="
+    },
+    {
+      "Commitment": {
+        "ContractID": "urn:vcp-research:native-layout-migration:2026-10-25:v0",
+        "EventHashAlgorithm": "SHA-256",
+        "Header": {
+          "EventID": "urn:vcp-research:target-event:1",
+          "ActorID": "urn:vcp-research:converter",
+          "ChainID": "urn:vcp-research:derived-chain",
+          "SequenceNum": "1",
+          "EventType": "RESEARCH_LAYOUT_ONLY",
+          "PolicyID": "urn:vcp-research:registration:layout-v0",
+          "TimestampInt": "1792886400000000001",
+          "TimestampISO": "2026-10-25T00:00:00.000000001Z"
+        },
+        "Payload": {
+          "VCP-ANCHOR": {
+            "FailoverDetails": {
+              "TriggerCondition": {
+                "TotalDowntimeSec": "1"
+              }
+            }
+          },
+          "VCP-XREF": {
+            "SharedEventKey": {
+              "ToleranceMs": "10"
+            }
+          },
+          "VCP-GOV": {
+            "ConfidenceScore": "-0",
+            "PerformanceMetadata": {
+              "LatencyImpact": "0.001"
+            }
+          }
+        },
+        "PolicyIdentification": {
+          "PolicyID": "urn:vcp-research:registration:layout-v0",
+          "Version": "0"
+        },
+        "RegistrationPolicyBinding": {
+          "PolicyID": "urn:vcp-research:registration:layout-v0",
+          "PolicyVersion": "0",
+          "PolicyDigest": "sha256:6e4f078079523ddd9afb1f06f017de71ed03ec19d3c40f53b5ca1831204783c4"
+        },
+        "NumericPolicyBinding": {
+          "PolicyID": "urn:vcp-research:numeric:layout-v0",
+          "PolicyVersion": "0",
+          "PolicyDigest": "sha256:5c0a7abd04aa5d0fbfc2a8d9980fbc376bfe2f4cc3f7157cfab4ba0ca713a5b7"
+        },
+        "Origin": {
+          "Kind": "derived",
+          "DerivationPlanDigest": "sha256:1041c90acb4ef3ca98e42afe73fcc44382f1a8e33a2907a5ceae4d7b0c2f8040",
+          "SourceEntryID": "source-1"
+        },
+        "ChainMode": "linked",
+        "PreviousEventHash": "sha256:3cc75e661e45abecd090d75cb3ca938fc2257500f193cd4243c8b58485813206"
+      },
+      "Statement": {
+        "ContractID": "urn:vcp-research:native-layout-migration:2026-10-25:v0",
+        "SignatureAlgorithm": "Ed25519",
+        "KeyID": "urn:vcp-research:key:layout:event-signature",
+        "EventHash": "sha256:3449909079e7e40bdad0ecc1c0d25a17b9142c2c150164026f9b182933d34162",
+        "EventID": "urn:vcp-research:target-event:1",
+        "ActorID": "urn:vcp-research:converter",
+        "ChainID": "urn:vcp-research:derived-chain"
+      },
+      "Signature": "g0+kcH8ZAkxyKPvFXoRwa2iXUxNvZ90rRc4/sxh7aquIUn6j3gz0T6LVDVk/KLGYNy6gqpbwq0LnjH4mnvnbCQ=="
+    },
+    {
+      "Commitment": {
+        "ContractID": "urn:vcp-research:native-layout-migration:2026-10-25:v0",
+        "EventHashAlgorithm": "SHA-256",
+        "Header": {
+          "EventID": "urn:vcp-research:target-event:2",
+          "ActorID": "urn:vcp-research:converter",
+          "ChainID": "urn:vcp-research:derived-chain",
+          "SequenceNum": "2",
+          "EventType": "RESEARCH_LAYOUT_ONLY",
+          "PolicyID": "urn:vcp-research:registration:layout-v0",
+          "TimestampInt": "1792886400000000002",
+          "TimestampISO": "2026-10-25T00:00:00.000000002Z"
+        },
+        "Payload": {
+          "VCP-ANCHOR": {
+            "FailoverDetails": {
+              "TriggerCondition": {
+                "TotalDowntimeSec": "1"
+              }
+            }
+          },
+          "VCP-XREF": {
+            "SharedEventKey": {
+              "ToleranceMs": "10"
+            }
+          },
+          "VCP-GOV": {
+            "ConfidenceScore": "0.75",
+            "PerformanceMetadata": {
+              "LatencyImpact": "0.001"
+            }
+          }
+        },
+        "PolicyIdentification": {
+          "PolicyID": "urn:vcp-research:registration:layout-v0",
+          "Version": "0"
+        },
+        "RegistrationPolicyBinding": {
+          "PolicyID": "urn:vcp-research:registration:layout-v0",
+          "PolicyVersion": "0",
+          "PolicyDigest": "sha256:6e4f078079523ddd9afb1f06f017de71ed03ec19d3c40f53b5ca1831204783c4"
+        },
+        "NumericPolicyBinding": {
+          "PolicyID": "urn:vcp-research:numeric:layout-v0",
+          "PolicyVersion": "0",
+          "PolicyDigest": "sha256:5c0a7abd04aa5d0fbfc2a8d9980fbc376bfe2f4cc3f7157cfab4ba0ca713a5b7"
+        },
+        "Origin": {
+          "Kind": "derived",
+          "DerivationPlanDigest": "sha256:1041c90acb4ef3ca98e42afe73fcc44382f1a8e33a2907a5ceae4d7b0c2f8040",
+          "SourceEntryID": "source-2"
+        },
+        "ChainMode": "linked",
+        "PreviousEventHash": "sha256:3449909079e7e40bdad0ecc1c0d25a17b9142c2c150164026f9b182933d34162"
+      },
+      "Statement": {
+        "ContractID": "urn:vcp-research:native-layout-migration:2026-10-25:v0",
+        "SignatureAlgorithm": "Ed25519",
+        "KeyID": "urn:vcp-research:key:layout:event-signature",
+        "EventHash": "sha256:592d4afd38b60a5fe904ae58a33ea8034a0e0026a6513a7d954177e02a993157",
+        "EventID": "urn:vcp-research:target-event:2",
+        "ActorID": "urn:vcp-research:converter",
+        "ChainID": "urn:vcp-research:derived-chain"
+      },
+      "Signature": "vz+BNh4mZIbZpM3DIfhwok3floLdV+0A4kn7tW7lgPLT67VvUJxTviMWSVK8Wk0StBvvDG4QCm54rA5WpG1XDQ=="
+    }
+  ],
+  "DerivationPlan": {
+    "ContractID": "urn:vcp-research:native-layout-migration:2026-10-25:v0",
+    "PlanID": "urn:vcp-research:plan:three-events",
+    "SourceManifestDigest": "sha256:9c7be27adbd9a714214234d00a3bb4b4aa4a0bea4d8ea0e21a6671f58fcc4a3d",
+    "SourceFormat": "urn:vcp-research:raw-source:2026-10-25:v0",
+    "TargetActorID": "urn:vcp-research:converter",
+    "TargetChainID": "urn:vcp-research:derived-chain",
+    "RegistrationPolicyBinding": {
+      "PolicyID": "urn:vcp-research:registration:layout-v0",
+      "PolicyVersion": "0",
+      "PolicyDigest": "sha256:6e4f078079523ddd9afb1f06f017de71ed03ec19d3c40f53b5ca1831204783c4"
+    },
+    "NumericPolicyBinding": {
+      "PolicyID": "urn:vcp-research:numeric:layout-v0",
+      "PolicyVersion": "0",
+      "PolicyDigest": "sha256:5c0a7abd04aa5d0fbfc2a8d9980fbc376bfe2f4cc3f7157cfab4ba0ca713a5b7"
+    },
+    "ConversionRule": "research-exact-ms-to-s-preserve-decimals-v0",
+    "Entries": [
+      {
+        "SourceEntryID": "source-0",
+        "TargetEventID": "urn:vcp-research:target-event:0"
+      },
+      {
+        "SourceEntryID": "source-1",
+        "TargetEventID": "urn:vcp-research:target-event:1"
+      },
+      {
+        "SourceEntryID": "source-2",
+        "TargetEventID": "urn:vcp-research:target-event:2"
+      }
+    ]
+  },
+  "SourceManifest": {
+    "SourceFormat": "urn:vcp-research:raw-source:2026-10-25:v0",
+    "Entries": [
+      {
+        "EntryID": "source-0",
+        "RawSHA256": "sha256:3b89b25121ab60e9eadff71432b8faf4b0700473cbbc5cf4004a2068b44900fe",
+        "SignatureSHA256": "sha256:cebcc5e20346c760c6aeee9eeaf332c2da273f5274794ed27648a02ad950eb7f"
+      },
+      {
+        "EntryID": "source-1",
+        "RawSHA256": "sha256:2dcc2f7fa6dcaa4b4d77ac57bc489eeb2dc31ac57f99be9ef02ba8aa89095a77",
+        "SignatureSHA256": "sha256:9ae2528b4a05bd2f5d024fe33e8d8b662d281a2538b5cf3fe045d37f8836dc68"
+      },
+      {
+        "EntryID": "source-2",
+        "RawSHA256": "sha256:30ee8f70ee4a42a74dc7001e5890465123ae81f91802356de69d5a9bca35ab3b",
+        "SignatureSHA256": "sha256:93c8f3fedfcbcf4504d67ce8420b73ea2744988fe8eb22cd0ccded7574fc2959"
+      }
+    ],
+    "Evidence": [
+      {
+        "ArtifactID": "old-proof",
+        "RawSHA256": "sha256:b1d90713b14ae4c1ca831d71d2835c5fd680f16338d5d4ca4b2dd8fae0dac118"
+      },
+      {
+        "ArtifactID": "old-receipt",
+        "RawSHA256": "sha256:d05656c542ad94c7f2c5321f1963735f432dda25277136270361a11013285c7e"
+      }
+    ]
+  },
+  "Anchor": {
+    "Statement": {
+      "ContractID": "urn:vcp-research:native-layout-migration:2026-10-25:v0",
+      "SignatureAlgorithm": "Ed25519",
+      "KeyID": "urn:vcp-research:key:layout:anchor-signature",
+      "ActorID": "urn:vcp-research:converter",
+      "ChainID": "urn:vcp-research:derived-chain",
+      "RegistrationPolicyBinding": {
+        "PolicyID": "urn:vcp-research:registration:layout-v0",
+        "PolicyVersion": "0",
+        "PolicyDigest": "sha256:6e4f078079523ddd9afb1f06f017de71ed03ec19d3c40f53b5ca1831204783c4"
+      },
+      "NumericPolicyBinding": {
+        "PolicyID": "urn:vcp-research:numeric:layout-v0",
+        "PolicyVersion": "0",
+        "PolicyDigest": "sha256:5c0a7abd04aa5d0fbfc2a8d9980fbc376bfe2f4cc3f7157cfab4ba0ca713a5b7"
+      },
+      "TreeScheme": "research-rfc6962-digest-leaf-v0",
+      "EventCount": "3",
+      "FirstEventID": "urn:vcp-research:target-event:0",
+      "LastEventID": "urn:vcp-research:target-event:2",
+      "MerkleRoot": "sha256:6903c02ecb637194e521afffae1ab3fd1d82b1bb8339036c07828e55b8fb92e2",
+      "RecordedAtNs": "1792886400000000000",
+      "IntendedTarget": "synthetic-unconnected"
+    },
+    "Signature": "cFa5V1yvtekwQfj3AT0huR5clOX6iRMmmkxCBTkTHIX7x9G8uua0eNvGh9hR7gO5NyUeHUS9UItqbPjhWsG/CA=="
+  },
+  "InclusionEvidence": [
+    {
+      "EventID": "urn:vcp-research:target-event:0",
+      "LeafIndex": "0",
+      "Path": [
+        "sha256:8e99944c3cde1df8d5942f6e1f679cbcfc4335576372fe3e9a65d9400c3c5f15",
+        "sha256:db73275685cf0670e89e2b0b590f1ebdb67f40bba76037896c594e322815c037"
+      ]
+    },
+    {
+      "EventID": "urn:vcp-research:target-event:1",
+      "LeafIndex": "1",
+      "Path": [
+        "sha256:9233af9f813008105ea70c230fb40bb450553fe336f727f9cb1f7eddf343cdbb",
+        "sha256:db73275685cf0670e89e2b0b590f1ebdb67f40bba76037896c594e322815c037"
+      ]
+    },
+    {
+      "EventID": "urn:vcp-research:target-event:2",
+      "LeafIndex": "2",
+      "Path": [
+        "sha256:5e0802ae26435e33aabdce476bc193a5dfee95e4ee11846597f8e305e587a1c2"
+      ]
+    }
+  ],
+  "MigrationAttestation": {
+    "Statement": {
+      "ContractID": "urn:vcp-research:native-layout-migration:2026-10-25:v0",
+      "SignatureAlgorithm": "Ed25519",
+      "KeyID": "urn:vcp-research:key:layout:attestation",
+      "DerivationPlanDigest": "sha256:1041c90acb4ef3ca98e42afe73fcc44382f1a8e33a2907a5ceae4d7b0c2f8040",
+      "SourceManifestDigest": "sha256:9c7be27adbd9a714214234d00a3bb4b4aa4a0bea4d8ea0e21a6671f58fcc4a3d",
+      "TargetArtifactDigest": "sha256:e4e807f2cbef60e89e06a50d8aa9f2793a3b305d1fb7cad4f61e5d9b9c683cd5",
+      "CreatedAtNs": "1792886401000000000",
+      "Support": "synthetic internal execution; no external evaluator",
+      "ConversionRule": "research-exact-ms-to-s-preserve-decimals-v0"
+    },
+    "Signature": "uY4JYM/67CbQYQg+dEV9CLB86Y6kXZsNyhnR7Q/jrNAEeZET/fHZKOiuW7zGD6+fkKW2a6o1L6YlvAI+GXpkAw=="
+  }
+}

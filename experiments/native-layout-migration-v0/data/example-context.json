@@ -1,0 +1,38 @@
+{
+  "ContractID": "urn:vcp-research:native-layout-migration:2026-10-25:v0",
+  "SourceManifestDigest": "sha256:9c7be27adbd9a714214234d00a3bb4b4aa4a0bea4d8ea0e21a6671f58fcc4a3d",
+  "Keys": {
+    "source": {
+      "KeyID": "urn:vcp-research:key:layout:source",
+      "PublicKey": "28cedda00c0a81ff57896c9e98c39d0142c2f45ef7776fb1f28141d4cd8f1100"
+    },
+    "event-signature": {
+      "KeyID": "urn:vcp-research:key:layout:event-signature",
+      "PublicKey": "9f7cf441d60a17e127dc91ea5dd57ed81df5f41f234aaf19ad5c0707596ba91d"
+    },
+    "anchor-signature": {
+      "KeyID": "urn:vcp-research:key:layout:anchor-signature",
+      "PublicKey": "6da0226aa8c7d635d26fd26749960635bfb1a061e4fa853d450c587dcef4ce97"
+    },
+    "attestation": {
+      "KeyID": "urn:vcp-research:key:layout:attestation",
+      "PublicKey": "f6ee8ce8fca358c7d74897c43be2ce9950260fe515f9fd09348b20bd11b5c764"
+    }
+  },
+  "ActorID": "urn:vcp-research:converter",
+  "ChainID": "urn:vcp-research:derived-chain",
+  "SourceActorID": "urn:vcp-research:source-actor",
+  "SourceChainID": "urn:vcp-research:source-chain",
+  "Policies": {
+    "registration": {
+      "PolicyID": "urn:vcp-research:registration:layout-v0",
+      "PolicyVersion": "0",
+      "PolicyDigest": "sha256:6e4f078079523ddd9afb1f06f017de71ed03ec19d3c40f53b5ca1831204783c4"
+    },
+    "numeric": {
+      "PolicyID": "urn:vcp-research:numeric:layout-v0",
+      "PolicyVersion": "0",
+      "PolicyDigest": "sha256:5c0a7abd04aa5d0fbfc2a8d9980fbc376bfe2f4cc3f7157cfab4ba0ca713a5b7"
+    }
+  }
+}

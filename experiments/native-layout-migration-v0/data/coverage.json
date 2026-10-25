@@ -1,0 +1,450 @@
+{
+  "status": "UNADOPTED",
+  "independent_reproduction": "not_established",
+  "entries": [
+    {
+      "id": "N001",
+      "source_path": "Header.TimestampISO",
+      "status": "EXERCISED_SUBSET",
+      "detail": "Header ISO/ns pair in nine-digit UTC"
+    },
+    {
+      "id": "N002",
+      "source_path": "Header.TimestampInt",
+      "status": "EXERCISED_SUBSET",
+      "detail": "Header exact decimal ns, bounds"
+    },
+    {
+      "id": "N003",
+      "source_path": "Header.SequenceNum",
+      "status": "EXERCISED_SUBSET",
+      "detail": "Sequence string and strict ordering; gaps allowed"
+    },
+    {
+      "id": "N004",
+      "source_path": "Header.SCITTAlignment.RegistrationPolicy.IssuedAt",
+      "status": "UNASSESSED",
+      "detail": "Source path not admitted in this closed research subset; no native validation claim."
+    },
+    {
+      "id": "N005",
+      "source_path": "Payload.VCP-TRADE.Price",
+      "status": "UNASSESSED",
+      "detail": "Source path not admitted in this closed research subset; no native validation claim."
+    },
+    {
+      "id": "N006",
+      "source_path": "Payload.VCP-TRADE.Quantity",
+      "status": "UNASSESSED",
+      "detail": "Source path not admitted in this closed research subset; no native validation claim."
+    },
+    {
+      "id": "N007",
+      "source_path": "Payload.VCP-TRADE.ExecutedQty",
+      "status": "UNASSESSED",
+      "detail": "Source path not admitted in this closed research subset; no native validation claim."
+    },
+    {
+      "id": "N008",
+      "source_path": "Payload.VCP-TRADE.RemainingQty",
+      "status": "UNASSESSED",
+      "detail": "Source path not admitted in this closed research subset; no native validation claim."
+    },
+    {
+      "id": "N009",
+      "source_path": "Payload.VCP-TRADE.ExecutionPrice",
+      "status": "UNASSESSED",
+      "detail": "Source path not admitted in this closed research subset; no native validation claim."
+    },
+    {
+      "id": "N010",
+      "source_path": "Payload.VCP-TRADE.Commission",
+      "status": "UNASSESSED",
+      "detail": "Source path not admitted in this closed research subset; no native validation claim."
+    },
+    {
+      "id": "N011",
+      "source_path": "Payload.VCP-TRADE.Slippage",
+      "status": "UNASSESSED",
+      "detail": "Source path not admitted in this closed research subset; no native validation claim."
+    },
+    {
+      "id": "N012",
+      "source_path": "Payload.VCP-GOV.ConfidenceScore",
+      "status": "EXERCISED_SUBSET",
+      "detail": "Flat ConfidenceScore ratio and exact original lexeme"
+    },
+    {
+      "id": "N013",
+      "source_path": "Payload.VCP-PRIVACY.ErasureDetails.Scope.AffectedEventCount",
+      "status": "UNASSESSED",
+      "detail": "Source path not admitted in this closed research subset; no native validation claim."
+    },
+    {
+      "id": "N014",
+      "source_path": "Payload.VCP-PRIVACY.ErasureDetails.Authorization.AuthorizationTimestamp",
+      "status": "UNASSESSED",
+      "detail": "Source path not admitted in this closed research subset; no native validation claim."
+    },
+    {
+      "id": "N015",
+      "source_path": "Payload.VCP-PRIVACY.ErasureDetails.Authorization.ApprovalChain[].ApprovalTimestamp",
+      "status": "UNASSESSED",
+      "detail": "Source path not admitted in this closed research subset; no native validation claim."
+    },
+    {
+      "id": "N016",
+      "source_path": "Payload.VCP-PRIVACY.ErasureDetails.CryptoShredding.DestructionTimestamp",
+      "status": "UNASSESSED",
+      "detail": "Source path not admitted in this closed research subset; no native validation claim."
+    },
+    {
+      "id": "N017",
+      "source_path": "Security.MerkleIndex",
+      "status": "EXERCISED_SUBSET",
+      "detail": "Detached LeafIndex/count/path in complete synthetic batch"
+    },
+    {
+      "id": "N018",
+      "source_path": "PolicyIdentification.RegistrationPolicy.EffectiveDate",
+      "status": "UNASSESSED",
+      "detail": "Source path not admitted in this closed research subset; no native validation claim."
+    },
+    {
+      "id": "N019",
+      "source_path": "PolicyIdentification.RegistrationPolicy.ExpirationDate",
+      "status": "UNASSESSED",
+      "detail": "Source path not admitted in this closed research subset; no native validation claim."
+    },
+    {
+      "id": "N020",
+      "source_path": "Payload.VCP-RECOVERY.Announcement.ScheduledTime",
+      "status": "UNASSESSED",
+      "detail": "Source path not admitted in this closed research subset; no native validation claim."
+    },
+    {
+      "id": "N021",
+      "source_path": "Payload.VCP-RECOVERY.RecoveryAction.EmergencyOverride.ApprovalChain[].ApprovalTimestamp",
+      "status": "UNASSESSED",
+      "detail": "Source path not admitted in this closed research subset; no native validation claim."
+    },
+    {
+      "id": "N022",
+      "source_path": "Payload.VCP-GOV.AuditDetails.ReviewedAt",
+      "status": "UNASSESSED",
+      "detail": "Source path not admitted in this closed research subset; no native validation claim."
+    },
+    {
+      "id": "N023",
+      "source_path": "Payload.VCP-ANCHOR.MigrationDetails.OldAnchorTarget.LastAnchorTimestamp",
+      "status": "UNASSESSED",
+      "detail": "Source path not admitted in this closed research subset; no native validation claim."
+    },
+    {
+      "id": "N024",
+      "source_path": "Payload.VCP-ANCHOR.MigrationDetails.NewAnchorTarget.FirstAnchorTimestamp",
+      "status": "UNASSESSED",
+      "detail": "Source path not admitted in this closed research subset; no native validation claim."
+    },
+    {
+      "id": "N025",
+      "source_path": "Payload.VCP-ANCHOR.MigrationDetails.DualAnchorPeriod.StartTimestamp",
+      "status": "UNASSESSED",
+      "detail": "Source path not admitted in this closed research subset; no native validation claim."
+    },
+    {
+      "id": "N026",
+      "source_path": "Payload.VCP-ANCHOR.MigrationDetails.DualAnchorPeriod.EndTimestamp",
+      "status": "UNASSESSED",
+      "detail": "Source path not admitted in this closed research subset; no native validation claim."
+    },
+    {
+      "id": "N027",
+      "source_path": "Payload.VCP-ANCHOR.MigrationDetails.DualAnchorPeriod.OverlapEventCount",
+      "status": "UNASSESSED",
+      "detail": "Source path not admitted in this closed research subset; no native validation claim."
+    },
+    {
+      "id": "N028",
+      "source_path": "Payload.VCP-ANCHOR.MigrationDetails.TierSpecificRTO.MaxOutageDuration",
+      "status": "UNASSESSED",
+      "detail": "Source path not admitted in this closed research subset; no native validation claim."
+    },
+    {
+      "id": "N029",
+      "source_path": "Payload.VCP-ANCHOR.MigrationDetails.TierSpecificRTO.FailoverDeadline",
+      "status": "UNASSESSED",
+      "detail": "Source path not admitted in this closed research subset; no native validation claim."
+    },
+    {
+      "id": "N030",
+      "source_path": "Payload.VCP-ANCHOR.FailoverDetails.TriggerCondition.FailureCount",
+      "status": "UNASSESSED",
+      "detail": "Source path not admitted in this closed research subset; no native validation claim."
+    },
+    {
+      "id": "N031",
+      "source_path": "Payload.VCP-ANCHOR.FailoverDetails.TriggerCondition.TotalDowntimeSec",
+      "status": "EXERCISED_SUBSET",
+      "detail": "TotalDowntimeSec at the original logical path, from explicit synthetic source milliseconds"
+    },
+    {
+      "id": "N032",
+      "source_path": "Payload.VCP-ANCHOR.FailoverDetails.TriggerCondition.LastSuccessfulAnchor",
+      "status": "UNASSESSED",
+      "detail": "Source path not admitted in this closed research subset; no native validation claim."
+    },
+    {
+      "id": "N033",
+      "source_path": "Payload.VCP-ANCHOR.FailoverDetails.PrimaryAnchor.LastAttemptTimestamp",
+      "status": "UNASSESSED",
+      "detail": "Source path not admitted in this closed research subset; no native validation claim."
+    },
+    {
+      "id": "N034",
+      "source_path": "Payload.VCP-ANCHOR.FailoverDetails.SecondaryAnchor.ActivationTimestamp",
+      "status": "UNASSESSED",
+      "detail": "Source path not admitted in this closed research subset; no native validation claim."
+    },
+    {
+      "id": "N035",
+      "source_path": "Payload.VCP-ANCHOR.FailoverDetails.QueuedEvents.Count",
+      "status": "UNASSESSED",
+      "detail": "Source path not admitted in this closed research subset; no native validation claim."
+    },
+    {
+      "id": "N036",
+      "source_path": "AnchorRecord.Timestamp",
+      "status": "NEW_SEMANTICS_ONLY",
+      "detail": "New RecordedAtNs creation-time scalar only; NOT a mapping or verification of legacy AnchorRecord.Timestamp."
+    },
+    {
+      "id": "N037",
+      "source_path": "AnchorRecord.EventCount",
+      "status": "EXERCISED_SUBSET",
+      "detail": "Complete synthetic batch EventCount"
+    },
+    {
+      "id": "N038",
+      "source_path": "AnchorRecord.AnchorTarget.Confirmations",
+      "status": "UNASSESSED",
+      "detail": "Source path not admitted in this closed research subset; no native validation claim."
+    },
+    {
+      "id": "N039",
+      "source_path": "AnchorRecord.AnchorTarget.FinalityTimestamp",
+      "status": "UNASSESSED",
+      "detail": "Source path not admitted in this closed research subset; no native validation claim."
+    },
+    {
+      "id": "N040",
+      "source_path": "AnchorRecord.AnchorTarget.EnhancedMonitoring.LastHealthCheck",
+      "status": "UNASSESSED",
+      "detail": "Source path not admitted in this closed research subset; no native validation claim."
+    },
+    {
+      "id": "N041",
+      "source_path": "Payload.VCP-XREF.SharedEventKey.Timestamp",
+      "status": "UNASSESSED",
+      "detail": "Source path not admitted in this closed research subset; no native validation claim."
+    },
+    {
+      "id": "N042",
+      "source_path": "Payload.VCP-XREF.SharedEventKey.ToleranceMs",
+      "status": "EXERCISED_SUBSET",
+      "detail": "ToleranceMs retained as milliseconds"
+    },
+    {
+      "id": "N043",
+      "source_path": "Payload.VCP-XREF.PartyIndex",
+      "status": "UNASSESSED",
+      "detail": "Source path not admitted in this closed research subset; no native validation claim."
+    },
+    {
+      "id": "N044",
+      "source_path": "Payload.VCP-XREF.UpstreamParty.ReceivedTimestamp",
+      "status": "UNASSESSED",
+      "detail": "Source path not admitted in this closed research subset; no native validation claim."
+    },
+    {
+      "id": "N045",
+      "source_path": "Payload.VCP-XREF.DownstreamParties[].ForwardedTimestamp",
+      "status": "UNASSESSED",
+      "detail": "Source path not admitted in this closed research subset; no native validation claim."
+    },
+    {
+      "id": "N046",
+      "source_path": "Payload.VCP-XREF.ChainMetadata.TotalParties",
+      "status": "UNASSESSED",
+      "detail": "Source path not admitted in this closed research subset; no native validation claim."
+    },
+    {
+      "id": "N047",
+      "source_path": "Payload.VCP-RECOVERY.RecoveryConstraints.MaxSkipEvents",
+      "status": "UNASSESSED",
+      "detail": "Source path not admitted in this closed research subset; no native validation claim."
+    },
+    {
+      "id": "N048",
+      "source_path": "Payload.VCP-RECOVERY.RecoveryConstraints.MaxSkipDuration",
+      "status": "UNASSESSED",
+      "detail": "Source path not admitted in this closed research subset; no native validation claim."
+    },
+    {
+      "id": "N049",
+      "source_path": "Payload.VCP-RECOVERY.BreakPoint.BreakTimestamp",
+      "status": "UNASSESSED",
+      "detail": "Source path not admitted in this closed research subset; no native validation claim."
+    },
+    {
+      "id": "N050",
+      "source_path": "Payload.VCP-RECOVERY.RecoveryAction.RecoveredEvents",
+      "status": "UNASSESSED",
+      "detail": "Source path not admitted in this closed research subset; no native validation claim."
+    },
+    {
+      "id": "N051",
+      "source_path": "Payload.VCP-RECOVERY.ChainValidation.AnchorVerificationTimestamp",
+      "status": "UNASSESSED",
+      "detail": "Source path not admitted in this closed research subset; no native validation claim."
+    },
+    {
+      "id": "N052",
+      "source_path": "Payload.VCP-GOV.Governance.ApprovalTimestamp",
+      "status": "UNASSESSED",
+      "detail": "Source path not admitted in this closed research subset; no native validation claim."
+    },
+    {
+      "id": "N053",
+      "source_path": "Payload.VCP-GOV.DecisionFactors.Features[].Value",
+      "status": "UNASSESSED",
+      "detail": "Source path not admitted in this closed research subset; no native validation claim."
+    },
+    {
+      "id": "N054",
+      "source_path": "Payload.VCP-GOV.DecisionFactors.Features[].Weight",
+      "status": "UNASSESSED",
+      "detail": "Source path not admitted in this closed research subset; no native validation claim."
+    },
+    {
+      "id": "N055",
+      "source_path": "Payload.VCP-GOV.DecisionFactors.Features[].Contribution",
+      "status": "UNASSESSED",
+      "detail": "Source path not admitted in this closed research subset; no native validation claim."
+    },
+    {
+      "id": "N056",
+      "source_path": "Payload.VCP-GOV.DecisionFactors.ConfidenceScore",
+      "status": "UNASSESSED",
+      "detail": "Source path not admitted in this closed research subset; no native validation claim."
+    },
+    {
+      "id": "N057",
+      "source_path": "Payload.VCP-GOV.PerformanceMetadata.SamplingRate",
+      "status": "UNASSESSED",
+      "detail": "Source path not admitted in this closed research subset; no native validation claim."
+    },
+    {
+      "id": "N058",
+      "source_path": "Payload.VCP-GOV.PerformanceMetadata.LatencyImpact",
+      "status": "EXERCISED_SUBSET",
+      "detail": "LatencyImpact preserved in microseconds"
+    },
+    {
+      "id": "N059",
+      "source_path": "Payload.VCP-RISK.RiskProfile.LastModified",
+      "status": "UNASSESSED",
+      "detail": "Source path not admitted in this closed research subset; no native validation claim."
+    },
+    {
+      "id": "N060",
+      "source_path": "Payload.VCP-RISK.ParametersSnapshot.MaxOrderSize",
+      "status": "UNASSESSED",
+      "detail": "Source path not admitted in this closed research subset; no native validation claim."
+    },
+    {
+      "id": "N061",
+      "source_path": "Payload.VCP-RISK.ParametersSnapshot.MaxPositionSize",
+      "status": "UNASSESSED",
+      "detail": "Source path not admitted in this closed research subset; no native validation claim."
+    },
+    {
+      "id": "N062",
+      "source_path": "Payload.VCP-RISK.ParametersSnapshot.DailyExposureLimit",
+      "status": "UNASSESSED",
+      "detail": "Source path not admitted in this closed research subset; no native validation claim."
+    },
+    {
+      "id": "N063",
+      "source_path": "Payload.VCP-RISK.ParametersSnapshot.ExposureUtilization",
+      "status": "UNASSESSED",
+      "detail": "Source path not admitted in this closed research subset; no native validation claim."
+    },
+    {
+      "id": "N064",
+      "source_path": "Payload.VCP-RISK.ParametersSnapshot.VaRLimit",
+      "status": "UNASSESSED",
+      "detail": "Source path not admitted in this closed research subset; no native validation claim."
+    },
+    {
+      "id": "N065",
+      "source_path": "Payload.VCP-RISK.ParametersSnapshot.CurrentVaR",
+      "status": "UNASSESSED",
+      "detail": "Source path not admitted in this closed research subset; no native validation claim."
+    },
+    {
+      "id": "N066",
+      "source_path": "Payload.VCP-RISK.ParametersSnapshot.ThrottleRate",
+      "status": "UNASSESSED",
+      "detail": "Source path not admitted in this closed research subset; no native validation claim."
+    },
+    {
+      "id": "N067",
+      "source_path": "Payload.VCP-RISK.TriggeredControls[].TriggerValue",
+      "status": "UNASSESSED",
+      "detail": "Source path not admitted in this closed research subset; no native validation claim."
+    },
+    {
+      "id": "N068",
+      "source_path": "Payload.VCP-RISK.TriggeredControls[].Timestamp",
+      "status": "UNASSESSED",
+      "detail": "Source path not admitted in this closed research subset; no native validation claim."
+    },
+    {
+      "id": "N069",
+      "source_path": "Payload.VCP-PRIVACY.Pseudonymization.RetentionPeriod",
+      "status": "UNASSESSED",
+      "detail": "Source path not admitted in this closed research subset; no native validation claim."
+    },
+    {
+      "id": "N070",
+      "source_path": "SecondaryAnchorConfiguration.Secondary.LastHealthCheck",
+      "status": "UNASSESSED",
+      "detail": "Source path not admitted in this closed research subset; no native validation claim."
+    },
+    {
+      "id": "N071",
+      "source_path": "SCITTReceipt.payload.tree_size",
+      "status": "UNASSESSED",
+      "detail": "Source path not admitted in this closed research subset; no native validation claim."
+    },
+    {
+      "id": "N072",
+      "source_path": "SCITTReceipt.payload.leaf_index",
+      "status": "UNASSESSED",
+      "detail": "Source path not admitted in this closed research subset; no native validation claim."
+    },
+    {
+      "id": "N073",
+      "source_path": "LegacyHeader.Timestamp",
+      "status": "UNASSESSED",
+      "detail": "Source path not admitted in this closed research subset; no native validation claim."
+    },
+    {
+      "id": "N074",
+      "source_path": "LegacyHeader.EventType",
+      "status": "UNASSESSED",
+      "detail": "Source path not admitted in this closed research subset; no native validation claim."
+    }
+  ]
+}
