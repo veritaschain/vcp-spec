@@ -1,0 +1,18 @@
+{
+  "status": "UNADOPTED",
+  "assets": {
+    "candidate.schema.json": "sha256:4365adef8d98a300f326e36d5aa7cd6a349b7c22f60e4685547b05d53265439e",
+    "checker.py": "sha256:eb90b40bf1b74935ef47c268430adfbdd7f9ecf4a3528d22ad17807dd5b805d6",
+    "data/cases.json": "sha256:303f0d2d1f646945a21893ce37c1beaa39334584333206760477546608c00817",
+    "data/coverage.json": "sha256:e8fec46b419a5f6d68cacf6647a224a18ccfe365b2f9c6993c4455dfa496230e",
+    "data/example-bundle.json": "sha256:f42eb2054e7bf45f3f017ab3d78856fd457babb69d366e19f82e3a26711cad2e",
+    "data/example-context.json": "sha256:fb563f947e68580e57237f43aff2fda1b869ae8c0eaae90f456e897085fe06a9",
+    "fixtures.py": "sha256:b9516973da1ba492329c416eeeaa86219b06f5516429f73706e6af69ee160d3a",
+    "report_controls.py": "sha256:dcc53a160bb7d2c90861fedccea9b1fbc5c87818235f22a6e64fb7ac698ae262",
+    "requirements.txt": "sha256:e2b9464713de04caeb006aee85b36b1a1e2111b8b8f333e124a8b46a1a6a2c00",
+    "run.py": "sha256:d5e20dda76e4da9494ee64a4e6decdd8e4bd4d0fa61771b7c7be8d2322c8a05e",
+    "schema_builder.py": "sha256:22472b7f4652e800de22b5ee86beec3a5b01d3048e92c08ed5782359bddd5d98",
+    "sources.json": "sha256:19e3bdf8cfa81fafdcf6841997c5ec8fbdde299b8b22808978e5286283574af4",
+    "test_checker.py": "sha256:a1a6171eab8039595f31eacc87440db8f622ee4ebab6009b382de6373fd0a4ae"
+  }
+}

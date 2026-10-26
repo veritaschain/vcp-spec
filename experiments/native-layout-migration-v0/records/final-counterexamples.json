@@ -1,0 +1,775 @@
+{
+  "status": "UNADOPTED",
+  "independent_reproduction": "not_established",
+  "before_commit": "61a6b812f90ef13f0438484c63dd403d17687f5a",
+  "after_implementation_commit": "5330244c714f6c548a87114bd394fc6d7113b0de",
+  "cases": [
+    {
+      "id": "policy-array",
+      "bundle_digest": "sha256:12c2bf77dc046b685d94ed3511c4f3a3129804a7e9fd3b4ab859359773586f78",
+      "context_digest": "sha256:50e4671976fb7f8255397e88c415801b804ad2b6e183b2fb0bbd19ab67031053",
+      "before": {
+        "exception": "AttributeError",
+        "message": "'list' object has no attribute 'get'"
+      },
+      "after": {
+        "status": "UNADOPTED",
+        "independent_reproduction": "not_established",
+        "native_conformance": "UNASSESSED",
+        "covered_checks": "FAIL",
+        "checks": {
+          "layout": {
+            "status": "PASS",
+            "detail": "covered checks passed"
+          },
+          "source_retention": {
+            "status": "PASS",
+            "detail": "covered checks passed"
+          },
+          "source_authentication": {
+            "status": "PASS",
+            "detail": "covered checks passed"
+          },
+          "source_interpretation": {
+            "status": "PASS",
+            "detail": "covered checks passed"
+          },
+          "policy_binding": {
+            "status": "FAIL",
+            "detail": "policy must be a JSON object"
+          },
+          "numeric_time": {
+            "status": "PASS",
+            "detail": "covered checks passed"
+          },
+          "cryptographic_integrity": {
+            "status": "PASS",
+            "detail": "covered checks passed"
+          },
+          "batch_binding": {
+            "status": "PASS",
+            "detail": "covered checks passed"
+          },
+          "inclusion_evidence": {
+            "status": "PASS",
+            "detail": "covered checks passed"
+          },
+          "derivation_binding": {
+            "status": "PASS",
+            "detail": "covered checks passed"
+          }
+        },
+        "always_unassessed": [
+          "complete_native_schema",
+          "production_authority",
+          "external_time_and_receipts",
+          "inner_approvals",
+          "other_time_bases",
+          "independence"
+        ]
+      }
+    },
+    {
+      "id": "source-second-99",
+      "bundle_digest": "sha256:39b16cbe4414157d0e15df428269505b5e9afd0146536059087fe4a2d1aafaac",
+      "context_digest": "sha256:71033596a8ab513f82b93c9faeb7ade1996c7b7c5abb3ab9872d4d279d56cd52",
+      "before": {
+        "status": "UNADOPTED",
+        "independent_reproduction": "not_established",
+        "native_conformance": "UNASSESSED",
+        "covered_checks": "UNASSESSED",
+        "checks": {
+          "layout": {
+            "status": "PASS",
+            "detail": "covered checks passed"
+          },
+          "source_retention": {
+            "status": "PASS",
+            "detail": "covered checks passed"
+          },
+          "source_authentication": {
+            "status": "PASS",
+            "detail": "covered checks passed"
+          },
+          "source_interpretation": {
+            "status": "UNASSESSED",
+            "detail": "leap mapping unavailable"
+          },
+          "policy_binding": {
+            "status": "PASS",
+            "detail": "covered checks passed"
+          },
+          "numeric_time": {
+            "status": "PASS",
+            "detail": "covered checks passed"
+          },
+          "cryptographic_integrity": {
+            "status": "PASS",
+            "detail": "covered checks passed"
+          },
+          "batch_binding": {
+            "status": "PASS",
+            "detail": "covered checks passed"
+          },
+          "inclusion_evidence": {
+            "status": "PASS",
+            "detail": "covered checks passed"
+          },
+          "derivation_binding": {
+            "status": "UNASSESSED",
+            "detail": "source interpretation prerequisite"
+          }
+        },
+        "always_unassessed": [
+          "complete_native_schema",
+          "production_authority",
+          "external_time_and_receipts",
+          "inner_approvals",
+          "other_time_bases",
+          "independence"
+        ]
+      },
+      "after": {
+        "status": "UNADOPTED",
+        "independent_reproduction": "not_established",
+        "native_conformance": "UNASSESSED",
+        "covered_checks": "FAIL",
+        "checks": {
+          "layout": {
+            "status": "PASS",
+            "detail": "covered checks passed"
+          },
+          "source_retention": {
+            "status": "PASS",
+            "detail": "covered checks passed"
+          },
+          "source_authentication": {
+            "status": "PASS",
+            "detail": "covered checks passed"
+          },
+          "source_interpretation": {
+            "status": "FAIL",
+            "detail": "ISO second range"
+          },
+          "policy_binding": {
+            "status": "PASS",
+            "detail": "covered checks passed"
+          },
+          "numeric_time": {
+            "status": "PASS",
+            "detail": "covered checks passed"
+          },
+          "cryptographic_integrity": {
+            "status": "PASS",
+            "detail": "covered checks passed"
+          },
+          "batch_binding": {
+            "status": "PASS",
+            "detail": "covered checks passed"
+          },
+          "inclusion_evidence": {
+            "status": "PASS",
+            "detail": "covered checks passed"
+          },
+          "derivation_binding": {
+            "status": "FAIL",
+            "detail": "source_interpretation prerequisite"
+          }
+        },
+        "always_unassessed": [
+          "complete_native_schema",
+          "production_authority",
+          "external_time_and_receipts",
+          "inner_approvals",
+          "other_time_bases",
+          "independence"
+        ]
+      }
+    },
+    {
+      "id": "inexact-duration-hides-invalid-ratio",
+      "bundle_digest": "sha256:eb35aa56f298ddca1a9661b4629b9bd47cd6e016dd313417e4af297ac1764514",
+      "context_digest": "sha256:2733ead3f7f772d3ceb9cd7c1f1ff1ec86875d6325f65a819e2feaa97a9b810f",
+      "before": {
+        "status": "UNADOPTED",
+        "independent_reproduction": "not_established",
+        "native_conformance": "UNASSESSED",
+        "covered_checks": "UNASSESSED",
+        "checks": {
+          "layout": {
+            "status": "PASS",
+            "detail": "covered checks passed"
+          },
+          "source_retention": {
+            "status": "PASS",
+            "detail": "covered checks passed"
+          },
+          "source_authentication": {
+            "status": "PASS",
+            "detail": "covered checks passed"
+          },
+          "source_interpretation": {
+            "status": "UNASSESSED",
+            "detail": "inexact integer-destination conversion"
+          },
+          "policy_binding": {
+            "status": "PASS",
+            "detail": "covered checks passed"
+          },
+          "numeric_time": {
+            "status": "PASS",
+            "detail": "covered checks passed"
+          },
+          "cryptographic_integrity": {
+            "status": "PASS",
+            "detail": "covered checks passed"
+          },
+          "batch_binding": {
+            "status": "PASS",
+            "detail": "covered checks passed"
+          },
+          "inclusion_evidence": {
+            "status": "PASS",
+            "detail": "covered checks passed"
+          },
+          "derivation_binding": {
+            "status": "UNASSESSED",
+            "detail": "source interpretation prerequisite"
+          }
+        },
+        "always_unassessed": [
+          "complete_native_schema",
+          "production_authority",
+          "external_time_and_receipts",
+          "inner_approvals",
+          "other_time_bases",
+          "independence"
+        ]
+      },
+      "after": {
+        "status": "UNADOPTED",
+        "independent_reproduction": "not_established",
+        "native_conformance": "UNASSESSED",
+        "covered_checks": "FAIL",
+        "checks": {
+          "layout": {
+            "status": "PASS",
+            "detail": "covered checks passed"
+          },
+          "source_retention": {
+            "status": "PASS",
+            "detail": "covered checks passed"
+          },
+          "source_authentication": {
+            "status": "PASS",
+            "detail": "covered checks passed"
+          },
+          "source_interpretation": {
+            "status": "FAIL",
+            "detail": "inexact integer-destination conversion; decimal quantity range"
+          },
+          "policy_binding": {
+            "status": "PASS",
+            "detail": "covered checks passed"
+          },
+          "numeric_time": {
+            "status": "PASS",
+            "detail": "covered checks passed"
+          },
+          "cryptographic_integrity": {
+            "status": "PASS",
+            "detail": "covered checks passed"
+          },
+          "batch_binding": {
+            "status": "PASS",
+            "detail": "covered checks passed"
+          },
+          "inclusion_evidence": {
+            "status": "PASS",
+            "detail": "covered checks passed"
+          },
+          "derivation_binding": {
+            "status": "FAIL",
+            "detail": "source_interpretation prerequisite"
+          }
+        },
+        "always_unassessed": [
+          "complete_native_schema",
+          "production_authority",
+          "external_time_and_receipts",
+          "inner_approvals",
+          "other_time_bases",
+          "independence"
+        ]
+      }
+    },
+    {
+      "id": "unknown-source-hides-other-derived-mismatch",
+      "bundle_digest": "sha256:b2c4ca36b25f776c8eee52d9145ae44be3350e7f0a5d509eb92f11120b83604a",
+      "context_digest": "sha256:94a51fd51a5648d55231efaa35dd00133227546d4b0a19a458069e2480b48623",
+      "before": {
+        "status": "UNADOPTED",
+        "independent_reproduction": "not_established",
+        "native_conformance": "UNASSESSED",
+        "covered_checks": "UNASSESSED",
+        "checks": {
+          "layout": {
+            "status": "PASS",
+            "detail": "covered checks passed"
+          },
+          "source_retention": {
+            "status": "PASS",
+            "detail": "covered checks passed"
+          },
+          "source_authentication": {
+            "status": "PASS",
+            "detail": "covered checks passed"
+          },
+          "source_interpretation": {
+            "status": "UNASSESSED",
+            "detail": "source time basis not mapped"
+          },
+          "policy_binding": {
+            "status": "PASS",
+            "detail": "covered checks passed"
+          },
+          "numeric_time": {
+            "status": "PASS",
+            "detail": "covered checks passed"
+          },
+          "cryptographic_integrity": {
+            "status": "PASS",
+            "detail": "covered checks passed"
+          },
+          "batch_binding": {
+            "status": "PASS",
+            "detail": "covered checks passed"
+          },
+          "inclusion_evidence": {
+            "status": "PASS",
+            "detail": "covered checks passed"
+          },
+          "derivation_binding": {
+            "status": "UNASSESSED",
+            "detail": "source interpretation prerequisite"
+          }
+        },
+        "always_unassessed": [
+          "complete_native_schema",
+          "production_authority",
+          "external_time_and_receipts",
+          "inner_approvals",
+          "other_time_bases",
+          "independence"
+        ]
+      },
+      "after": {
+        "status": "UNADOPTED",
+        "independent_reproduction": "not_established",
+        "native_conformance": "UNASSESSED",
+        "covered_checks": "FAIL",
+        "checks": {
+          "layout": {
+            "status": "PASS",
+            "detail": "covered checks passed"
+          },
+          "source_retention": {
+            "status": "PASS",
+            "detail": "covered checks passed"
+          },
+          "source_authentication": {
+            "status": "PASS",
+            "detail": "covered checks passed"
+          },
+          "source_interpretation": {
+            "status": "UNASSESSED",
+            "detail": "source time basis not mapped"
+          },
+          "policy_binding": {
+            "status": "PASS",
+            "detail": "covered checks passed"
+          },
+          "numeric_time": {
+            "status": "PASS",
+            "detail": "covered checks passed"
+          },
+          "cryptographic_integrity": {
+            "status": "PASS",
+            "detail": "covered checks passed"
+          },
+          "batch_binding": {
+            "status": "PASS",
+            "detail": "covered checks passed"
+          },
+          "inclusion_evidence": {
+            "status": "PASS",
+            "detail": "covered checks passed"
+          },
+          "derivation_binding": {
+            "status": "FAIL",
+            "detail": "source_interpretation prerequisite; derived ToleranceMs value/lexeme mismatch"
+          }
+        },
+        "always_unassessed": [
+          "complete_native_schema",
+          "production_authority",
+          "external_time_and_receipts",
+          "inner_approvals",
+          "other_time_bases",
+          "independence"
+        ]
+      }
+    },
+    {
+      "id": "unknown-time-hides-same-event-invalid-ratio",
+      "bundle_digest": "sha256:c04725f5fcd8684de5a1439fe1e89ab6a016f982df2924ef3afcfb995c7dd113",
+      "context_digest": "sha256:94a51fd51a5648d55231efaa35dd00133227546d4b0a19a458069e2480b48623",
+      "before": {
+        "status": "UNADOPTED",
+        "independent_reproduction": "not_established",
+        "native_conformance": "UNASSESSED",
+        "covered_checks": "UNASSESSED",
+        "checks": {
+          "layout": {
+            "status": "PASS",
+            "detail": "covered checks passed"
+          },
+          "source_retention": {
+            "status": "PASS",
+            "detail": "covered checks passed"
+          },
+          "source_authentication": {
+            "status": "PASS",
+            "detail": "covered checks passed"
+          },
+          "source_interpretation": {
+            "status": "UNASSESSED",
+            "detail": "source time basis not mapped"
+          },
+          "policy_binding": {
+            "status": "PASS",
+            "detail": "covered checks passed"
+          },
+          "numeric_time": {
+            "status": "UNASSESSED",
+            "detail": "leap mapping unavailable"
+          },
+          "cryptographic_integrity": {
+            "status": "PASS",
+            "detail": "covered checks passed"
+          },
+          "batch_binding": {
+            "status": "PASS",
+            "detail": "covered checks passed"
+          },
+          "inclusion_evidence": {
+            "status": "PASS",
+            "detail": "covered checks passed"
+          },
+          "derivation_binding": {
+            "status": "UNASSESSED",
+            "detail": "source interpretation prerequisite"
+          }
+        },
+        "always_unassessed": [
+          "complete_native_schema",
+          "production_authority",
+          "external_time_and_receipts",
+          "inner_approvals",
+          "other_time_bases",
+          "independence"
+        ]
+      },
+      "after": {
+        "status": "UNADOPTED",
+        "independent_reproduction": "not_established",
+        "native_conformance": "UNASSESSED",
+        "covered_checks": "FAIL",
+        "checks": {
+          "layout": {
+            "status": "PASS",
+            "detail": "covered checks passed"
+          },
+          "source_retention": {
+            "status": "PASS",
+            "detail": "covered checks passed"
+          },
+          "source_authentication": {
+            "status": "PASS",
+            "detail": "covered checks passed"
+          },
+          "source_interpretation": {
+            "status": "UNASSESSED",
+            "detail": "source time basis not mapped"
+          },
+          "policy_binding": {
+            "status": "PASS",
+            "detail": "covered checks passed"
+          },
+          "numeric_time": {
+            "status": "FAIL",
+            "detail": "leap mapping unavailable; decimal quantity range"
+          },
+          "cryptographic_integrity": {
+            "status": "PASS",
+            "detail": "covered checks passed"
+          },
+          "batch_binding": {
+            "status": "PASS",
+            "detail": "covered checks passed"
+          },
+          "inclusion_evidence": {
+            "status": "PASS",
+            "detail": "covered checks passed"
+          },
+          "derivation_binding": {
+            "status": "FAIL",
+            "detail": "source_interpretation prerequisite; derived Confidence value/lexeme mismatch"
+          }
+        },
+        "always_unassessed": [
+          "complete_native_schema",
+          "production_authority",
+          "external_time_and_receipts",
+          "inner_approvals",
+          "other_time_bases",
+          "independence"
+        ]
+      }
+    },
+    {
+      "id": "null-source-actor-context",
+      "bundle_digest": "sha256:2b4cc032de623c0c35d6cdab8e915877772cc7d14b8f95f38558e11da7ce1834",
+      "context_digest": "sha256:c72af5de53a6acdd1a187553b8d44fea28e7e9dca4a61560fc8f0a250fe8b7de",
+      "before": {
+        "status": "UNADOPTED",
+        "independent_reproduction": "not_established",
+        "native_conformance": "UNASSESSED",
+        "covered_checks": "PASS",
+        "checks": {
+          "layout": {
+            "status": "PASS",
+            "detail": "covered checks passed"
+          },
+          "source_retention": {
+            "status": "PASS",
+            "detail": "covered checks passed"
+          },
+          "source_authentication": {
+            "status": "PASS",
+            "detail": "covered checks passed"
+          },
+          "source_interpretation": {
+            "status": "PASS",
+            "detail": "covered checks passed"
+          },
+          "policy_binding": {
+            "status": "PASS",
+            "detail": "covered checks passed"
+          },
+          "numeric_time": {
+            "status": "PASS",
+            "detail": "covered checks passed"
+          },
+          "cryptographic_integrity": {
+            "status": "PASS",
+            "detail": "covered checks passed"
+          },
+          "batch_binding": {
+            "status": "PASS",
+            "detail": "covered checks passed"
+          },
+          "inclusion_evidence": {
+            "status": "PASS",
+            "detail": "covered checks passed"
+          },
+          "derivation_binding": {
+            "status": "PASS",
+            "detail": "covered checks passed"
+          }
+        },
+        "always_unassessed": [
+          "complete_native_schema",
+          "production_authority",
+          "external_time_and_receipts",
+          "inner_approvals",
+          "other_time_bases",
+          "independence"
+        ]
+      },
+      "after": {
+        "status": "UNADOPTED",
+        "independent_reproduction": "not_established",
+        "native_conformance": "UNASSESSED",
+        "covered_checks": "FAIL",
+        "checks": {
+          "layout": {
+            "status": "FAIL",
+            "detail": "configured identity type/length"
+          },
+          "source_retention": {
+            "status": "UNASSESSED",
+            "detail": "not evaluated"
+          },
+          "source_authentication": {
+            "status": "UNASSESSED",
+            "detail": "not evaluated"
+          },
+          "source_interpretation": {
+            "status": "UNASSESSED",
+            "detail": "not evaluated"
+          },
+          "policy_binding": {
+            "status": "UNASSESSED",
+            "detail": "not evaluated"
+          },
+          "numeric_time": {
+            "status": "UNASSESSED",
+            "detail": "not evaluated"
+          },
+          "cryptographic_integrity": {
+            "status": "UNASSESSED",
+            "detail": "not evaluated"
+          },
+          "batch_binding": {
+            "status": "UNASSESSED",
+            "detail": "not evaluated"
+          },
+          "inclusion_evidence": {
+            "status": "UNASSESSED",
+            "detail": "not evaluated"
+          },
+          "derivation_binding": {
+            "status": "UNASSESSED",
+            "detail": "not evaluated"
+          }
+        },
+        "always_unassessed": [
+          "complete_native_schema",
+          "production_authority",
+          "external_time_and_receipts",
+          "inner_approvals",
+          "other_time_bases",
+          "independence"
+        ]
+      }
+    },
+    {
+      "id": "missing-key-malformed-signature",
+      "bundle_digest": "sha256:5ab5f54cbb65d108524ccc0894f43c08e799927d122fa41a99bc8645e1a9ccd6",
+      "context_digest": "sha256:b6ffc917c46158795c36066323c867b2c2b3a89d5160746cccebb1eab47c0719",
+      "before": {
+        "status": "UNADOPTED",
+        "independent_reproduction": "not_established",
+        "native_conformance": "UNASSESSED",
+        "covered_checks": "UNASSESSED",
+        "checks": {
+          "layout": {
+            "status": "PASS",
+            "detail": "covered checks passed"
+          },
+          "source_retention": {
+            "status": "PASS",
+            "detail": "covered checks passed"
+          },
+          "source_authentication": {
+            "status": "PASS",
+            "detail": "covered checks passed"
+          },
+          "source_interpretation": {
+            "status": "PASS",
+            "detail": "covered checks passed"
+          },
+          "policy_binding": {
+            "status": "PASS",
+            "detail": "covered checks passed"
+          },
+          "numeric_time": {
+            "status": "PASS",
+            "detail": "covered checks passed"
+          },
+          "cryptographic_integrity": {
+            "status": "UNASSESSED",
+            "detail": "no configured event-signature key; no configured event-signature key; no configured event-signature key"
+          },
+          "batch_binding": {
+            "status": "PASS",
+            "detail": "covered checks passed"
+          },
+          "inclusion_evidence": {
+            "status": "PASS",
+            "detail": "covered checks passed"
+          },
+          "derivation_binding": {
+            "status": "PASS",
+            "detail": "covered checks passed"
+          }
+        },
+        "always_unassessed": [
+          "complete_native_schema",
+          "production_authority",
+          "external_time_and_receipts",
+          "inner_approvals",
+          "other_time_bases",
+          "independence"
+        ]
+      },
+      "after": {
+        "status": "UNADOPTED",
+        "independent_reproduction": "not_established",
+        "native_conformance": "UNASSESSED",
+        "covered_checks": "FAIL",
+        "checks": {
+          "layout": {
+            "status": "PASS",
+            "detail": "covered checks passed"
+          },
+          "source_retention": {
+            "status": "PASS",
+            "detail": "covered checks passed"
+          },
+          "source_authentication": {
+            "status": "PASS",
+            "detail": "covered checks passed"
+          },
+          "source_interpretation": {
+            "status": "PASS",
+            "detail": "covered checks passed"
+          },
+          "policy_binding": {
+            "status": "PASS",
+            "detail": "covered checks passed"
+          },
+          "numeric_time": {
+            "status": "PASS",
+            "detail": "covered checks passed"
+          },
+          "cryptographic_integrity": {
+            "status": "FAIL",
+            "detail": "Error: Only base64 data is allowed; no configured event-signature key; no configured event-signature key"
+          },
+          "batch_binding": {
+            "status": "PASS",
+            "detail": "covered checks passed"
+          },
+          "inclusion_evidence": {
+            "status": "PASS",
+            "detail": "covered checks passed"
+          },
+          "derivation_binding": {
+            "status": "PASS",
+            "detail": "covered checks passed"
+          }
+        },
+        "always_unassessed": [
+          "complete_native_schema",
+          "production_authority",
+          "external_time_and_receipts",
+          "inner_approvals",
+          "other_time_bases",
+          "independence"
+        ]
+      }
+    }
+  ]
+}

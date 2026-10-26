@@ -1,0 +1,39 @@
+{
+  "status": "UNADOPTED",
+  "independent_reproduction": "not_established",
+  "controls": [
+    {
+      "id": "case-omitted",
+      "rejected": true
+    },
+    {
+      "id": "count-forged",
+      "rejected": true
+    },
+    {
+      "id": "boolean-for-count",
+      "rejected": true
+    },
+    {
+      "id": "dependency-forged",
+      "rejected": true
+    },
+    {
+      "id": "input-fingerprint-forged",
+      "rejected": true
+    },
+    {
+      "id": "unassessed-promoted",
+      "rejected": true
+    },
+    {
+      "id": "source-failure-promoted",
+      "rejected": true
+    },
+    {
+      "id": "implementation-fingerprint-forged",
+      "rejected": true
+    }
+  ],
+  "all_controls_matched": true
+}

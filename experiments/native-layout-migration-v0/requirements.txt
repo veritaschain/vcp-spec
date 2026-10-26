@@ -1,0 +1,10 @@
+attrs==26.1.0
+cffi==2.1.1
+cryptography==50.0.2
+jsonschema==4.26.0
+jsonschema-specifications==2025.9.1
+pycparser==3.12
+referencing==0.37.0
+rfc8785==0.1.4
+rpds-py==2026.9.1
+typing_extensions==4.16.0

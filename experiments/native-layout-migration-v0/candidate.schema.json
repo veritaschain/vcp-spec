@@ -1,0 +1,773 @@
+{
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "ContractID": {
+      "const": "urn:vcp-research:native-layout-migration:2026-10-25:v0"
+    },
+    "Policies": {
+      "$ref": "#/$defs/policy_bytes"
+    },
+    "SourceManifest": {
+      "$ref": "#/$defs/manifest"
+    },
+    "SourceArtifacts": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/source_entry"
+      },
+      "minItems": 1,
+      "maxItems": 16
+    },
+    "PreservedEvidence": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/evidence"
+      },
+      "minItems": 1,
+      "maxItems": 16
+    },
+    "DerivationPlan": {
+      "$ref": "#/$defs/plan"
+    },
+    "Events": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/envelope"
+      },
+      "minItems": 1,
+      "maxItems": 16
+    },
+    "Anchor": {
+      "$ref": "#/$defs/anchor"
+    },
+    "InclusionEvidence": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/proof"
+      },
+      "minItems": 1,
+      "maxItems": 16
+    },
+    "MigrationAttestation": {
+      "$ref": "#/$defs/attestation"
+    }
+  },
+  "required": [
+    "ContractID",
+    "Policies",
+    "SourceManifest",
+    "SourceArtifacts",
+    "PreservedEvidence",
+    "DerivationPlan",
+    "Events",
+    "Anchor",
+    "InclusionEvidence",
+    "MigrationAttestation"
+  ],
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:vcp-research:native-layout-migration:2026-10-25:v0:schema",
+  "$comment": "UNADOPTED. SYNTHETIC SUBSET ONLY. Independent third-party reproduction not established.",
+  "$defs": {
+    "id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128
+    },
+    "uint": {
+      "type": "string",
+      "pattern": "^(0|[1-9][0-9]*)$",
+      "maxLength": 19
+    },
+    "decimal": {
+      "type": "string",
+      "pattern": "^-?[0-9]+(\\.[0-9]+)?$",
+      "maxLength": 40
+    },
+    "iso": {
+      "type": "string",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}\\.[0-9]{9}Z$",
+      "maxLength": 30
+    },
+    "hash": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "maxLength": 71
+    },
+    "hex": {
+      "type": "string",
+      "pattern": "^([0-9a-f]{2})*$",
+      "maxLength": 131072
+    },
+    "signature": {
+      "type": "string",
+      "minLength": 88,
+      "maxLength": 88
+    },
+    "binding": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "PolicyID": {
+          "$ref": "#/$defs/id"
+        },
+        "PolicyVersion": {
+          "const": "0"
+        },
+        "PolicyDigest": {
+          "$ref": "#/$defs/hash"
+        }
+      },
+      "required": [
+        "PolicyID",
+        "PolicyVersion",
+        "PolicyDigest"
+      ]
+    },
+    "origin": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "Kind": {
+          "const": "derived"
+        },
+        "DerivationPlanDigest": {
+          "$ref": "#/$defs/hash"
+        },
+        "SourceEntryID": {
+          "$ref": "#/$defs/id"
+        }
+      },
+      "required": [
+        "Kind",
+        "DerivationPlanDigest",
+        "SourceEntryID"
+      ]
+    },
+    "header": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "EventID": {
+          "$ref": "#/$defs/id"
+        },
+        "ActorID": {
+          "$ref": "#/$defs/id"
+        },
+        "ChainID": {
+          "$ref": "#/$defs/id"
+        },
+        "SequenceNum": {
+          "$ref": "#/$defs/uint"
+        },
+        "EventType": {
+          "const": "RESEARCH_LAYOUT_ONLY"
+        },
+        "PolicyID": {
+          "$ref": "#/$defs/id"
+        },
+        "TimestampInt": {
+          "$ref": "#/$defs/uint"
+        },
+        "TimestampISO": {
+          "$ref": "#/$defs/iso"
+        }
+      },
+      "required": [
+        "EventID",
+        "ActorID",
+        "ChainID",
+        "SequenceNum",
+        "EventType",
+        "PolicyID",
+        "TimestampInt",
+        "TimestampISO"
+      ]
+    },
+    "payload": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "VCP-ANCHOR": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "FailoverDetails": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "TriggerCondition": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "TotalDowntimeSec": {
+                      "$ref": "#/$defs/uint"
+                    }
+                  },
+                  "required": [
+                    "TotalDowntimeSec"
+                  ]
+                }
+              },
+              "required": [
+                "TriggerCondition"
+              ]
+            }
+          },
+          "required": [
+            "FailoverDetails"
+          ]
+        },
+        "VCP-XREF": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "SharedEventKey": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "ToleranceMs": {
+                  "$ref": "#/$defs/uint"
+                }
+              },
+              "required": [
+                "ToleranceMs"
+              ]
+            }
+          },
+          "required": [
+            "SharedEventKey"
+          ]
+        },
+        "VCP-GOV": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "ConfidenceScore": {
+              "$ref": "#/$defs/decimal"
+            },
+            "PerformanceMetadata": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "LatencyImpact": {
+                  "$ref": "#/$defs/decimal"
+                }
+              },
+              "required": [
+                "LatencyImpact"
+              ]
+            }
+          },
+          "required": [
+            "ConfidenceScore",
+            "PerformanceMetadata"
+          ]
+        }
+      },
+      "required": [
+        "VCP-ANCHOR",
+        "VCP-XREF",
+        "VCP-GOV"
+      ]
+    },
+    "event": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "ContractID": {
+          "const": "urn:vcp-research:native-layout-migration:2026-10-25:v0"
+        },
+        "EventHashAlgorithm": {
+          "const": "SHA-256"
+        },
+        "Header": {
+          "$ref": "#/$defs/header"
+        },
+        "Payload": {
+          "$ref": "#/$defs/payload"
+        },
+        "PolicyIdentification": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "PolicyID": {
+                  "$ref": "#/$defs/id"
+                },
+                "Version": {
+                  "const": "0"
+                }
+              },
+              "required": [
+                "PolicyID",
+                "Version"
+              ]
+            }
+          ]
+        },
+        "RegistrationPolicyBinding": {
+          "$ref": "#/$defs/binding"
+        },
+        "NumericPolicyBinding": {
+          "$ref": "#/$defs/binding"
+        },
+        "Origin": {
+          "$ref": "#/$defs/origin"
+        },
+        "ChainMode": {
+          "enum": [
+            "start",
+            "linked"
+          ]
+        },
+        "PreviousEventHash": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "$ref": "#/$defs/hash"
+            }
+          ]
+        }
+      },
+      "required": [
+        "ContractID",
+        "EventHashAlgorithm",
+        "Header",
+        "Payload",
+        "PolicyIdentification",
+        "RegistrationPolicyBinding",
+        "NumericPolicyBinding",
+        "Origin",
+        "ChainMode",
+        "PreviousEventHash"
+      ]
+    },
+    "event_statement": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "ContractID": {
+          "const": "urn:vcp-research:native-layout-migration:2026-10-25:v0"
+        },
+        "SignatureAlgorithm": {
+          "const": "Ed25519"
+        },
+        "KeyID": {
+          "$ref": "#/$defs/id"
+        },
+        "EventHash": {
+          "$ref": "#/$defs/hash"
+        },
+        "EventID": {
+          "$ref": "#/$defs/id"
+        },
+        "ActorID": {
+          "$ref": "#/$defs/id"
+        },
+        "ChainID": {
+          "$ref": "#/$defs/id"
+        }
+      },
+      "required": [
+        "ContractID",
+        "SignatureAlgorithm",
+        "KeyID",
+        "EventHash",
+        "EventID",
+        "ActorID",
+        "ChainID"
+      ]
+    },
+    "envelope": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "Commitment": {
+          "$ref": "#/$defs/event"
+        },
+        "Statement": {
+          "$ref": "#/$defs/event_statement"
+        },
+        "Signature": {
+          "$ref": "#/$defs/signature"
+        }
+      },
+      "required": [
+        "Commitment",
+        "Statement",
+        "Signature"
+      ]
+    },
+    "anchor_statement": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "ContractID": {
+          "const": "urn:vcp-research:native-layout-migration:2026-10-25:v0"
+        },
+        "SignatureAlgorithm": {
+          "const": "Ed25519"
+        },
+        "KeyID": {
+          "$ref": "#/$defs/id"
+        },
+        "ActorID": {
+          "$ref": "#/$defs/id"
+        },
+        "ChainID": {
+          "$ref": "#/$defs/id"
+        },
+        "RegistrationPolicyBinding": {
+          "$ref": "#/$defs/binding"
+        },
+        "NumericPolicyBinding": {
+          "$ref": "#/$defs/binding"
+        },
+        "TreeScheme": {
+          "const": "research-rfc6962-digest-leaf-v0"
+        },
+        "EventCount": {
+          "$ref": "#/$defs/uint"
+        },
+        "FirstEventID": {
+          "$ref": "#/$defs/id"
+        },
+        "LastEventID": {
+          "$ref": "#/$defs/id"
+        },
+        "MerkleRoot": {
+          "$ref": "#/$defs/hash"
+        },
+        "RecordedAtNs": {
+          "$ref": "#/$defs/uint"
+        },
+        "IntendedTarget": {
+          "const": "synthetic-unconnected"
+        }
+      },
+      "required": [
+        "ContractID",
+        "SignatureAlgorithm",
+        "KeyID",
+        "ActorID",
+        "ChainID",
+        "RegistrationPolicyBinding",
+        "NumericPolicyBinding",
+        "TreeScheme",
+        "EventCount",
+        "FirstEventID",
+        "LastEventID",
+        "MerkleRoot",
+        "RecordedAtNs",
+        "IntendedTarget"
+      ]
+    },
+    "anchor": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "Statement": {
+          "$ref": "#/$defs/anchor_statement"
+        },
+        "Signature": {
+          "$ref": "#/$defs/signature"
+        }
+      },
+      "required": [
+        "Statement",
+        "Signature"
+      ]
+    },
+    "proof": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "EventID": {
+          "$ref": "#/$defs/id"
+        },
+        "LeafIndex": {
+          "$ref": "#/$defs/uint"
+        },
+        "Path": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/hash"
+          },
+          "minItems": 0,
+          "maxItems": 16
+        }
+      },
+      "required": [
+        "EventID",
+        "LeafIndex",
+        "Path"
+      ]
+    },
+    "source_entry": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "EntryID": {
+          "$ref": "#/$defs/id"
+        },
+        "OriginalHex": {
+          "$ref": "#/$defs/hex"
+        },
+        "RetainedHex": {
+          "$ref": "#/$defs/hex"
+        },
+        "Signature": {
+          "$ref": "#/$defs/signature"
+        },
+        "RetainedSignature": {
+          "$ref": "#/$defs/signature"
+        }
+      },
+      "required": [
+        "EntryID",
+        "OriginalHex",
+        "RetainedHex",
+        "Signature",
+        "RetainedSignature"
+      ]
+    },
+    "manifest_entry": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "EntryID": {
+          "$ref": "#/$defs/id"
+        },
+        "RawSHA256": {
+          "$ref": "#/$defs/hash"
+        },
+        "SignatureSHA256": {
+          "$ref": "#/$defs/hash"
+        }
+      },
+      "required": [
+        "EntryID",
+        "RawSHA256",
+        "SignatureSHA256"
+      ]
+    },
+    "evidence_entry": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "ArtifactID": {
+          "$ref": "#/$defs/id"
+        },
+        "RawSHA256": {
+          "$ref": "#/$defs/hash"
+        }
+      },
+      "required": [
+        "ArtifactID",
+        "RawSHA256"
+      ]
+    },
+    "evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "ArtifactID": {
+          "$ref": "#/$defs/id"
+        },
+        "OriginalHex": {
+          "$ref": "#/$defs/hex"
+        },
+        "RetainedHex": {
+          "$ref": "#/$defs/hex"
+        }
+      },
+      "required": [
+        "ArtifactID",
+        "OriginalHex",
+        "RetainedHex"
+      ]
+    },
+    "manifest": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "SourceFormat": {
+          "const": "urn:vcp-research:raw-source:2026-10-25:v0"
+        },
+        "Entries": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/manifest_entry"
+          },
+          "minItems": 1,
+          "maxItems": 16
+        },
+        "Evidence": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/evidence_entry"
+          },
+          "minItems": 1,
+          "maxItems": 16
+        }
+      },
+      "required": [
+        "SourceFormat",
+        "Entries",
+        "Evidence"
+      ]
+    },
+    "mapping": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "SourceEntryID": {
+          "$ref": "#/$defs/id"
+        },
+        "TargetEventID": {
+          "$ref": "#/$defs/id"
+        }
+      },
+      "required": [
+        "SourceEntryID",
+        "TargetEventID"
+      ]
+    },
+    "plan": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "ContractID": {
+          "const": "urn:vcp-research:native-layout-migration:2026-10-25:v0"
+        },
+        "PlanID": {
+          "$ref": "#/$defs/id"
+        },
+        "SourceManifestDigest": {
+          "$ref": "#/$defs/hash"
+        },
+        "SourceFormat": {
+          "const": "urn:vcp-research:raw-source:2026-10-25:v0"
+        },
+        "TargetActorID": {
+          "$ref": "#/$defs/id"
+        },
+        "TargetChainID": {
+          "$ref": "#/$defs/id"
+        },
+        "RegistrationPolicyBinding": {
+          "$ref": "#/$defs/binding"
+        },
+        "NumericPolicyBinding": {
+          "$ref": "#/$defs/binding"
+        },
+        "ConversionRule": {
+          "const": "research-exact-ms-to-s-preserve-decimals-v0"
+        },
+        "Entries": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/mapping"
+          },
+          "minItems": 1,
+          "maxItems": 16
+        }
+      },
+      "required": [
+        "ContractID",
+        "PlanID",
+        "SourceManifestDigest",
+        "SourceFormat",
+        "TargetActorID",
+        "TargetChainID",
+        "RegistrationPolicyBinding",
+        "NumericPolicyBinding",
+        "ConversionRule",
+        "Entries"
+      ]
+    },
+    "attestation_statement": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "ContractID": {
+          "const": "urn:vcp-research:native-layout-migration:2026-10-25:v0"
+        },
+        "SignatureAlgorithm": {
+          "const": "Ed25519"
+        },
+        "KeyID": {
+          "$ref": "#/$defs/id"
+        },
+        "DerivationPlanDigest": {
+          "$ref": "#/$defs/hash"
+        },
+        "SourceManifestDigest": {
+          "$ref": "#/$defs/hash"
+        },
+        "TargetArtifactDigest": {
+          "$ref": "#/$defs/hash"
+        },
+        "CreatedAtNs": {
+          "$ref": "#/$defs/uint"
+        },
+        "Support": {
+          "const": "synthetic internal execution; no external evaluator"
+        },
+        "ConversionRule": {
+          "const": "research-exact-ms-to-s-preserve-decimals-v0"
+        }
+      },
+      "required": [
+        "ContractID",
+        "SignatureAlgorithm",
+        "KeyID",
+        "DerivationPlanDigest",
+        "SourceManifestDigest",
+        "TargetArtifactDigest",
+        "CreatedAtNs",
+        "Support",
+        "ConversionRule"
+      ]
+    },
+    "attestation": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "Statement": {
+          "$ref": "#/$defs/attestation_statement"
+        },
+        "Signature": {
+          "$ref": "#/$defs/signature"
+        }
+      },
+      "required": [
+        "Statement",
+        "Signature"
+      ]
+    },
+    "policy_bytes": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "registration": {
+          "$ref": "#/$defs/hex"
+        },
+        "numeric": {
+          "$ref": "#/$defs/hex"
+        }
+      },
+      "required": [
+        "registration",
+        "numeric"
+      ]
+    }
+  }
+}

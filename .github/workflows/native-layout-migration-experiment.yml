@@ -1,0 +1,42 @@
+name: Unadopted native layout and migration experiment
+
+on:
+  pull_request:
+    paths:
+      - 'experiments/native-layout-migration-v0/**'
+      - '.github/workflows/native-layout-migration-experiment.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  synthetic-layout-migration:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.12', '3.14']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Install pinned research dependencies
+        run: python -m pip install -r experiments/native-layout-migration-v0/requirements.txt
+      - name: Fresh synthetic execution and regression controls
+        run: python experiments/native-layout-migration-v0/run.py --output "${{ runner.temp }}/native-layout-${{ matrix.python }}.json"
+      - name: Recompute complete saved report and test mutations
+        run: |
+          python experiments/native-layout-migration-v0/run.py --verify-report "${{ runner.temp }}/native-layout-${{ matrix.python }}.json"
+          python experiments/native-layout-migration-v0/report_controls.py "${{ runner.temp }}/native-layout-${{ matrix.python }}.json" > "${{ runner.temp }}/report-controls-${{ matrix.python }}.json"
+      - name: Retain internal experiment results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: unadopted-native-layout-python-${{ matrix.python }}
+          path: |
+            ${{ runner.temp }}/native-layout-${{ matrix.python }}.json
+            ${{ runner.temp }}/report-controls-${{ matrix.python }}.json
+          if-no-files-found: error
+          retention-days: 30
