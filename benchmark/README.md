@@ -1,5 +1,27 @@
 # AI Decision Auditability Benchmark (v1.0)
 
+> **Consistency note — 25 October 2026 (informative).** The documents in this
+> directory have not been re-reviewed against VAP v1.2. Known inconsistencies:
+>
+> - [SCORING.md](./SCORING.md) is headed "Version 2.0" and "Normative (Canonical
+>   Reference)", while this README gives the benchmark as released v1.0. Which
+>   version and status apply has not been settled.
+> - SCORING.md and [IMPROVEMENT.md](./IMPROVEMENT.md) call the benchmark the
+>   "VAP Scorecard". VAP v1.2 defines no scorecard; the benchmark is not part of
+>   the VAP specification, and a score is not a VAP or VCP conformance result.
+> - IMPROVEMENT.md cites VCP sections by names that do not exist in any VCP
+>   specification version (for example "§4.2 (MerkleAnchor)", "§3.3
+>   (HashChain)", "§5.3 (ResponsibilityFields)", "§6.4 (KeyLifecycle)"). Use
+>   the VCP specification's own section headings instead. The "one reference
+>   profile" label on those lines means one example, not a VAP reference
+>   profile.
+> - IMPROVEMENT.md described VCP as "one example of a complete, open-standard
+>   implementation" and as "one reference implementation". Under VAP v1.2
+>   §10.4, VCP's alignment with VAP v1.2 is under review and full conformance
+>   has not been established; that subsection was corrected on 25 October 2026.
+>
+> The PDF files are unchanged.
+
 This directory contains the official **AI Decision Auditability Benchmark** published by the  
 **VeritasChain Standards Organization (VSO)**.
 

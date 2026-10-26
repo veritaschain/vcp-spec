@@ -57,10 +57,16 @@ interface VcpEvent {
 }
 
 /**
- * Verify Merkle proof locally (RFC 6962 compliant).
- * 
- * This function runs entirely on your machine.
- * No server trust required - that's the "Verify, Don't Trust" principle!
+ * Check the API-supplied audit path against the API-supplied root by folding
+ * the raw event hash with plain SHA-256(left || right) and no 0x00/0x01
+ * prefixes. This matches neither RFC 6962 nor the VCP v1.2 §6.2.1 example
+ * builder (see Known issues, research observation P3).
+ * For an RFC 6962 verifier, see https://github.com/veritaschain/vcp-sdk
+ * (pre-release, first-party).
+ *
+ * The path is folded on your machine, but the root it is compared with comes
+ * from the same API, so a match shows internal consistency only; the root is
+ * not independently anchored here.
  */
 function verifyMerkleProof(proof: MerkleProof): boolean {
   try {
@@ -193,19 +199,20 @@ async function main() {
     
     console.log();
     if (isValid) {
-      console.log('✅ VERIFIED: Proof is mathematically valid!');
+      console.log('✅ MATCH against API-supplied root (not independently anchored)');
       console.log();
       console.log('   What this means:');
-      console.log('   → The event exists in the Merkle tree');
-      console.log('   → The proof was verified on YOUR machine');
-      console.log('   → No server trust was required');
-      console.log('   → Any tampering would have been detected');
+      console.log('   → The API-supplied path folds to the API-supplied root');
+      console.log('   → The fold was computed on YOUR machine');
+      console.log('   → The root was not checked against an external anchor');
+      console.log('   → Construction: plain SHA-256 pairs, no RFC 6962 prefixes (P3)');
     } else {
-      console.log('❌ FAILED: Proof verification failed!');
+      console.log('❌ NO MATCH: path does not fold to the API-supplied root');
       console.log();
       console.log('   This could mean:');
-      console.log('   → Data was tampered with');
+      console.log('   → The data or proof differs from what the root commits to');
       console.log('   → Proof is incomplete or corrupted');
+      console.log('   → The proof uses a different tree construction (e.g. RFC 6962)');
     }
   } catch (error) {
     console.error('Error fetching proof:', error);
@@ -222,14 +229,15 @@ async function main() {
   console.log('You\'ve just experienced the core of VCP:');
   console.log('  ✓ Queried the VCP Explorer API');
   console.log('  ✓ Retrieved a Merkle proof');
-  console.log('  ✓ Verified it locally (no server trust!)');
+  console.log('  ✓ Folded it locally against the API-supplied root');
   console.log();
   console.log('Next steps:');
   console.log('  📖 Full Spec:      https://github.com/veritaschain/vcp-spec');
   console.log('  🛠️  SDK Spec:       https://github.com/veritaschain/vcp-sdk-spec');
   console.log('  🔍 Explorer GUI:   https://veritaschain.org/explorer/app/');
   console.log('  🔌 MT4/MT5:        https://github.com/veritaschain/vcp-sidecar-guide');
-  console.log('  ℹ️  VC-Certified:   https://veritaschain.org/certified/ (issued by accredited CABs, not VSO)');
+  console.log('  ℹ️  VC-Certified:   https://veritaschain.org/certified/ (scheme requires CABs independent of VSO; the only registered CAB is not independent)');
+  console.log('  🔐 RFC 6962:       https://github.com/veritaschain/vcp-sdk (pre-release, first-party)');
   console.log();
 }
 
