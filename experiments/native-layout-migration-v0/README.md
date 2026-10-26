@@ -15,7 +15,7 @@ allocate a VCP event type or replace native UUID/identity rules.
 
 Only this new directory and its new CI workflow are added. Current specifications,
 GA/RC schemas, existing implementations/experiments, signed records, distributions,
-release tags, DOC-SYNC and K3 are unchanged. All 204 baseline files are fingerprinted
+release tags, DOC-SYNC and K3 are unchanged. All 204 current baseline files at `943d513fec3c0eaa7eb683120e2d82d5eb748285` are fingerprinted
 in [sources.json](sources.json); execution checks those exact bytes. Use a checkout
 of this experiment's reviewed commit, not a subsequently edited baseline.
 
@@ -37,7 +37,7 @@ is used by the checker. Package installation needs its normal package source.
 Do not run scripts supplied by an evaluator as part of accepting a report.
 
 The suite returns zero only when **all authored per-axis expectations**, all
-14 unit outcomes and all 25 regression controls match, without skipped or expected
+14 unit outcomes and all 39 regression controls match, without skipped or expected
 failures. Negative and unsupported cases are supposed to return FAIL/UNASSESSED;
 “suite succeeded” does not mean all evidence passed. `--verify-report` performs
 fresh execution and strict typed comparison of the **entire report**, including
@@ -214,12 +214,18 @@ normative requirement or schema is changed, and none of the new failures makes a
 existing native record invalid. Known unsupported features are not silently filled
 with defaults. Independent reproduction remains unestablished even after CI passes.
 
-The case matrix contains **55 bundle cases** (6 PASS, 36 FAIL, 13 UNASSESSED) and
+The case matrix contains **62 bundle cases** (6 PASS, 43 FAIL, 13 UNASSESSED) and
 **14 unit cases** (5 PASS, 4 FAIL, 5 UNASSESSED), with authored per-axis expectations.
-These are candidate outcomes, not all-positive evidence. The 25 additional
+These are candidate outcomes, not all-positive evidence. The 39 additional
 regressions and eight report mutation controls are separate measures, not a count
 of independent validations. Actual run records and runtime limitations are in
 [REVIEW.md](REVIEW.md). The new CI checks Python 3.12/3.14; prior experiment and
 contract workflows remain untouched. CI artifacts have ordinary finite retention;
 the local recorded runs in this directory are retained in Git, not represented as
 external evaluator reports or a new fixed research release.
+
+Final-review repairs and new run records are in [FINAL-REVIEW.md](FINAL-REVIEW.md).
+The earlier 55-case reports remain historical records for their stated commit;
+verify them at that commit, not against this revised implementation. The current
+baseline incorporates separately merged PRs #13, #17 and #18 without reverting
+any of their changes. No existing baseline file is modified by this PR.

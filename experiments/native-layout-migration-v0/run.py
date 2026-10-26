@@ -12,8 +12,8 @@ import checker as ck
 
 HERE=Path(__file__).resolve().parent
 ROOT=HERE.parents[1]
-BASE='517d407f507fd6401bc6edb4979b5a6673122d40'
-TEST_COUNT=25
+BASE='943d513fec3c0eaa7eb683120e2d82d5eb748285'
+TEST_COUNT=39
 DEPENDENCIES={'attrs':'26.1.0','cffi':'2.1.1','cryptography':'50.0.2','jsonschema':'4.26.0',
               'jsonschema-specifications':'2025.9.1','pycparser':'3.12','referencing':'0.37.0',
               'rfc8785':'0.1.4','rpds-py':'2026.9.1','typing_extensions':'4.16.0'}
@@ -46,7 +46,7 @@ def execute():
     versions,manifest=audit()
     data=ck.strict_json((HERE/'data/cases.json').read_bytes())
     ck.need(set(data)=={'status','independent_reproduction','cases','unit_cases'} and data['status']=='UNADOPTED' and data['independent_reproduction']=='not_established','case metadata')
-    ck.need(len(data['cases'])==55 and len({c['id'] for c in data['cases']})==55,'bundle case inventory')
+    ck.need(len(data['cases'])==62 and len({c['id'] for c in data['cases']})==62,'bundle case inventory')
     outputs=[];mismatches=[];counts={s:0 for s in ('PASS','FAIL','UNASSESSED')}
     for case in data['cases']:
         ck.need(set(case)=={'id','reason','bundle','context','expected'} and set(case['expected'])==set(ck.AXES),'case shape')

@@ -243,6 +243,36 @@ def vectors():
         link_plan(b);seal(b,c)
     add('configured-but-unimplemented-policy',unsupported_policy,expectation(policy_binding='UNASSESSED'),reason='Allowlisting an incoming digest cannot add interpretation support.')
     add('registration-header-id-mismatch',target_change(lambda e:e['Header'].update(PolicyID=e['NumericPolicyBinding']['PolicyID'])),expectation(policy_binding='FAIL'))
+    # Final-review counterexamples: authored assertions, not inferred outcomes.
+    add('policy-array',lambda b,c:b['Policies'].update(numeric=rawjson([]).hex()),expectation(policy_binding='FAIL'),
+        reason='A non-object policy must produce a finding, not an uncaught AttributeError.')
+    add('source-second-99',src(lambda s:s.update(TimestampISO='2026-10-25T00:00:99.000000000Z')),
+        expectation(source_interpretation='FAIL',derivation_binding='FAIL'),reason='Invalid seconds are not an unmapped leap second.')
+    add('inexact-duration-hides-invalid-ratio',src(lambda s:s.update(DurationMs='1001',Confidence='75')),
+        expectation(source_interpretation='FAIL',derivation_binding='FAIL'),reason='An unknown conversion must not suppress a known invalid ratio.')
+    def unknown_other_mismatch(b,c):
+        source_change(b,c,lambda s:s.update(TimeBasis='smear-unspecified'))
+        b['Events'][1]['Commitment']['Payload']['VCP-XREF']['SharedEventKey']['ToleranceMs']='11';seal(b,c)
+    add('unknown-source-hides-other-derived-mismatch',unknown_other_mismatch,
+        expectation(source_interpretation='UNASSESSED',derivation_binding='FAIL'),reason='A supported row still proves a mismatch when another row is partly unassessed.')
+    def unknown_same_mismatch(b,c):
+        source_change(b,c,lambda s:s.update(TimeBasis='smear-unspecified'))
+        e=b['Events'][0]['Commitment'];e['Header']['TimestampISO']='2016-12-31T23:59:60.000000000Z'
+        e['Payload']['VCP-GOV']['ConfidenceScore']='75';seal(b,c)
+    add('unknown-time-hides-same-event-invalid-ratio',unknown_same_mismatch,
+        expectation(source_interpretation='UNASSESSED',numeric_time='FAIL',derivation_binding='FAIL'),
+        reason='Known numeric failure and mismatch survive an unsupported time in the same event.')
+    def null_actor(b,c):
+        c['SourceActorID']=None
+        for row in b['SourceArtifacts']:
+            s=ck.strict_json(bytes.fromhex(row['OriginalHex']));s['ActorID']=None;raw=rawjson(s)
+            row.update(OriginalHex=raw.hex(),RetainedHex=raw.hex(),Signature=sign('source',raw),RetainedSignature=sign('source',raw))
+        refresh_sources(b,c)
+    add('null-source-actor-context',null_actor,layout_failure(),reason='Matching null identities are malformed configuration, not a selected source actor.')
+    def malformed_signature(b,c):
+        b['Events'][0]['Signature']='!'*88;c['Keys']['event-signature']=None;attest(b,c)
+    add('missing-key-malformed-signature',malformed_signature,expectation(cryptographic_integrity='FAIL'),
+        reason='Missing authority does not make a known malformed signature encoding unassessed.')
     return cases
 
 UNIT_CASES=[

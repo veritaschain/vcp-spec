@@ -36,6 +36,22 @@ class Finding(Exception):
 def need(condition,message,status='FAIL'):
     if not condition: raise Finding(status,message)
 
+INPUT_ERRORS=(ValueError,KeyError,TypeError,OverflowError,UnicodeError,RecursionError)
+
+def findings(functions):
+    found=[]
+    for fn in functions:
+        try:fn()
+        except Finding as e:found.append(e)
+        except INPUT_ERRORS as e:
+            found.append(Finding('FAIL',type(e).__name__+': '+str(e)[:160]))
+    return found
+
+def finish(found):
+    if found:raise Finding(aggregate([e.status for e in found]),'; '.join(e.message for e in found))
+
+def collect(functions):finish(findings(functions))
+
 def strict_json(raw):
     need(type(raw) is bytes and len(raw)<=8_000_000,'JSON input size/type')
     def pairs(items):
@@ -92,14 +108,17 @@ def iso_ns(s,source=False):
     m=re.fullmatch(pattern,s) if type(s) is str else None
     need(m is not None,'ISO syntax')
     y,mo,d,h,mi,se=map(int,m.groups()[:6]);frac,offset=m.group(7,8)
-    need(se<60,'leap mapping unavailable','UNASSESSED')
+    need(se<=60,'ISO second range')
     if not source:need(len(frac)==9 and offset=='Z','candidate requires nine UTC fractional digits')
-    delta=datetime(y,mo,d,h,mi,se,tzinfo=timezone.utc)-EPOCH
+    # Validate the calendar and offset even when the second needs an unmapped
+    # leap rule. Invalid dates/seconds must not masquerade as unsupported time.
+    delta=datetime(y,mo,d,h,mi,min(se,59),tzinfo=timezone.utc)-EPOCH
     seconds=delta.days*86400+delta.seconds
     if offset!='Z':
         oh,om=int(offset[1:3]),int(offset[4:6]);need(oh<=23 and om<=59,'offset range')
         need(offset!='-00:00','unknown local offset','UNASSESSED')
         seconds-=(1 if offset[0]=='+' else -1)*(oh*3600+om*60)
+    need(se<60,'leap mapping unavailable','UNASSESSED')
     return seconds*10**9+int(frac.ljust(9,'0'))
 
 def ns_iso(v):
@@ -136,36 +155,74 @@ def context_check(c):
     need(c['ContractID']==CONTRACT,'unsupported context','UNASSESSED')
     need(type(c['Keys']) is dict and set(c['Keys'])=={'source','event-signature','anchor-signature','attestation'},'key roles')
     need(type(c['Policies']) is dict and set(c['Policies'])=={'registration','numeric'},'policy roles')
+    def identity(v):need(type(v) is str and 1<=len(v)<=128,'configured identity type/length')
+    def pin(v):need(type(v) is str and re.fullmatch('sha256:[0-9a-f]{64}',v) is not None,'configured digest encoding')
+    for name in ('ActorID','ChainID','SourceActorID','SourceChainID'):identity(c[name])
+    if c['SourceManifestDigest'] is not None:pin(c['SourceManifestDigest'])
+    for row in c['Keys'].values():
+        if row is None:continue
+        need(type(row) is dict and set(row)=={'KeyID','PublicKey'},'configured key fields')
+        identity(row['KeyID']);need(len(hexbytes(row['PublicKey']))==32,'public key length')
+    for row in c['Policies'].values():
+        if row is None:continue
+        need(type(row) is dict and set(row)=={'PolicyID','PolicyVersion','PolicyDigest'},'configured policy fields')
+        identity(row['PolicyID']);need(row['PolicyVersion']=='0','unsupported configured policy version','UNASSESSED');pin(row['PolicyDigest'])
+    jcs(c)
 
 def verify_sig(role,message,signature,context,key_id=None):
+    raw_signature=sigbytes(signature)
     row=context['Keys'][role]
     need(row is not None,'no configured '+role+' key','UNASSESSED')
     need(type(row) is dict and set(row)=={'KeyID','PublicKey'},'configured key fields')
     if key_id is not None:need(key_id==row['KeyID'],'key role/identity not selected','UNASSESSED')
     key=hexbytes(row['PublicKey']);need(len(key)==32,'public key length')
-    try:Ed25519PublicKey.from_public_bytes(key).verify(sigbytes(signature),DOMAINS[role]+message)
+    try:Ed25519PublicKey.from_public_bytes(key).verify(raw_signature,DOMAINS[role]+message)
     except InvalidSignature:raise Finding('FAIL',role+' signature does not verify')
 
 def source_rows(b):
     return [strict_json(hexbytes(e['OriginalHex'])) for e in b['SourceArtifacts']]
 
-def interpret_source(s,c):
+def source_assessment(s,c):
+    """Evaluate independently mapped fields; an unknown is not an early success.
+
+    A different format or extended shape stays wholly uninterpreted. Within the
+    selected source shape, retain known values and findings separately so an
+    unsupported time/conversion cannot suppress another field or row's failure.
+    """
     allowed={'Format','EventID','ActorID','ChainID','SequenceNum','TimestampInt','TimestampISO','TimeBasis','Units','DurationMs','ToleranceMs','Confidence','LatencyUs'}
     need(type(s) is dict and set(s)==allowed,'unmapped source member/inner approval','UNASSESSED')
     need(s['Format']==SOURCE,'unknown source format','UNASSESSED')
-    need(s['ActorID']==c['SourceActorID'] and s['ChainID']==c['SourceChainID'],'source context mismatch')
-    need(type(s['EventID']) is str and bool(s['EventID']),'source event identity')
-    need(type(s['SequenceNum']) is int and 0<=s['SequenceNum']<=MAX63,'source sequence type/range')
-    need(type(s['TimestampInt']) is int,'source integer value unavailable','UNASSESSED')
-    need(s['TimeBasis']=='unix_no_leap','source time basis not mapped','UNASSESSED')
-    need(same(s['Units'],{'TimestampInt':'ns','DurationMs':'ms','ToleranceMs':'ms','Confidence':'ratio','LatencyUs':'us'}),'source units not mapped','UNASSESSED')
-    need(iso_ns(s['TimestampISO'],source=True)==s['TimestampInt'],'source ISO/ns mismatch')
-    need(0<=s['TimestampInt']<=MAX63,'source instant unsupported by target','UNASSESSED')
-    duration=convert(s['DurationMs'],'ms','s')
-    uint(s['ToleranceMs'],MAX31);decimal(s['Confidence'],True);decimal(s['LatencyUs'])
-    return {'TimestampInt':str(s['TimestampInt']),'TimestampISO':ns_iso(s['TimestampInt']),
-            'SequenceNum':str(s['SequenceNum']),'DurationSec':duration,
-            'ToleranceMs':s['ToleranceMs'],'Confidence':s['Confidence'],'LatencyUs':s['LatencyUs']}
+    values={}
+    def identity():
+        need(type(s['EventID']) is str and bool(s['EventID']),'source event identity')
+        values['EventID']=s['EventID']
+    def sequence():
+        need(type(s['SequenceNum']) is int and 0<=s['SequenceNum']<=MAX63,'source sequence type/range')
+        values['SequenceNum']=str(s['SequenceNum'])
+    units={'TimestampInt':'ns','DurationMs':'ms','ToleranceMs':'ms','Confidence':'ratio','LatencyUs':'us'}
+    def unit(field):
+        need(type(s['Units']) is dict and set(s['Units'])==set(units),'source unit fields not mapped','UNASSESSED')
+        need(s['Units'][field]==units[field],'source '+field+' unit not mapped','UNASSESSED')
+    def time():
+        unit('TimestampInt')
+        need(type(s['TimestampInt']) is int,'source integer value unavailable','UNASSESSED')
+        need(s['TimeBasis']=='unix_no_leap','source time basis not mapped','UNASSESSED')
+        need(iso_ns(s['TimestampISO'],source=True)==s['TimestampInt'],'source ISO/ns mismatch')
+        need(0<=s['TimestampInt']<=MAX63,'source instant unsupported by target','UNASSESSED')
+        values.update(TimestampInt=str(s['TimestampInt']),TimestampISO=ns_iso(s['TimestampInt']))
+    def quantity(field,target,parse):
+        unit(field);value=parse(s[field]);values[target]=value
+    found=findings([
+        lambda:need(s['ActorID']==c['SourceActorID'] and s['ChainID']==c['SourceChainID'],'source context mismatch'),
+        identity,sequence,time,
+        lambda:quantity('DurationMs','DurationSec',lambda v:convert(v,'ms','s')),
+        lambda:quantity('ToleranceMs','ToleranceMs',lambda v:(uint(v,MAX31),v)[1]),
+        lambda:quantity('Confidence','Confidence',lambda v:(decimal(v,True),v)[1]),
+        lambda:quantity('LatencyUs','LatencyUs',lambda v:(decimal(v),v)[1])])
+    return values,found
+
+def interpret_source(s,c):
+    values,found=source_assessment(s,c);finish(found);return values
 
 def aggregate(statuses):
     return 'FAIL' if 'FAIL' in statuses else ('UNASSESSED' if 'UNASSESSED' in statuses else 'PASS')
@@ -175,18 +232,8 @@ def check(bundle,context):
     def run(axis,fn):
         try:fn();results[axis]={'status':'PASS','detail':'covered checks passed'}
         except Finding as e:results[axis]={'status':e.status,'detail':e.message}
-        except (ValueError,KeyError,TypeError,OverflowError,UnicodeError,RecursionError) as e:
+        except INPUT_ERRORS as e:
             results[axis]={'status':'FAIL','detail':type(e).__name__+': '+str(e)[:160]}
-    def collect(functions):
-        found=[]
-        for fn in functions:
-            try:fn()
-            except Finding as e:found.append(e)
-            except (ValueError,KeyError,TypeError,OverflowError,UnicodeError,RecursionError) as e:
-                found.append(Finding('FAIL',type(e).__name__+': '+str(e)[:160]))
-        if found:
-            state=aggregate([e.status for e in found])
-            raise Finding(state,'; '.join(e.message for e in found))
     def layout():
         context_check(context)
         errors=list(VALIDATOR.iter_errors(bundle))
@@ -218,15 +265,27 @@ def check(bundle,context):
             need(digest(jcs(b['SourceManifest']))==c['SourceManifestDigest'],'source differs from pinned received manifest')
         run('source_retention',retention)
         run('source_authentication',lambda:collect([lambda e=e:verify_sig('source',hexbytes(e['OriginalHex']),e['Signature'],c) for e in b['SourceArtifacts']]))
+        source_values=[]
         def source_interpretation():
-            ss=source_rows(b)
-            collect([lambda s=s:interpret_source(s,c) for s in ss])
-            need(len({s['EventID'] for s in ss})==len(ss),'duplicate original EventID')
-            need(all(a['SequenceNum']<z['SequenceNum'] for a,z in zip(ss,ss[1:])),'original order/sequence mismatch')
+            found=[]
+            for row in b['SourceArtifacts']:
+                value={}
+                def evaluate():
+                    nonlocal value
+                    value,problems=source_assessment(strict_json(hexbytes(row['OriginalHex'])),c)
+                    found.extend(problems)
+                found.extend(findings([evaluate]));source_values.append(value)
+            ids=[v['EventID'] for v in source_values if 'EventID' in v]
+            seq=[int(v['SequenceNum']) for v in source_values if 'SequenceNum' in v]
+            found.extend(findings([
+                lambda:need(len(set(ids))==len(ids),'duplicate original EventID'),
+                lambda:need(all(a<z for a,z in zip(seq,seq[1:])),'original order/sequence mismatch')]))
+            finish(found)
         run('source_interpretation',source_interpretation)
         def policies():
             def one(role,member):
                 raw=hexbytes(b['Policies'][role]);v=strict_json(raw)
+                need(type(v) is dict,'policy must be a JSON object')
                 need(v.get('Role')==role,'policy role mismatch')
                 value=binding(raw)
                 for event in events:need(same(event[member],value),'event policy bytes not bound')
@@ -246,12 +305,13 @@ def check(bundle,context):
         def numeric():
             def one(e):
                 h=e['Header'];p=e['Payload']
-                ns=uint(h['TimestampInt']);need(iso_ns(h['TimestampISO'])==ns,'target ISO/ns mismatch')
-                uint(h['SequenceNum'])
-                uint(p['VCP-ANCHOR']['FailoverDetails']['TriggerCondition']['TotalDowntimeSec'])
-                uint(p['VCP-XREF']['SharedEventKey']['ToleranceMs'],MAX31)
-                decimal(p['VCP-GOV']['ConfidenceScore'],True)
-                decimal(p['VCP-GOV']['PerformanceMetadata']['LatencyImpact'])
+                collect([
+                    lambda:need(iso_ns(h['TimestampISO'])==uint(h['TimestampInt']),'target ISO/ns mismatch'),
+                    lambda:uint(h['TimestampInt']),lambda:uint(h['SequenceNum']),
+                    lambda:uint(p['VCP-ANCHOR']['FailoverDetails']['TriggerCondition']['TotalDowntimeSec']),
+                    lambda:uint(p['VCP-XREF']['SharedEventKey']['ToleranceMs'],MAX31),
+                    lambda:decimal(p['VCP-GOV']['ConfidenceScore'],True),
+                    lambda:decimal(p['VCP-GOV']['PerformanceMetadata']['LatencyImpact'])])
             collect([lambda e=e:one(e) for e in events]+[
                 lambda:uint(b['Anchor']['Statement']['RecordedAtNs']),
                 lambda:uint(b['MigrationAttestation']['Statement']['CreatedAtNs'])])
@@ -263,8 +323,9 @@ def check(bundle,context):
                     s=env['Statement'];hdr=env['Commitment']['Header']
                     need(s['EventHash']==h,'event hash mismatch')
                     need(all(s[k]==hdr[k] for k in ('EventID','ActorID','ChainID')),'event statement identity binding')
-                    need(hdr['ActorID']==c['ActorID'] and hdr['ChainID']==c['ChainID'],'unselected actor/chain','UNASSESSED')
-                    verify_sig('event-signature',jcs(s),env['Signature'],c,s['KeyID'])
+                    collect([
+                        lambda:need(hdr['ActorID']==c['ActorID'] and hdr['ChainID']==c['ChainID'],'unselected actor/chain','UNASSESSED'),
+                        lambda:verify_sig('event-signature',jcs(s),env['Signature'],c,s['KeyID'])])
                 checks.append(one)
             for role,name in [('anchor-signature','Anchor'),('attestation','MigrationAttestation')]:
                 checks.append(lambda role=role,name=name:verify_sig(role,jcs(b[name]['Statement']),b[name]['Signature'],c,b[name]['Statement']['KeyID']))
@@ -303,19 +364,21 @@ def check(bundle,context):
             att=b['MigrationAttestation']['Statement']
             need(att['DerivationPlanDigest']==pd and att['SourceManifestDigest']==plan['SourceManifestDigest'],'attestation source/plan')
             need(att['TargetArtifactDigest']==digest(jcs(target_artifact(b))),'attestation full target-artifact binding')
-            # Known bad links above still fail even when a later source is uninterpretable.
-            need(results['source_retention']['status']=='PASS','source preservation prerequisite',results['source_retention']['status'])
-            need(results['source_authentication']['status']=='PASS','source authentication prerequisite',results['source_authentication']['status'])
-            need(results['source_interpretation']['status']=='PASS','source interpretation prerequisite',results['source_interpretation']['status'])
-            ss=source_rows(b)
-            need(not set(target_ids)&{s['EventID'] for s in ss},'new IDs must not reuse any source EventID')
-            for s,e in zip(ss,events):
-                v=interpret_source(s,c);h=e['Header'];p=e['Payload']
-                need(all(h[k]==v[k] for k in ('TimestampInt','TimestampISO','SequenceNum')),'derived Header value mismatch')
-                need(p['VCP-ANCHOR']['FailoverDetails']['TriggerCondition']['TotalDowntimeSec']==v['DurationSec'],'duration exact conversion mismatch')
-                need(p['VCP-XREF']['SharedEventKey']['ToleranceMs']==v['ToleranceMs'],'stored milliseconds changed')
-                need(p['VCP-GOV']['ConfidenceScore']==v['Confidence'],'decimal lexeme changed')
-                need(p['VCP-GOV']['PerformanceMetadata']['LatencyImpact']==v['LatencyUs'],'microsecond lexeme changed')
+            # All prerequisites remain required for PASS. A missing pin/key or
+            # unmapped field must not hide a known mismatch in supplied evidence.
+            checks=[lambda axis=axis:need(results[axis]['status']=='PASS',axis+' prerequisite',results[axis]['status'])
+                    for axis in ('source_retention','source_authentication','source_interpretation')]
+            ids={v['EventID'] for v in source_values if 'EventID' in v}
+            checks.append(lambda:need(not set(target_ids)&ids,'new IDs must not reuse any source EventID'))
+            for v,e in zip(source_values,events):
+                h=e['Header'];p=e['Payload']
+                target={k:h[k] for k in ('TimestampInt','TimestampISO','SequenceNum')}
+                target.update(DurationSec=p['VCP-ANCHOR']['FailoverDetails']['TriggerCondition']['TotalDowntimeSec'],
+                    ToleranceMs=p['VCP-XREF']['SharedEventKey']['ToleranceMs'],
+                    Confidence=p['VCP-GOV']['ConfidenceScore'],LatencyUs=p['VCP-GOV']['PerformanceMetadata']['LatencyImpact'])
+                checks.extend(lambda k=k,v=v,target=target:need(target[k]==v[k],'derived '+k+' value/lexeme mismatch')
+                              for k in target if k in v)
+            collect(checks)
         run('derivation_binding',derivation)
     return {'status':'UNADOPTED','independent_reproduction':'not_established','native_conformance':'UNASSESSED',
       'covered_checks':aggregate([v['status'] for v in results.values()]),'checks':results,
