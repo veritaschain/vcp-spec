@@ -1,4 +1,4 @@
-![VCP Version](https://img.shields.io/badge/VCP-v1.2%20Production%20Ready-blue)
+![VCP specification status](https://img.shields.io/badge/VCP-v1.2%20Specification%20GA-blue)
 ![License: CC BY 4.0](https://img.shields.io/badge/License-CC%20BY%204.0-green)
 
 # VeritasChain Protocol (VCP)
