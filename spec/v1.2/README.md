@@ -8,7 +8,7 @@
 
 ## Status
 
-**Production Ready** — Released. GA declared 2026-07-06 (Release Candidate RC1 published 2026-05-31); tag `v1.2.0` (commit `b23acb2`, 2026-10-09) on the validated correction commit, not the earlier PR #1 merge.
+**Specification GA** — Released. GA declared 2026-07-06 (Release Candidate RC1 published 2026-05-31); tag `v1.2.0` (commit `b23acb2`, 2026-10-09) on the validated correction commit, not the earlier PR #1 merge.
 
 v1.2 adds features and stricter certification requirements over v1.1. Historical v1.0/v1.1 records retain their original validation context and signed bytes; this is not a guarantee that every old-format event passes the v1.2 schema. Known Header and EventType divergences prevent an unconditional backward-compatibility claim (see Known issues). Assess producer/verifier compatibility against the declared version and policy. This informative clarification does not amend the frozen specifications or schemas. The normative annex VSO-SPEC-CHANGE-001 is provided in this directory (see Documents below).
 
@@ -38,7 +38,7 @@ v1.2 strengthens operational integrity (VCP-RECOVERY), reconciles append-only au
 
 ## What v1.2 GA Claims — and What It Does Not
 
-GA ("Production Ready") is a **specification-level** status. In keeping
+GA is a **specification-level publication** status, not an implementation production-readiness claim. In keeping
 with VSO's honest-scoping policy, the following distinctions apply.
 
 **GA means:**
@@ -93,7 +93,7 @@ ERRATA E-2026-10-21).
 
 | Language | File | Status |
 |----------|------|--------|
-| 🇬🇧 English | [VCP-Specification-v1_2_en.md](VCP-Specification-v1_2_en.md) | Production Ready (normative) |
+| 🇬🇧 English | [VCP-Specification-v1_2_en.md](VCP-Specification-v1_2_en.md) | Specification GA (normative text) |
 | 📎 Change Proposal (normative annex) | [VSO-SPEC-CHANGE-001.md](VSO-SPEC-CHANGE-001.md) | Adopted into v1.2 (Rev. 3 + 2026-10-09 correction); prevails over the specification text where they differ |
 | 🧩 JSON Schema | [vcp-event-v1.2.json](vcp-event-v1.2.json) | Canonical source; website copy must match at release (https://veritaschain.org/schema/vcp-event-v1.2.json) |
 | 🇯🇵 日本語 | [VCP-Specification-v1_2_ja.md](VCP-Specification-v1_2_ja.md) | Translation (convenience only; English prevails) |
