@@ -251,6 +251,8 @@ Recorded 2026-10-25:
   schema `EventType` enum contains none of these six, so such events fail
   schema validation. §1.3 says "Full backward compatibility is guaranteed
   within the v1.x series"; the schema does not support that for these types.
+  The same applies to the VSO-SPEC-CHANGE-001 §4.3 rows "v1.2 accepts all v1.0
+  events" and "v1.2 accepts all v1.1 events" (recorded 2026-10-28).
 - **Schema validity is not conformance.** §6.3.1 says all events MUST be
   signed, and §5.5.3 makes `ConformanceTier`, `RegistrationPolicy.Issuer` and
   `VerificationDepth` REQUIRED. The schema requires only `EventHash` and

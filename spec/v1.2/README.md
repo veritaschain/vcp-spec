@@ -40,7 +40,7 @@ v1.2 strengthens operational integrity (VCP-RECOVERY), reconciles append-only au
 
 GA is a **specification-level publication** status, not an implementation production-readiness claim. The frozen
 specification files keep their original header "Status: Production Ready" (EN/JA/ZH); read that label as
-specification GA (VAP v1.2 ERRATA E-2026-10-27). In keeping
+specification GA, consistent with VAP v1.2 ERRATA E-2026-10-27. In keeping
 with VSO's honest-scoping policy, the following distinctions apply.
 
 **GA means:**
