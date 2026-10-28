@@ -6,7 +6,11 @@
 
 ---
 
-> **Superseded by [v1.2](../v1.2/)** (Production Ready, GA 2026-07-06) — protocol-compatible with v1.1; all v1.1 events and anchors remain valid and verifiable under v1.2. v1.1 has no tagged release in this repository.
+> **Superseded by [v1.2](../v1.2/)** (specification GA declared 2026-07-06; tag `v1.2.0`, 2026-10-09). Compatibility from v1.1 to v1.2 is not unconditional: the v1.2 schema rejects some v1.0/v1.1 event types and header fields, so not every v1.1 event validates under v1.2 (see the v1.2 [known issues](../v1.2/README.md#known-issues-in-v12-informative) and [GA-CONSISTENCY.md](../v1.2/GA-CONSISTENCY.md)). Original v1.1 records keep their original validation context and signed bytes; do not rewrite them to satisfy the v1.2 schema. VCP v1.1's integrity alignment with VAP v1.2 is under review (VAP v1.2 §10.4). v1.1 has no tagged release in this repository.
+>
+> The frozen v1.1 specification files keep their original header "Status: Production Ready"; read it as a specification publication status, not implementation production readiness.
+>
+> *Corrected 2026-10-28.* This notice previously read: "(Production Ready, GA 2026-07-06) — protocol-compatible with v1.1; all v1.1 events and anchors remain valid and verifiable under v1.2."
 
 ---
 
