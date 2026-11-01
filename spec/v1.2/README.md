@@ -38,7 +38,7 @@ v1.2 strengthens operational integrity (VCP-RECOVERY), reconciles append-only au
 
 ## What v1.2 GA Claims — and What It Does Not
 
-GA is a **specification-level publication** status, not an implementation production-readiness claim. The original `v1.2.0` release preserves its historical header. The current-branch EN/JA/ZH copies carry a dated editorial clarification and corrected status/purpose wording; this does not amend the tag or adopt changes to algorithms, schemas or the normative annex. The known technical divergences below remain unresolved. The following distinctions apply.
+GA is a **specification-level publication** status, not an implementation production-readiness claim. The original `v1.2.0` release preserves its historical header. The current-branch EN/JA/ZH copies in `spec/v1.2/` and their byte-identical repository-root mirrors carry a dated editorial clarification and corrected status/purpose wording; this does not amend the tag or adopt changes to algorithms, schemas or the normative annex. The known technical divergences below remain unresolved. The following distinctions apply.
 
 **GA means:**
 
