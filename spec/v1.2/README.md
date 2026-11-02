@@ -99,6 +99,27 @@ ERRATA E-2026-10-21).
 | 🇨🇳 中文 | [VCP-Specification-v1_2_zh.md](VCP-Specification-v1_2_zh.md) | Translation (convenience only; English prevails) |
 | 📄 PDF | VCP-Specification-v1_2_en.pdf | Planned |
 
+## Current-branch editorial history and digests
+
+These entries identify corrected working-branch text, not a replacement release.
+The original `v1.2.0` tag and its contents remain unchanged. The 2026-07-06 date
+is the historical GA declaration; the verified release tag is dated 2026-10-09.
+
+| Date | Editorial change |
+|------|------------------|
+| 2026-11-01 | Clarify specification GA and §1.1 assurance/completeness wording in EN/JA/ZH and root mirrors. |
+| 2026-11-02 | Record the editorial correction in all three revision histories; replace the English §3.2.2 immutable-record description with append-only, tamper-evident; add historical-version notices to the current-branch v1.0/v1.1 files. Requirements, schemas, algorithms, annex and tagged artifacts remain unchanged. |
+
+SHA-256 of the current-branch v1.2 specification files (2 November 2026):
+
+| File | SHA-256 |
+|------|---------|
+| [VCP-Specification-v1_2_en.md](VCP-Specification-v1_2_en.md) | `1de491c0c6a6a6598fd5b3c55863b4e66864f781d6c47eef263d1d1ad3ae7dbb` |
+| [VCP-Specification-v1_2_ja.md](VCP-Specification-v1_2_ja.md) | `66ba4c1d126f3896019d6fdda3dccca45cb62464ce94337005ef8da466d3c095` |
+| [VCP-Specification-v1_2_zh.md](VCP-Specification-v1_2_zh.md) | `51aec6a3770b3464e17b68fe7f0edbb82962d1b4d7e9097ad681573a9bdd7044` |
+
+The corresponding repository-root files are byte-identical mirrors.
+
 ## Three-Layer Architecture
 
 The three-layer integrity architecture introduced in v1.1 (Layer 1 Event Integrity, Layer 2 Collection Integrity / Merkle Tree, Layer 3 External Verifiability) is **unchanged** in v1.2. See Section 6 of the specification for details.
@@ -143,7 +164,7 @@ The tagged v1.2 text is unchanged. The current-branch copies correct the status 
 | §6.3.3 Attested Database Examples; Annex §2.4, §8.8 | AWS QLDB reached end of support on 2025-07-31 |
 | §6.3.1 table | DILITHIUM2 / FALCON512 still shown as "Future (reserved)", while §1.4 and §1.5.1 give their v1.2 status as EXPERIMENTAL; §1.5.1 prevails |
 | §1.1 (tagged text; current-branch wording corrected 2026-11-01) | "immutable" and "ensuring compliance with international regulations" — the property provided is tamper-evidence, and conformance does not constitute compliance (VAP v1.2 §1.6) |
-| §3.2.2 | ERASURE described as "a new immutable event" — append-only, tamper-evident |
+| §3.2.2 (tagged text; current-branch wording corrected 2026-11-02) | ERASURE described as "a new immutable event" — append-only, tamper-evident |
 | §1.1 note (current-branch wording corrected 2026-11-01); §2.2.3; §6.0; Appendix D | "Completeness guarantees", "no required events were omitted", "provably complete" — the property provided is detectability, at batch granularity, of omission after anchoring and of split-view presentation (VAP v1.2 INT-008); an event that never entered an anchored batch is not revealed by it |
 | Summary of Changes; Annex Executive Summary, Appendix A | Change counts disagree: both summaries state 7 Normative / 2 Informative; the specification's own change table lists 6 / 3; annex Appendix A lists 7 / 3 (adding §10 Silver Tier guidance). Annex Appendix A has no heading of its own (A.1 follows §10 directly) |
 | Summary of Changes #6 vs Annex §6.2, A.1 | Latency budget clarification is Informative in the specification's change table and Normative in the annex; the annex prevails (Summary of Changes note) |

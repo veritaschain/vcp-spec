@@ -1,6 +1,8 @@
 # VeritasChain Protocol (VCP) Specification
 ## Version 1.0
 
+> **Historical version — 2 November 2026.** This file preserves an earlier specification. The original status below is not evidence that an implementation is production ready. For new work, consult [VCP v1.2 and its known issues](https://github.com/veritaschain/vcp-spec/tree/main/spec/v1.2). Historical signed records retain their original version and validation context.
+
 **Status:** Production Ready  
 **Category:** Financial Technology / Audit Standards  
 **Date:** 2025-11-25  

@@ -19,6 +19,7 @@
 
 | Version | Date | Changes | Author |
 |---------|------|---------|--------|
+| 1.2 (editorial) | 2026-11-02 | Record the 1 November status and §1.1 clarification; describe the §3.2.2 record as append-only and tamper-evident. No normative requirement, schema, algorithm or tagged artifact changed | VSO |
 | 1.2 | 2026-07-06 | RECOVERY operational constraints, ERASURE event (GDPR / crypto-shredding), Version Compatibility Matrix, SCITT alignment fields, latency budgets, anchor continuity, multi-actor XREF, Silver-tier guidance | VSO Technical Committee |
 | 1.1 | 2025-12-30 | Three-layer architecture, External Anchor mandatory, Policy Identification, VCP-XREF, Completeness Guarantees | VSO Technical Committee |
 | 1.0 | 2025-11-25 | Initial release | VSO Technical Committee |
@@ -376,7 +377,7 @@ VCP v1.1 introduces standardized error event types to ensure consistent error re
 
 #### 3.2.2 ERASURE Event Type (NEW in v1.2)
 
-VCP v1.2 introduces the **ERASURE** event type to reconcile the GDPR right to erasure (Art. 17) with append-only, tamper-evident audit trails. ERASURE does **not** delete or rewrite any prior event. It records, as a new immutable event, that the *plaintext* of specified protected fields has been rendered irrecoverable via **crypto-shredding** (destruction of the per-subject data-encryption key), while the original EventHash, Merkle inclusion, and external anchor of the target events remain verifiable.
+VCP v1.2 introduces the **ERASURE** event type to reconcile the GDPR right to erasure (Art. 17) with append-only, tamper-evident audit trails. ERASURE does **not** delete or rewrite any prior event. It records, as a new append-only, tamper-evident event, that the *plaintext* of specified protected fields has been rendered irrecoverable via **crypto-shredding** (destruction of the per-subject data-encryption key), while the original EventHash, Merkle inclusion, and external anchor of the target events remain verifiable.
 
 
 The canonical structured encoding is `Payload.VCP-PRIVACY.ErasureDetails`. All seven members below are REQUIRED. Annex §3.4 defines nested fields and §3.4.3 defines historical migration; the compact pre-GA form is not a GA encoding.
