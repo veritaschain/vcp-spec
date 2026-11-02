@@ -19,7 +19,7 @@
 3. [Event Lifecycle](#3-event-lifecycle)
 4. [Data Model](#4-data-model)
 5. [Extension Modules](#5-extension-modules)
-6. [Integrity and Security Layer](#6-integrity-and-security-layer)
+6. [Integrity and Security Layer](#6-integrity-and-security-layer-vcp-sec)
 7. [Implementation Guidelines](#7-implementation-guidelines)
 8. [Regulatory Compliance](#8-regulatory-compliance)
 9. [Testing Requirements](#9-testing-requirements)
@@ -985,6 +985,7 @@ ErrorCodes:
 | Version | Date | Changes | Author |
 |---------|------|---------|--------|
 | 1.0 | 2025-11-25 | Initial release with fixed Event Type codes and standardized Enum definitions | VSO Technical Committee |
+| 1.0 (editorial) | 2026-11-02 | Correct the §6 TOC fragment to match the retained heading; normative text unchanged | VSO |
 
 ---
 

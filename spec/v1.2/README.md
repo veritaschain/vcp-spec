@@ -109,6 +109,7 @@ is the historical GA declaration; the verified release tag is dated 2026-10-09.
 |------|------------------|
 | 2026-11-01 | Clarify specification GA and §1.1 assurance/completeness wording in EN/JA/ZH and root mirrors. |
 | 2026-11-02 | Record the editorial correction in all three revision histories; replace the English §3.2.2 immutable-record description with append-only, tamper-evident; add historical-version notices to the current-branch v1.0/v1.1 files. Requirements, schemas, algorithms, annex and tagged artifacts remain unchanged. |
+| 2026-11-02 (navigation follow-up) | Correct §6 TOC fragments in the three root v1.0 files and the §10 TOC fragment in both current-branch CHANGE-001 copies; record navigation-only edits in their histories. Normative clauses, v1.2 specification bytes and the digests below, schemas, algorithms and tagged artifacts remain unchanged. |
 
 SHA-256 of the current-branch v1.2 specification files (2 November 2026):
 
