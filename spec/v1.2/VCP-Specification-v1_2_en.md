@@ -1,7 +1,8 @@
 # VeritasChain Protocol (VCP) Specification
 ## Version 1.2
 
-**Status:** Production Ready  
+**Status:** Specification GA; implementation production readiness is not established
+
 **Category:** Financial Technology / Audit Standards  
 **Date:** 2026-07-06  
 **Maintainer:** VeritasChain Standards Organization (VSO)  
@@ -10,12 +11,15 @@
 
 **GA consistency correction — 2026-10-09:** The canonical ERASURE wire format and validator contract changed from the untagged RC / pre-GA artifacts (Annex §3.4.3). Claims of zero breaking changes below concern the v1.0/v1.1 baseline, not pre-GA v1.2 ERASURE. Historical signed data MUST NOT be rewritten. The release is not technically identical to RC1.
 
+**Editorial clarification — 1 November 2026 (current branch only):** GA describes specification publication. It does not establish production readiness, international standards-body adoption, independent certification, or compliance with law. This notice and the wording corrections in §1.1 do not resolve the cryptographic example/schema divergences listed in [Known issues](https://github.com/veritaschain/vcp-spec/blob/main/spec/v1.2/README.md#known-issues-in-v12-informative); those still require change control. The original `v1.2.0` tag, normative annex, schemas, algorithms and historical signed data are unchanged. The Japanese and Chinese files are partial translations; consult the English text and the same known-issues list for omitted sections.
+
 ---
 
 ## Revision History
 
 | Version | Date | Changes | Author |
 |---------|------|---------|--------|
+| 1.2 (editorial) | 2026-11-02 | Record the 1 November status and §1.1 clarification; describe the §3.2.2 record as append-only and tamper-evident. No normative requirement, schema, algorithm or tagged artifact changed | VSO |
 | 1.2 | 2026-07-06 | RECOVERY operational constraints, ERASURE event (GDPR / crypto-shredding), Version Compatibility Matrix, SCITT alignment fields, latency budgets, anchor continuity, multi-actor XREF, Silver-tier guidance | VSO Technical Committee |
 | 1.1 | 2025-12-30 | Three-layer architecture, External Anchor mandatory, Policy Identification, VCP-XREF, Completeness Guarantees | VSO Technical Committee |
 | 1.0 | 2025-11-25 | Initial release | VSO Technical Committee |
@@ -119,9 +123,9 @@ v1.1 strengthens this by:
 
 ### 1.1 Purpose
 
-The VeritasChain Protocol (VCP) is a global standard specification for recording the "decision-making" and "execution results" of algorithmic trading in an immutable and verifiable format. VCP provides a cryptographically secured chain of evidence that establishes truth ("Veritas") in trading operations, ensuring compliance with international regulations including MiFID II, GDPR, EU AI Act, and emerging quantum-resistant security requirements.
+The VeritasChain Protocol (VCP) is a published specification for recording algorithmic-trading decisions and execution results in a tamper-evident, verifiable form. Its cryptographic records support examination of recorded actions within a declared scope and trust model. They do not establish that the recorded facts are true, prevent unrecorded actions, or establish compliance with MiFID II, GDPR, the EU AI Act or other legal requirements.
 
-> **Completeness Guarantees (NEW in v1.1):** VCP v1.1 extends tamper-evidence to **completeness guarantees**, enabling third parties to cryptographically verify not only that events were not altered, but that **no required events were omitted** (omission / split-view attacks). This is achieved through mandatory Merkle Tree construction and external anchoring for all tiers, ensuring that event batches are provably complete at the time of anchoring.
+> **Recorded-batch verification:** Merkle proofs and authenticated batch metadata can support checks of the events committed to a declared batch. Omission or split-view detection depends on authenticated scope, count and ordering, appropriate key trust, and independent anchor or checkpoint comparison. Hashes alone do not establish that every real-world event was collected. See the known issues concerning odd-node construction, AnchorRecord signature coverage and numeric canonicalization before relying on the examples.
 
 ### 1.2 Scope
 
@@ -373,7 +377,7 @@ VCP v1.1 introduces standardized error event types to ensure consistent error re
 
 #### 3.2.2 ERASURE Event Type (NEW in v1.2)
 
-VCP v1.2 introduces the **ERASURE** event type to reconcile the GDPR right to erasure (Art. 17) with append-only, tamper-evident audit trails. ERASURE does **not** delete or rewrite any prior event. It records, as a new immutable event, that the *plaintext* of specified protected fields has been rendered irrecoverable via **crypto-shredding** (destruction of the per-subject data-encryption key), while the original EventHash, Merkle inclusion, and external anchor of the target events remain verifiable.
+VCP v1.2 introduces the **ERASURE** event type to reconcile the GDPR right to erasure (Art. 17) with append-only, tamper-evident audit trails. ERASURE does **not** delete or rewrite any prior event. It records, as a new append-only, tamper-evident event, that the *plaintext* of specified protected fields has been rendered irrecoverable via **crypto-shredding** (destruction of the per-subject data-encryption key), while the original EventHash, Merkle inclusion, and external anchor of the target events remain verifiable.
 
 
 The canonical structured encoding is `Payload.VCP-PRIVACY.ErasureDetails`. All seven members below are REQUIRED. Annex §3.4 defines nested fields and §3.4.3 defines historical migration; the compact pre-GA form is not a GA encoding.

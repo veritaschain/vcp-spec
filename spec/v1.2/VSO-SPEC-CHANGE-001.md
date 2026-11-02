@@ -16,6 +16,7 @@
 
 | Version | Date | Changes |
 |---------|------|---------|
+| Editorial (navigation only) | 2026-11-02 | Correct the §10 TOC fragment to match the retained heading; normative annex clauses unchanged |
 | 1.2-ga-correction | 2026-10-09 | Canonical system event registry and payload mapping; ERASURE nested encoding and explicit pre-GA migration; bounded CHECKPOINT/storage guidance; detached erasure proofs |
 | 1.2-draft-03 | 2026-01-06 | Silver Tier implementation guidance, CAB audit requirements for Emergency Override, Failover automation criteria, Implementation cost estimates, Phased adoption roadmap |
 | 1.2-draft-02 | 2026-01-06 | Normative count fixed, blockchain criteria harmonized, CHECKPOINT emergency override added, tier-specific RTO/RPO, privacy guidance for ERASURE |
@@ -50,7 +51,7 @@ VCP v1.2 is a **Protocol-Compatible / Certification-Stricter** update that addre
 7. [Anchor Target Continuity Plan](#7-anchor-target-continuity-plan)
 8. [Reference Implementation Benchmarks](#8-reference-implementation-benchmarks)
 9. [Multi-Actor Chain Linking Extension](#9-multi-actor-chain-linking-extension)
-10. [Silver Tier Implementation Guidance](#10-silver-tier-implementation-guidance)
+10. [Silver Tier Implementation Guidance](#10-silver-tier-implementation-guidance-new-in-v12-draft-03)
 
 ---
 

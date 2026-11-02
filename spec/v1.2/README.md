@@ -38,10 +38,7 @@ v1.2 strengthens operational integrity (VCP-RECOVERY), reconciles append-only au
 
 ## What v1.2 GA Claims — and What It Does Not
 
-GA is a **specification-level publication** status, not an implementation production-readiness claim. The frozen
-specification files keep their original header "Status: Production Ready" (EN/JA/ZH); read that label as
-specification GA, consistent with VAP v1.2 ERRATA E-2026-10-27. In keeping
-with VSO's honest-scoping policy, the following distinctions apply.
+GA is a **specification-level publication** status, not an implementation production-readiness claim. The original `v1.2.0` release preserves its historical header. The current-branch EN/JA/ZH copies in `spec/v1.2/` and their byte-identical repository-root mirrors carry a dated editorial clarification and corrected status/purpose wording; this does not amend the tag or adopt changes to algorithms, schemas or the normative annex. The known technical divergences below remain unresolved. The following distinctions apply.
 
 **GA means:**
 
@@ -102,6 +99,28 @@ ERRATA E-2026-10-21).
 | 🇨🇳 中文 | [VCP-Specification-v1_2_zh.md](VCP-Specification-v1_2_zh.md) | Translation (convenience only; English prevails) |
 | 📄 PDF | VCP-Specification-v1_2_en.pdf | Planned |
 
+## Current-branch editorial history and digests
+
+These entries identify corrected working-branch text, not a replacement release.
+The original `v1.2.0` tag and its contents remain unchanged. The 2026-07-06 date
+is the historical GA declaration; the verified release tag is dated 2026-10-09.
+
+| Date | Editorial change |
+|------|------------------|
+| 2026-11-01 | Clarify specification GA and §1.1 assurance/completeness wording in EN/JA/ZH and root mirrors. |
+| 2026-11-02 | Record the editorial correction in all three revision histories; replace the English §3.2.2 immutable-record description with append-only, tamper-evident; add historical-version notices to the current-branch v1.0/v1.1 files. Requirements, schemas, algorithms, annex and tagged artifacts remain unchanged. |
+| 2026-11-02 (navigation follow-up) | Correct §6 TOC fragments in the three root v1.0 files and the §10 TOC fragment in both current-branch CHANGE-001 copies; record navigation-only edits in their histories. Normative clauses, v1.2 specification bytes and the digests below, schemas, algorithms and tagged artifacts remain unchanged. |
+
+SHA-256 of the current-branch v1.2 specification files (2 November 2026):
+
+| File | SHA-256 |
+|------|---------|
+| [VCP-Specification-v1_2_en.md](VCP-Specification-v1_2_en.md) | `1de491c0c6a6a6598fd5b3c55863b4e66864f781d6c47eef263d1d1ad3ae7dbb` |
+| [VCP-Specification-v1_2_ja.md](VCP-Specification-v1_2_ja.md) | `66ba4c1d126f3896019d6fdda3dccca45cb62464ce94337005ef8da466d3c095` |
+| [VCP-Specification-v1_2_zh.md](VCP-Specification-v1_2_zh.md) | `51aec6a3770b3464e17b68fe7f0edbb82962d1b4d7e9097ad681573a9bdd7044` |
+
+The corresponding repository-root files are byte-identical mirrors.
+
 ## Three-Layer Architecture
 
 The three-layer integrity architecture introduced in v1.1 (Layer 1 Event Integrity, Layer 2 Collection Integrity / Merkle Tree, Layer 3 External Verifiability) is **unchanged** in v1.2. See Section 6 of the specification for details.
@@ -136,7 +155,7 @@ not been established. Internal synthetic results are not independent third-party
 reproduction, which remains unestablished. Current protocol requirements and
 K3 baselines, criteria and results are unchanged.
 
-The v1.2 text is unchanged in these respects; they are errata candidates for the next revision.
+The tagged v1.2 text is unchanged. The current-branch copies correct the status and §1.1 purpose/completeness wording on 1 November 2026; the remaining locations and technical divergences below are still candidates for a future revision. This editorial correction does not adopt the technical proposals above.
 
 | Location | Issue |
 |----------|-------|
@@ -145,12 +164,12 @@ The v1.2 text is unchanged in these respects; they are errata candidates for the
 | §6.4, §6.4.1; `vcp-event-v1.2.json` | §6.4 names the anchor reference `AnchorReference`, and §6.4.1 lists `AnchorReference`, `MerkleRoot` and `MerkleIndex` as REQUIRED from v1.1. The v1.2 schema requires only `EventHash` and `SignAlgo` in `Security`, describes the three fields as VC-Certified requirements enforced by Registration Policy, and also accepts `AnchorRef`, the field name used by draft-kamimura-scitt-vcp. Whether the three fields are protocol or certification requirements, and which name is canonical, is to be settled in the next revision |
 | §6.3.3 Attested Database Examples; Annex §2.4, §8.8 | AWS QLDB reached end of support on 2025-07-31 |
 | §6.3.1 table | DILITHIUM2 / FALCON512 still shown as "Future (reserved)", while §1.4 and §1.5.1 give their v1.2 status as EXPERIMENTAL; §1.5.1 prevails |
-| §1.1 | "immutable" and "ensuring compliance with international regulations" — the property provided is tamper-evidence, and conformance does not constitute compliance (VAP v1.2 §1.6) |
-| §3.2.2 | ERASURE described as "a new immutable event" — append-only, tamper-evident |
-| §1.1 note; §2.2.3; §6.0; Appendix D | "Completeness guarantees", "no required events were omitted", "provably complete" — the property provided is detectability, at batch granularity, of omission after anchoring and of split-view presentation (VAP v1.2 INT-008); an event that never entered an anchored batch is not revealed by it |
+| §1.1 (tagged text; current-branch wording corrected 2026-11-01) | "immutable" and "ensuring compliance with international regulations" — the property provided is tamper-evidence, and conformance does not constitute compliance (VAP v1.2 §1.6) |
+| §3.2.2 (tagged text; current-branch wording corrected 2026-11-02) | ERASURE described as "a new immutable event" — append-only, tamper-evident |
+| §1.1 note (current-branch wording corrected 2026-11-01); §2.2.3; §6.0; Appendix D | "Completeness guarantees", "no required events were omitted", "provably complete" — the property provided is detectability, at batch granularity, of omission after anchoring and of split-view presentation (VAP v1.2 INT-008); an event that never entered an anchored batch is not revealed by it |
 | Summary of Changes; Annex Executive Summary, Appendix A | Change counts disagree: both summaries state 7 Normative / 2 Informative; the specification's own change table lists 6 / 3; annex Appendix A lists 7 / 3 (adding §10 Silver Tier guidance). Annex Appendix A has no heading of its own (A.1 follows §10 directly) |
 | Summary of Changes #6 vs Annex §6.2, A.1 | Latency budget clarification is Informative in the specification's change table and Normative in the annex; the annex prevails (Summary of Changes note) |
-| §1.1 | "a global standard specification" — VCP is a published VSO specification; it has not been adopted by any established standards body, and its IETF profile is an individual Internet-Draft. "establishes truth ('Veritas')" — the chain of evidence makes alteration and post-anchor omission of records detectable; it does not establish that the recorded decisions or events were correct or true (VAP v1.2 §1.6(c)) |
+| §1.1 (tagged text; current-branch wording corrected 2026-11-01) | "a global standard specification" — VCP is a published VSO specification; it has not been adopted by any established standards body, and its IETF profile is an individual Internet-Draft. "establishes truth ('Veritas')" — the chain of evidence makes alteration and post-anchor omission of records detectable; it does not establish that the recorded decisions or events were correct or true (VAP v1.2 §1.6(c)) |
 | §5.6.1 diagram; §5.6.2 use-case table; §5.6.7 | "Guarantee: Unless both parties collude …", "Prevent payout disputes" and "KEY GUARANTEE … non-repudiable evidence" — VCP-XREF makes one party's omission or modification detectable by the other party when both parties record and do not collude; it does not prevent disputes, and the evidential weight of the records is for competent authorities and courts (VAP v1.2 §1.6) |
 | Annex §8 | Benchmark figures are reported for `vcp-core-py` / `vcp-core-cpp` v1.2.0, which are not publicly available; the figures cannot be reproduced from published artifacts and are informative only (§8.2) |
 | §3.2.1 Error Event Schema Extension | The example puts `ErrorDetails` at the top level of the event and uses `Header.Timestamp`. The v1.2 event schema allows only `Header`, `Payload`, `Security` and `PolicyIdentification` at the top level (`additionalProperties: false`), requires `Header.TimestampInt`, does not allow `Header.Timestamp`, and defines no `ErrorDetails`. A schema-valid event therefore cannot carry `ErrorDetails` where §3.2.1 places it, although §3.2.1 makes `ErrorDetails.Severity` and `ErrorDetails.ErrorMessage` REQUIRED |

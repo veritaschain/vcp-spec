@@ -1,3 +1,24 @@
+# Repository license scopes
+
+## Scope clarification - 2 November 2026
+
+Documentation is available under Creative Commons Attribution 4.0 International
+(CC BY 4.0), subject to the existing notices retained below.
+
+First-party executable source code, scripts, code examples and schemas are also
+available under Apache License 2.0; its full text is in LICENSE-CODE. This is an
+additional code license. It does not revoke licenses already granted for prior
+copies or remove any existing MIT alternative or file-specific license notice.
+Third-party material, dependencies, data and trademarks retain their own terms;
+this statement does not grant rights in them that the publisher does not hold.
+Pure prose and document artwork are not covered by the additional code license.
+
+文書は既存の表示に従いCC BY 4.0で提供します。自社が権利を持つコード・スクリプト・
+コード例・スキーマにはApache-2.0の選択肢を追加します。既に付与したライセンス、
+ファイル固有の表示、第三者の権利を取り消したり置き換えたりするものではありません。
+
+## Pre-existing license text and notices
+
 Creative Commons Attribution 4.0 International
 
 This work is licensed under the Creative Commons Attribution 4.0 International License.

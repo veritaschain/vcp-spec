@@ -351,3 +351,7 @@ Please open an Issue or Pull Request to contribute.
 ---
 
 **VeritasChain Protocol — Verify, Don’t Trust.**
+
+## License scope clarification — 2 November 2026
+
+Documentation remains CC BY 4.0. First-party code, scripts, code examples and schemas additionally offer [Apache-2.0](LICENSE-CODE); existing licenses and third-party notices remain in effect. See [LICENSE](LICENSE) for the scope and preserved prior terms. This editorial licensing note does not change protocol requirements or claim conformance.
