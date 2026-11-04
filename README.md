@@ -3,9 +3,9 @@
 
 # VeritasChain Protocol (VCP)
 
-**VeritasChain Protocol (VCP)** is an open, vendor-neutral standard for
+**VeritasChain Protocol (VCP)** is an open specification maintained by VSO (operated by VeritasChain Co., Ltd.) for
 **cryptographically verifiable audit trails** in algorithmic and AI-driven
-trading systems.
+trading systems; see [conflict-of-interest disclosure](https://veritaschain.org/vso/policies/).
 
 VCP enables regulators, auditors, and market participants to
 **verify — not merely trust —** the integrity, completeness (at anchor

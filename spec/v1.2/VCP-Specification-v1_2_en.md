@@ -1,7 +1,7 @@
 # VeritasChain Protocol (VCP) Specification
 ## Version 1.2
 
-**Status:** Specification GA; implementation production readiness is not established
+**Status:** GA (specification publication status; not implementation production readiness)
 
 **Category:** Financial Technology / Audit Standards  
 **Date:** 2026-07-06  
