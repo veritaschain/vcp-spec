@@ -1,0 +1,11 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Report a security defect privately
+    url: mailto:security@veritaschain.org
+    about: Defects that could let a verifier accept tampered, omitted or misattributed evidence
+  - name: Send a review comment privately
+    url: mailto:standards@veritaschain.org
+    about: Comments are summarized publicly and attributed only with your permission
+  - name: Change-control procedure (VCP-PROC-001)
+    url: https://github.com/veritaschain/vcp-spec/blob/main/CHANGE-CONTROL.md
+    about: How proposals are reviewed, decided and released

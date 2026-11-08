@@ -1,0 +1,90 @@
+name: Change proposal
+description: Propose a change to normative VCP artifacts (specification text, normative annex, JSON Schema)
+title: "[CP]: "
+labels: ["change-proposal", "decision-pending"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Proposals follow [VCP-PROC-001](https://github.com/veritaschain/vcp-spec/blob/main/CHANGE-CONTROL.md).
+        The Editor assigns a `VCP-CP-YYYY-NNN` identifier and a proposed class.
+        **Opening this issue is not adoption.** A change is adopted only when an accepted decision record is merged into `decisions/`.
+        **Security defects:** do not report them here. Write to security@veritaschain.org.
+  - type: textarea
+    id: summary
+    attributes:
+      label: Summary
+      description: One or two sentences describing the change.
+    validations:
+      required: true
+  - type: checkboxes
+    id: artifacts
+    attributes:
+      label: Affected normative artifacts
+      options:
+        - label: Specification text (English)
+        - label: Normative annex (VSO-SPEC-CHANGE-NNN)
+        - label: JSON Schema
+        - label: Version tag / errata list
+  - type: input
+    id: baseline
+    attributes:
+      label: Baseline
+      description: Version, sections and the commit SHA you read (do not link the moving `main` branch alone).
+      placeholder: "v1.2.0, §6.2.1, commit b23acb2"
+    validations:
+      required: true
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: What is wrong or missing? Quote the exact text (briefly) and give evidence.
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed change
+      description: The replacement text or rule. Longer proposals may be submitted as a pull request adding a file under `proposals/`.
+    validations:
+      required: true
+  - type: dropdown
+    id: class
+    attributes:
+      label: Suggested class (the Editor decides; reviewers may challenge)
+      options:
+        - "E — Editorial"
+        - "P — Errata / PATCH"
+        - "M — MINOR (backward-compatible addition)"
+        - "X — MAJOR (breaking)"
+        - "Not sure"
+    validations:
+      required: true
+  - type: textarea
+    id: compatibility
+    attributes:
+      label: Compatibility impact
+      description: Does the change alter bytes that producers hash or sign? Does it widen or narrow what the schema accepts? What happens to existing signed data?
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Test vectors and implementation evidence
+      description: Links to vectors, reproductions or implementations, with the commit SHA. Say who maintains each implementation.
+  - type: textarea
+    id: disclosure
+    attributes:
+      label: Affiliation and conflicts of interest
+      description: Your affiliation, and any relationship with VeritasChain Co., Ltd. or with a vendor that the change would affect. Write "None" if none.
+    validations:
+      required: true
+  - type: dropdown
+    id: attribution
+    attributes:
+      label: Attribution in the decision record
+      options:
+        - "You may name me by my GitHub handle"
+        - "Please use a chosen identifier instead of my handle"
+    validations:
+      required: true

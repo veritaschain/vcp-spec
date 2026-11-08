@@ -1,0 +1,54 @@
+name: Errata report
+description: Report an error or contradiction in a published VCP version
+title: "[Errata]: "
+labels: ["errata", "decision-pending"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Errata follow [VCP-PROC-001](https://github.com/veritaschain/vcp-spec/blob/main/CHANGE-CONTROL.md).
+        Check the [Known issues](https://github.com/veritaschain/vcp-spec/blob/main/spec/v1.2/README.md#known-issues-in-v12-informative) first.
+        **If the error could let a verifier accept tampered, omitted or misattributed evidence**, write to security@veritaschain.org instead of opening a public issue.
+  - type: input
+    id: location
+    attributes:
+      label: Location
+      description: Version, section or line, and the commit SHA or tag.
+      placeholder: "v1.2.0 (b23acb2), §6.2.3"
+    validations:
+      required: true
+  - type: textarea
+    id: text
+    attributes:
+      label: Published text
+      description: Quote the relevant passage briefly.
+    validations:
+      required: true
+  - type: textarea
+    id: why
+    attributes:
+      label: Why it is wrong
+      description: The contradiction, the external standard it conflicts with, or a reproducible demonstration.
+    validations:
+      required: true
+  - type: textarea
+    id: fix
+    attributes:
+      label: Suggested correction
+  - type: dropdown
+    id: kind
+    attributes:
+      label: Kind
+      options:
+        - "Editorial (no requirement changes)"
+        - "Technical (a requirement, example or schema is wrong)"
+        - "Not sure"
+    validations:
+      required: true
+  - type: textarea
+    id: disclosure
+    attributes:
+      label: Affiliation and conflicts of interest
+      description: Write "None" if none.
+    validations:
+      required: true
