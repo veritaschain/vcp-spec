@@ -194,6 +194,19 @@ Recorded 2026-10-25:
 | §1.6 | The core module list omits `VCP-ANCHOR`, which §3.2.3 and Annex §1.4.10 use for `Payload.VCP-ANCHOR.MigrationDetails` / `FailoverDetails` (`SYS_ANCHOR_MIGRATION`, `SYS_ANCHOR_FAILOVER`) |
 | JA / ZH translations | Partial translations. Omitted relative to the English text: §5.6.5 Cross-Reference Protocol, §5.6.6 Discrepancy Handling and §5.6.9 (JA/ZH §5.6.5–§5.6.6 correspond to English §5.6.7–§5.6.8); the bodies of §6.1–§6.2 (placeholders only), §6.3.1 and §6.3.2; the §6.3.3 subsections Acceptable Anchor Targets, Anchoring Record Schema and Silver Tier Anchoring Options; §6.4 and §6.4.1; §7.1 (placeholder only); §8.1.2 and §8.1.3; the Gold/Platinum steps of §10.2; Appendix E.3 AnchorRecord PQC Extension (JA/ZH E.3 corresponds to English E.4). The English text prevails |
 
+Recorded 2026-11-08 (found while classifying the items above; informative, no requirement changed):
+
+| Location | Issue |
+|----------|-------|
+| `README.md`; `spec/v1.2/README.md` | Precedence is defined only between the annex and the specification text, and between English and translations. No rule settles conflicts between normative text, the JSON Schema and code examples, although example docstrings state "REQUIRED for all VCP events" (§6.1.1), "REQUIRED for all VCP implementations" (§6.2.1, §6.3.1) and "REQUIRED for verification" (§6.2.3) |
+| §6.1.1 | The EventHash input is `JCS(Header) + JCS(Payload)`. The top-level `PolicyIdentification` object (including `ConformanceTier` and `VerificationDepth`) is outside that input, and v1.2 defines no event-signature input (see the §6.3.1 / §7.1 row above), so no defined mechanism protects that object. `Header.PolicyID` is inside the hash input |
+| §6.1.2 | `PrevHash` is appended to the hash input as a hex string, and the all-zero value `"0"*64` means "no chain". A chain start therefore cannot be distinguished from a non-chained event |
+| §6.3.1 | The Ed25519 verification rule is not specified: cofactored versus cofactorless verification, and acceptance of small-order or non-canonical public keys. [RFC 8032 §5.1.7](https://www.rfc-editor.org/rfc/rfc8032#section-5.1.7) does not require a subgroup check. vcp-sdk records its own choice in [INTERPRETATIONS.md I-5](https://github.com/veritaschain/vcp-sdk/blob/3304affdbf9cc92a5358d9fcea628f3441c25af0/INTERPRETATIONS.md); that choice is not adopted by VSO |
+| §2.1 tier table; §2.2.1 | Platinum lists SBE serialization, but no SBE schema or SBE-to-hash-input mapping is published. Hash inputs are defined only for JSON with JCS |
+| §6.3.3 | The AnchorRecord has no machine-readable schema; it is given as annotated pseudo-JSON with type names such as `"int32"` |
+| `tests/fixtures/v1.2/`; [GA-CONSISTENCY.md](GA-CONSISTENCY.md) "Scope" | No cryptographic test vectors are published for v1.2. Fixture hashes, signatures and certificates are placeholders, so the Merkle, EventHash and signature rules cannot be checked against published expected values |
+| Revision History | v1.1 is attributed to "VSO Technical Committee". No membership or decision record of a VCP Technical Committee has been published |
+
 ## Relationship to VAP
 
 VCP is the first implementation profile of the VAP family. [The current VAP status](https://github.com/veritaschain/vap-spec/blob/b5ef9316717bebe638d5eca621327b54cdda93e1/spec/v1.2/VAP_Framework_Specification.md) records VCP v1.1 and v1.2 integrity alignment under review, a mapping outstanding, and full conformance unestablished. Under VAP §1.7, that current status prevails over the historical compatibility claims in VSO-VAP-CHANGE-001 CH-11 / Annex A; the annex itself is preserved. VAP and VCP version numbers are assigned independently; matching version numbers do not establish conformance.
