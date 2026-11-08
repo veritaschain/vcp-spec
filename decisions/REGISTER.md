@@ -6,8 +6,8 @@ The entries below are proposed initial assignments. They take effect with VCP-DR
 
 | ID | Title | Source | Proposed class | Status | Decision record |
 |---|---|---|---|---|---|
-| VCP-CP-2026-001 | Interim change-control procedure | [CHANGE-CONTROL.md](../CHANGE-CONTROL.md) | M | Public review (30 days; see DR-2026-001) | [VCP-DR-2026-001](VCP-DR-2026-001.md) (pending) |
-| VCP-CP-2026-002 | Normative precedence: annex, normative text, JSON Schema, examples, translations | [proposals/precedence-2026-11-08/](../proposals/precedence-2026-11-08/README.md) | P | Draft | — |
+| VCP-CP-2026-001 | Interim change-control procedure | [CHANGE-CONTROL.md](../CHANGE-CONTROL.md) | M | Public review in [#26](https://github.com/veritaschain/vcp-spec/issues/26), closes no earlier than 2026-12-08 04:00 UTC | [VCP-DR-2026-001](VCP-DR-2026-001.md) (pending) |
+| VCP-CP-2026-002 | Normative precedence: annex, normative text, JSON Schema, examples, translations | [proposals/precedence-2026-11-08/](../proposals/precedence-2026-11-08/README.md) | P | Public review in [#27](https://github.com/veritaschain/vcp-spec/issues/27), closes no earlier than 2026-11-22 04:00 UTC; decision waits for DR-2026-001 | — |
 | VCP-CP-2026-003 | Integrity-layer technical errata notices (Merkle construction, AnchorRecord coverage, exact numbers) | [technical-errata-draft.md](../proposals/integrity-2026-10-24/technical-errata-draft.md), PR #3 | P / S | Draft | — |
 | VCP-CP-2026-004 | Integrity byte contract and migration | [normative-change-draft.md](../proposals/integrity-2026-10-24/normative-change-draft.md), PR #4 | X (with separable M parts) | Draft | — |
 | VCP-CP-2026-005 | Numeric-field inventory | [proposals/numeric-fields-2026-10-25/](../proposals/numeric-fields-2026-10-25/) | input to CP-2026-004 | Draft | — |
