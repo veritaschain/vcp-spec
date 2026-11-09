@@ -16,12 +16,30 @@ permissions:
 jobs:
   synthetic-byte-binding:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: baseline
     strategy:
       fail-fast: false
       matrix:
         python: ['3.12', '3.14']
     steps:
-      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - name: Check out candidate experiment
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          path: candidate
+      # sources.json pins imported numeric/byte-contract files to this commit.
+      # Reproduction details: docs/EXPERIMENT_BASELINES.md
+      - name: Check out pinned source snapshot
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          ref: 1131901d0b83f87c1c60674697574a60cc88fee1
+          path: baseline
+      - name: Stage candidate experiment over pinned sources
+        working-directory: ${{ github.workspace }}
+        run: |
+          mkdir -p baseline/experiments
+          cp -a candidate/experiments/numeric-byte-binding-v0 baseline/experiments/
       - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
         with:
           python-version: ${{ matrix.python }}
