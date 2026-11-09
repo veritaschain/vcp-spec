@@ -16,14 +16,28 @@ allocate a VCP event type or replace native UUID/identity rules.
 Only this new directory and its new CI workflow are added. Current specifications,
 GA/RC schemas, existing implementations/experiments, signed records, distributions,
 release tags, DOC-SYNC and K3 are unchanged. All 204 current baseline files at `943d513fec3c0eaa7eb683120e2d82d5eb748285` are fingerprinted
-in [sources.json](sources.json); execution checks those exact bytes. Use a checkout
-of this experiment's reviewed commit, not a subsequently edited baseline.
+in [sources.json](sources.json); execution checks those exact bytes.
+
+**CI baseline isolation — 10 November 2026:** CI checks out that declared source
+commit separately and copies only the current PR's experiment directory into it.
+This keeps the 204 source fingerprints, experiment asset checks, fixtures and
+verdict rules unchanged while allowing later repository documentation and workflow
+edits. Current experiment changes still run and must satisfy their asset manifest;
+this is not a test of the current specification as a new experimental baseline.
+The saved historical reports and their source/input fingerprints are not rewritten.
+Follow the same preparation below when running from a newer repository checkout.
 
 ## Run a fresh internal reproduction
 
-From the repository root, using Python 3.12 or 3.14:
+From the repository root, using Python 3.12 or 3.14 and unused temporary paths:
 
 ```sh
+# Keep the historical source snapshot separate from the current experiment.
+git fetch --no-tags origin 943d513fec3c0eaa7eb683120e2d82d5eb748285
+git worktree add --detach /tmp/vcp-layout-baseline 943d513fec3c0eaa7eb683120e2d82d5eb748285
+cp -R experiments/native-layout-migration-v0 /tmp/vcp-layout-baseline/experiments/
+cd /tmp/vcp-layout-baseline
+
 python3 -m venv /tmp/vcp-layout-research-venv
 /tmp/vcp-layout-research-venv/bin/python -m pip install -r experiments/native-layout-migration-v0/requirements.txt
 /tmp/vcp-layout-research-venv/bin/python experiments/native-layout-migration-v0/run.py --output /tmp/vcp-layout-report.json

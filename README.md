@@ -36,20 +36,26 @@ The **canonical (normative) specification** of VCP is located under:
 
 ```text
 /spec/
-├─ v1.0/   index.html (HTML rendition; Markdown source at repository root)
+├─ v1.0/   index.html (navigation page; Markdown source at repository root)
 ├─ v1.1/   VCP-Specification-v1_1_{en,ja,zh}.md, PDF, CHANGELOG
 └─ v1.2/   VCP-Specification-v1_2_{en,ja,zh}.md,
            VSO-SPEC-CHANGE-001.md (normative annex),
            vcp-event-v1.2.json (JSON Schema)
 ```
 
-- The English Markdown file in each version directory is the authoritative text;
-  Japanese and Chinese translations and PDFs are provided **for convenience only**
-- `VCP-Specification-*.md` and `VSO-SPEC-CHANGE-001.md` files at the
-  repository root are **non-normative copies** (identical to the `/spec/`
-  versions for v1.1 and v1.2)
+- For v1.1 and v1.2, the English Markdown file in the version directory is the
+  authoritative text; Japanese and Chinese translations and PDFs are provided
+  **for convenience only**.
+- v1.0 is a directory-layout exception: `spec/v1.0/index.html` is a navigation
+  page pointing to the root English Markdown. The preserved v1.0 release source
+  is [VCP-Specification-v1_0_en.md at tag v1.0.0](https://github.com/veritaschain/vcp-spec/blob/v1.0.0/VCP-Specification-v1_0_en.md).
+  The current-branch root copy contains a later historical notice.
+- Root v1.1/v1.2 specification files and `VSO-SPEC-CHANGE-001.md` are
+  **non-normative mirrors** of their version-directory copies. For those
+  versions the `/spec/` copy prevails if a mirror differs.
 
-**If there is any conflict, the content under `/spec/` always prevails.**
+The [v1.1 source snapshot and digests](spec/v1.1/README.md#historical-source-snapshot-and-digests)
+identify historical bytes without implying a tagged v1.1 release.
 
 ---
 
@@ -65,7 +71,8 @@ v1.2 adds features and stricter certification requirements. Historical v1.0/v1.1
 records retain their original validation context and signed bytes; this does not
 mean that every old-format event passes the v1.2 schema. Known Header and
 EventType divergences prevent an unconditional backward-compatibility claim.
-Assess producer/verifier compatibility against the declared version and policy;
+Assess producer/verifier compatibility against an explicit, trusted version/policy context;
+the version and byte-contract selection limits across profiles are recorded in the known issues;
 do not rewrite historical signed records to make them pass a newer schema.
 See the [known issues](spec/v1.2/README.md#known-issues-in-v12-informative) and
 version-specific migration notes. This is an informative clarification, not a
@@ -306,15 +313,20 @@ v1.1; it is not a v1.2 verifier. It is a
 first-party implementation: VSO and VeritasChain Co., Ltd. share a founder, and
 a first-party implementation is not independent validation.
 
-An offline core library for v1.2, [vcp-sdk](https://github.com/veritaschain/vcp-sdk)
-v0.1.0 (pre-release; Python, TypeScript, MQL5), is also available. It is written
-by VeritasChain Co., Ltd., so it is first-party as well and does not change the
+An offline core library for v1.2, [vcp-sdk](https://github.com/veritaschain/vcp-sdk),
+is available as unreleased development source for Python, TypeScript and MQL5;
+its package metadata remains `0.1.0`. Follow the
+[pinned-source installation instructions](https://github.com/veritaschain/vcp-sdk/blob/9cfa2b999f8d7831dd49fe40e9f76005b5881ecd/README.md#install)
+and record the full source commit. The historical `v0.1.0` tag does not include
+all subsequent fixes. It is written by VeritasChain Co., Ltd., so it is
+first-party as well and does not change the
 external-implementation count above. Where the v1.2 text is ambiguous it makes a
 choice of its own, listed in its
-[INTERPRETATIONS.md](https://github.com/veritaschain/vcp-sdk/blob/v0.1.0/INTERPRETATIONS.md)
+[INTERPRETATIONS.md](https://github.com/veritaschain/vcp-sdk/blob/9cfa2b999f8d7831dd49fe40e9f76005b5881ecd/INTERPRETATIONS.md)
 (for example, RFC 6962 trees rather than the §6.2.1 example builder, and integers
 canonicalised as exact digits). Those choices are not adopted by VSO change
-control. A `VALID` result from it is not a conformance claim.
+control. When evaluating another checkout, also consult that checkout's own
+interpretations. A `VALID` result from it is not a conformance claim.
 
 ---
 

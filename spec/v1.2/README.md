@@ -10,7 +10,7 @@
 
 **Specification GA** — Released. GA declared 2026-07-06 (Release Candidate RC1 published 2026-05-31); tag `v1.2.0` (commit `b23acb2`, 2026-10-09) on the validated correction commit, not the earlier PR #1 merge.
 
-v1.2 adds features and stricter certification requirements over v1.1. Historical v1.0/v1.1 records retain their original validation context and signed bytes; this is not a guarantee that every old-format event passes the v1.2 schema. Known Header and EventType divergences prevent an unconditional backward-compatibility claim (see Known issues). Assess producer/verifier compatibility against the declared version and policy. This informative clarification does not amend the frozen specifications or schemas. The normative annex VSO-SPEC-CHANGE-001 is provided in this directory (see Documents below).
+v1.2 adds features and stricter certification requirements over v1.1. Historical v1.0/v1.1 records retain their original validation context and signed bytes; this is not a guarantee that every old-format event passes the v1.2 schema. Known Header and EventType divergences prevent an unconditional backward-compatibility claim (see Known issues). Assess producer/verifier compatibility against an explicit, trusted version/policy context; the limits of version and ruleset selection across profiles are recorded below. This informative clarification does not amend the frozen specifications or schemas. The normative annex VSO-SPEC-CHANGE-001 is provided in this directory (see Documents below).
 
 The 2026-10-09 GA consistency correction changes the untagged pre-GA ERASURE encoding and adds the five Annex system codes to the schema. **This is not technically identical to RC1.** See [GA consistency and compatibility](GA-CONSISTENCY.md) for migration, validation scope and release gates. The 2026-07-06 GA declaration is historical; it is not evidence of a tag or completed release.
 
@@ -110,14 +110,16 @@ is the historical GA declaration; the verified release tag is dated 2026-10-09.
 | 2026-11-01 | Clarify specification GA and §1.1 assurance/completeness wording in EN/JA/ZH and root mirrors. |
 | 2026-11-02 | Record the editorial correction in all three revision histories; replace the English §3.2.2 immutable-record description with append-only, tamper-evident; add historical-version notices to the current-branch v1.0/v1.1 files. Requirements, schemas, algorithms, annex and tagged artifacts remain unchanged. |
 | 2026-11-02 (navigation follow-up) | Correct §6 TOC fragments in the three root v1.0 files and the §10 TOC fragment in both current-branch CHANGE-001 copies; record navigation-only edits in their histories. Normative clauses, v1.2 specification bytes and the digests below, schemas, algorithms and tagged artifacts remain unchanged. |
+| 2026-11-05 (JST) | PR [#23](https://github.com/veritaschain/vcp-spec/pull/23), merge `2dd82e2a70b7f3245ba00e851c991c035649beee` (4 November, 23:49:21 UTC), changes only the status line in each EN/JA/ZH specification and its root mirror. The specification-internal revision tables were not updated by that PR; this entry records the omission without changing those files. |
+| 2026-11-10 | Recompute the current-branch specification digests and add the missing 5 November editorial record. Expand the informative known-issue inventory and link the unadopted CP-2026-007 triage. No specification, schema, annex or tagged bytes are changed by this follow-up. |
 
-SHA-256 of the current-branch v1.2 specification files (2 November 2026):
+SHA-256 of the current-branch v1.2 specification files, checked 10 November 2026 at commit `5b042c73adc294e503f07451a18345165341372c` (bytes last changed by PR #23):
 
 | File | SHA-256 |
 |------|---------|
-| [VCP-Specification-v1_2_en.md](VCP-Specification-v1_2_en.md) | `1de491c0c6a6a6598fd5b3c55863b4e66864f781d6c47eef263d1d1ad3ae7dbb` |
-| [VCP-Specification-v1_2_ja.md](VCP-Specification-v1_2_ja.md) | `66ba4c1d126f3896019d6fdda3dccca45cb62464ce94337005ef8da466d3c095` |
-| [VCP-Specification-v1_2_zh.md](VCP-Specification-v1_2_zh.md) | `51aec6a3770b3464e17b68fe7f0edbb82962d1b4d7e9097ad681573a9bdd7044` |
+| [VCP-Specification-v1_2_en.md](VCP-Specification-v1_2_en.md) | `fed1ef2d06bc39f06b4d642dd1b6859cb06dde427b2727a4e284aba67ce45030` |
+| [VCP-Specification-v1_2_ja.md](VCP-Specification-v1_2_ja.md) | `e711919ff87fcc59c29bef7c184cbc45d80d1c45270cf5667e554402b3784dfb` |
+| [VCP-Specification-v1_2_zh.md](VCP-Specification-v1_2_zh.md) | `d2afebd2c3e90874c579b7a06b63f332024c8983e5f0067b8e4821ff090e9716` |
 
 The corresponding repository-root files are byte-identical mirrors.
 
@@ -207,13 +209,32 @@ Recorded 2026-11-08 (found while classifying the items above; informative, no re
 | `tests/fixtures/v1.2/`; [GA-CONSISTENCY.md](GA-CONSISTENCY.md) "Scope" | No cryptographic test vectors are published for v1.2. Fixture hashes, signatures and certificates are placeholders, so the Merkle, EventHash and signature rules cannot be checked against published expected values |
 | Revision History | v1.1 is attributed to "VSO Technical Committee". No membership or decision record of a VCP Technical Committee has been published |
 
+Recorded 2026-11-10 (static source review at `5b042c73adc294e503f07451a18345165341372c`; informative, no requirement changed):
+
+| Location | Issue |
+|----------|-------|
+| §3.2.1 (EN/JA/ZH); English §6.3.2 | The §3.2.1 integer `1735520400000000`, interpreted as microseconds, denotes `2024-12-30T01:00:00Z`, not the adjacent `2025-12-30T00:00:00.000000Z`. The English §6.3.2 nanosecond integer `1735128000123456789` denotes `2024-12-25T12:00:00.123456789Z`, not its 2025 ISO value. The latter section is omitted from the partial JA/ZH translations; it is not a three-language example. The first mismatch is also in the pinned v1.1 snapshot. The SDK's I-7 timestamp-agreement check does not make these a valid dual-format pair; §3.2.1 also uses the unsupported field `Timestamp` rather than schema field `TimestampInt`. Corrected examples need review and must not rewrite historical signed data. |
+| Summary of Changes; §1.3; §10.1, §10.4, both §10.5 tables; Annex §4.3–§4.4 | Unconditional compatibility wording occurs beyond the previously listed §1.3 and Annex §4.3. Header/EventType rejection and the competing Merkle constructions prevent a blanket claim that all historical events or proofs verify under v1.2. §10.1 concerns v1.0→v1.1 and also requires separate assessment. The first-party SDK reports recognized legacy-tree cases as `INDETERMINATE` (`LEGACY_MERKLE_CONSTRUCTION`); that is an implementation interpretation, not an adopted universal migration rule. |
+| §10.3; Annex Appendix D.2 and Appendix E | The March/June 2026 grace dates have passed. Appendix E's dated phases, named toolkits and test suite, certified-implementation upgrade targets and deployment percentages are a historical roadmap, not evidence that those deliverables or populations exist. Appendix D.2's cost estimate does not establish conformance or legal compliance. Do not use these passages as a current certification decision or proof of delivered tooling; no replacement deadline is set here. |
+| §5.5.2, §6.1.1, §6.4; schema `Header.SCITTAlignment.Version`, `Security.Version`, `PolicyIdentification.Version` | `Header.SCITTAlignment.Version` is covered by EventHash when present and identifies the VCP version governing alignment semantics. The SCITTAlignment object is optional for the base profile and required under VCP_SCITT; it is not a required selector on every event. `Security.Version` and `PolicyIdentification.Version` are free strings outside the Header/Payload hash input; the Security example still says `1.1`. A required, unambiguous version/byte-contract/tree-scheme binding for all events is not specified, nor is a complete authenticated resolution through the hashed `Header.PolicyID`. Clarify the existing hashed selectors and trusted implementation context before proposing new fields. This is a specification gap, not a demonstrated downgrade exploit. |
+| §2.1, §2.2.1, §6.3.1; Annex §6.3–§6.6 and §8.3–§8.4 | Platinum combines throughput, hardware signing and latency claims without a reproducible end-to-end signing-capacity demonstration. Annex §6.3 places signing outside the critical path, so the <10µs budget is not a completion time for all evidence. Its reference hardware includes an HSM, while the §8 test environment does not specify one. Per-event versus root-only signature scope, Ed25519 support/performance, HSM count, concurrency and sustained queue behavior need evidence. P-256 throughput for a particular HSM does not establish Ed25519 throughput or prove Platinum impossible. |
+| §9.1.2; Annex §1, §7 | The critical-test table has only v1.0/v1.1 columns. No published v1.2 test-ID and acceptance-criteria mapping is supplied there for strengthened RECOVERY constraints or anchor-continuity obligations. Existing schema fixtures and an SDK verifier are not substitutes for a complete v1.2 certification matrix. |
+| §6.3.3 anchor-target and attested-database tables; Annex §8.8 | RFC 3161 protocol support and legally qualified time-stamp status are distinct. The table limits TSA applicability to Platinum/Gold while the Silver options include FreeTSA, leaving the TSA/PUBLIC_SERVICE classification to clarify. A named database plus SOC 2 does not by itself document the required cryptographic integrity mechanism. The cost table headed Gold mixes ten-minute, hourly and daily frequencies. Target classification, qualification evidence and cost assumptions need separate review; no service is certified or rejected by this notice. |
+| §6.1.1, §6.4.1, §7.1 | The example adds `Security.MerkleRoot`, `MerkleIndex` and `AnchorReference` after batch closure. These fields are outside the defined EventHash preimage; the SDK's I-5/I-6 interpretation signs EventHash and checks selected batch bindings separately. The specification needs to distinguish immutable captured/committed material from later evidence attachment, specify completion states and authenticate attachment associations. The anchor interval is not proof that all event content remains mutable, and append-only storage alone does not authenticate those attachments. |
+
+See the [CP-2026-007 triage draft](../../proposals/v1.2.1-errata-triage-2026-11-10/README.md)
+for candidate classes, dependencies and evidence still needed. Its proposed
+PATCH scope does not pre-classify byte, schema or signing changes as PATCH.
+The [v1.1 historical snapshot and digests](../v1.1/README.md#historical-source-snapshot-and-digests)
+provide a commit-pinned reference without creating or implying a v1.1 tag.
+
 ## Relationship to VAP
 
 VCP is the first implementation profile of the VAP family. [The current VAP status](https://github.com/veritaschain/vap-spec/blob/b5ef9316717bebe638d5eca621327b54cdda93e1/spec/v1.2/VAP_Framework_Specification.md) records VCP v1.1 and v1.2 integrity alignment under review, a mapping outstanding, and full conformance unestablished. Under VAP §1.7, that current status prevails over the historical compatibility claims in VSO-VAP-CHANGE-001 CH-11 / Annex A; the annex itself is preserved. VAP and VCP version numbers are assigned independently; matching version numbers do not establish conformance.
 
 ## Relationship to v1.1
 
-v1.2 extends v1.1 with the changes listed above, but the current schema does not accept every old event type or header layout. See Section 10.4 of the specification, the known issues above, and [GA-CONSISTENCY.md](GA-CONSISTENCY.md) when assessing producer and verifier migration. Preserve original signed records and evaluate them in their original version/policy context; do not rewrite them simply to satisfy the v1.2 schema. Migration needs for future event production and verifier support are implementation-specific. The pre-GA v1.2 ERASURE migration is a separate, explicitly breaking case.
+v1.2 extends v1.1 with the changes listed above, but the current schema does not accept every old event type or header layout. Use the known issues above and [GA-CONSISTENCY.md](GA-CONSISTENCY.md) when assessing producer and verifier migration; Section 10.4 and the compatibility tables contain the broad claims identified in those issues and are not a blanket migration assurance. Preserve original signed records and evaluate them in their original version/policy context; do not rewrite them simply to satisfy the v1.2 schema. Migration needs for future event production and verifier support are implementation-specific. The pre-GA v1.2 ERASURE migration is a separate, explicitly breaking case.
 
 ---
 

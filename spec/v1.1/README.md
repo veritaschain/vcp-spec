@@ -8,7 +8,7 @@
 
 > **Superseded by [v1.2](../v1.2/)** (specification GA declared 2026-07-06; tag `v1.2.0`, 2026-10-09). Compatibility from v1.1 to v1.2 is not unconditional: the v1.2 schema rejects some v1.0/v1.1 event types and header fields, so not every v1.1 event validates under v1.2 (see the v1.2 [known issues](../v1.2/README.md#known-issues-in-v12-informative) and [GA-CONSISTENCY.md](../v1.2/GA-CONSISTENCY.md)). Original v1.1 records keep their original validation context and signed bytes; do not rewrite them to satisfy the v1.2 schema. VCP v1.1's integrity alignment with VAP v1.2 is under review (VAP v1.2 §10.4). v1.1 has no tagged release in this repository.
 >
-> The frozen v1.1 specification files keep their original header "Status: Production Ready"; read it as a specification publication status, not implementation production readiness.
+> The historical v1.1 specification text retains its original header "Status: Production Ready"; read it as a specification publication status, not implementation production readiness. The snapshot and digests below distinguish the historical bytes from current-branch copies with later notices.
 >
 > *Corrected 2026-10-28.* This notice previously read: "(Production Ready, GA 2026-07-06) — protocol-compatible with v1.1; all v1.1 events and anchors remain valid and verifiable under v1.2."
 
@@ -40,6 +40,26 @@ This is a **protocol-compatible / certification-stricter** update from v1.0.
 | 🇯🇵 日本語 | [VCP-Specification-v1_1_ja.md](VCP-Specification-v1_1_ja.md) | Translation (convenience only; English prevails) |
 | 🇨🇳 中文 | [VCP-Specification-v1_1_zh.md](VCP-Specification-v1_1_zh.md) | Translation (convenience only; English prevails) |
 | 📄 PDF | [VCP-Specification-v1_1_en.pdf](VCP-Specification-v1_1_en.pdf) | Available |
+
+## Historical source snapshot and digests
+
+Recorded 10 November 2026. Commit
+[`48fc17955708d234232ce9aa7e248927832e095f`](https://github.com/veritaschain/vcp-spec/commit/48fc17955708d234232ce9aa7e248927832e095f)
+added the version-directory files on 31 December 2025. The following SHA-256
+values identify the exact Markdown bytes at that historical commit. This is an
+archival reference, not a newly created release, tag, adoption decision or claim
+that this snapshot resolves the known integrity issues.
+
+| Historical file | SHA-256 |
+|---|---|
+| [VCP-Specification-v1_1_en.md](https://github.com/veritaschain/vcp-spec/blob/48fc17955708d234232ce9aa7e248927832e095f/spec/v1.1/VCP-Specification-v1_1_en.md) | `4224c41dd121aa8018b5f38284c5c56889b405c53023ee93472800b49b6f4050` |
+| [VCP-Specification-v1_1_ja.md](https://github.com/veritaschain/vcp-spec/blob/48fc17955708d234232ce9aa7e248927832e095f/spec/v1.1/VCP-Specification-v1_1_ja.md) | `d56705604320c51c3543c59ae8f73a5357ecb776a9ce56b237c9b046b6a3802c` |
+| [VCP-Specification-v1_1_zh.md](https://github.com/veritaschain/vcp-spec/blob/48fc17955708d234232ce9aa7e248927832e095f/spec/v1.1/VCP-Specification-v1_1_zh.md) | `6b09d62667b1bc8c0bf50be2ad84693d24561f8fa035f8f25dd1bc8f78c6bdb4` |
+
+The current-branch files include later historical notices and are not
+byte-identical to this snapshot. Cite the commit and digest when identifying a
+historical v1.1 source; specify the implementation's actual validation rules
+separately. Preserve existing signed records. No `v1.1.0` tag is created here.
 
 ## Three-Layer Architecture
 
