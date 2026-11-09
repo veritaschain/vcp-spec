@@ -12,7 +12,7 @@ The entries below are proposed initial assignments. They take effect with VCP-DR
 | VCP-CP-2026-004 | Integrity byte contract and migration | [normative-change-draft.md](../proposals/integrity-2026-10-24/normative-change-draft.md), PR #4 | X (with separable M parts) | Draft | — |
 | VCP-CP-2026-005 | Numeric-field inventory | [proposals/numeric-fields-2026-10-25/](../proposals/numeric-fields-2026-10-25/) | input to CP-2026-004 | Draft | — |
 | VCP-CP-2026-006 | Native field layout and migration | [proposals/native-layout-migration-2026-10-25/](../proposals/native-layout-migration-2026-10-25/) | M / X | Draft | — |
-| VCP-CP-2026-007 | VCP v1.2.1 errata scope (triage of the v1.2 known issues) | to be submitted | P | Draft | — |
+| VCP-CP-2026-007 | VCP v1.2.1 errata scope (triage of the v1.2 known issues) | [triage draft](../proposals/v1.2.1-errata-triage-2026-11-10/README.md) | P scope proposed; byte/schema changes require separate M/X classification | Draft; no public review opened | — |
 
 ## Notes
 
