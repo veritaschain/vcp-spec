@@ -16,25 +16,42 @@ fixed distributions/tags, releases and K3 remain unchanged.
 
 ## Reproduce
 
-From a checkout of this PR's reviewed commit, with Python 3.12 or 3.14:
+From a checkout of the candidate commit, prepare the source snapshot named in
+`manifest.json`, then copy only the current experiment into it. The source files
+at `16018dd405cad45bd8b11a7dc2278f6d95111ea6` must retain their recorded bytes;
+later editorial changes on `main` are not substitute experiment inputs.
+
+With Git, a POSIX shell and Python 3.12 or 3.14:
 
 ```sh
-python3 experiments/numeric-representation-candidate-v0/run.py --output /tmp/vcp-numeric-new-run.json
+# Fetching is needed only if the pinned commit is missing locally.
+git cat-file -e 16018dd405cad45bd8b11a7dc2278f6d95111ea6^{commit} 2>/dev/null || \
+  git fetch --no-tags origin 16018dd405cad45bd8b11a7dc2278f6d95111ea6
+numeric_snapshot_dir="$(mktemp -d)"
+git archive 16018dd405cad45bd8b11a7dc2278f6d95111ea6 | tar -x -C "$numeric_snapshot_dir"
+mkdir -p "$numeric_snapshot_dir/experiments"
+cp -R experiments/numeric-representation-candidate-v0 "$numeric_snapshot_dir/experiments/"
+python3 "$numeric_snapshot_dir/experiments/numeric-representation-candidate-v0/run.py" --output /tmp/vcp-numeric-new-run.json
 ```
 
 Choose an unused output filename: the runner refuses to overwrite an existing
-report. No pip install, Docker, root privileges, credentials or network access is
-needed. Only the Python standard library is used. This runs the stored synthetic
-vectors, compares **all** checks and exact derived values with declared expected
+report. Retrieving a missing Git snapshot needs network access; execution after
+snapshot preparation is offline and needs no pip install, Docker, root privileges
+or credentials. The experiment itself uses only the Python standard library.
+This runs the stored synthetic vectors, compares **all** checks and exact derived values with declared expected
 outputs, then runs the regression/negative-control suite. Exit 0 means all
 expectations matched with no skipped or expected-failure tests. A mismatch exits
 1; setup/integrity/report errors exit 2. Neither exit 0 nor the report's
 `all_expectations_matched` is a VCP conformance claim.
 
 The separate [experimental CI workflow](../../.github/workflows/numeric-representation-experiment.yml)
-uses the same command on Python 3.12 and 3.14. The existing v1.2 schema workflow is
-unchanged. CI runs are internal automated executions, not independent third-party
-reproduction. Current local execution records and the two final-review fixes are
+checks out the candidate and the fixed source snapshot separately, stages only
+the candidate experiment in the snapshot, and uses the same runner command on
+Python 3.12 and 3.14. All source and experiment hashes remain checked; the manifest,
+fixtures and saved reports retain their original fingerprints. This is a new run
+of the historical-source experiment, not a check of the current specification's
+editorial bytes. The existing v1.2 schema workflow is unchanged. CI runs are
+internal automated executions, not independent third-party reproduction. Current local execution records and the two final-review fixes are
 described in [final-review-2026-10-25.md](final-review-2026-10-25.md). The initial
 [review-record.md](review-record.md) and its 533-case/15-test reports are preserved
 as historical results for commit `5914539ea1c8930d0f6723a923e82bc72fee3ce0`.
@@ -51,7 +68,7 @@ To inspect one input, create a new research-request JSON file, for example:
 ```
 
 ```sh
-python3 experiments/numeric-representation-candidate-v0/checker.py /tmp/numeric-input.json
+python3 "$numeric_snapshot_dir/experiments/numeric-representation-candidate-v0/checker.py" /tmp/numeric-input.json
 ```
 
 The checker exits 0 for **PASS**, 1 for **FAIL**, and 2 for **UNASSESSED** or a

@@ -313,15 +313,20 @@ v1.1; it is not a v1.2 verifier. It is a
 first-party implementation: VSO and VeritasChain Co., Ltd. share a founder, and
 a first-party implementation is not independent validation.
 
-An offline core library for v1.2, [vcp-sdk](https://github.com/veritaschain/vcp-sdk)
-v0.1.0 (pre-release; Python, TypeScript, MQL5), is also available. It is written
-by VeritasChain Co., Ltd., so it is first-party as well and does not change the
+An offline core library for v1.2, [vcp-sdk](https://github.com/veritaschain/vcp-sdk),
+is available as unreleased development source for Python, TypeScript and MQL5;
+its package metadata remains `0.1.0`. Follow the
+[pinned-source installation instructions](https://github.com/veritaschain/vcp-sdk/blob/9cfa2b999f8d7831dd49fe40e9f76005b5881ecd/README.md#install)
+and record the full source commit. The historical `v0.1.0` tag does not include
+all subsequent fixes. It is written by VeritasChain Co., Ltd., so it is
+first-party as well and does not change the
 external-implementation count above. Where the v1.2 text is ambiguous it makes a
 choice of its own, listed in its
-[INTERPRETATIONS.md](https://github.com/veritaschain/vcp-sdk/blob/v0.1.0/INTERPRETATIONS.md)
+[INTERPRETATIONS.md](https://github.com/veritaschain/vcp-sdk/blob/9cfa2b999f8d7831dd49fe40e9f76005b5881ecd/INTERPRETATIONS.md)
 (for example, RFC 6962 trees rather than the §6.2.1 example builder, and integers
 canonicalised as exact digits). Those choices are not adopted by VSO change
-control. A `VALID` result from it is not a conformance claim.
+control. When evaluating another checkout, also consult that checkout's own
+interpretations. A `VALID` result from it is not a conformance claim.
 
 ---
 
