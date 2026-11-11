@@ -1,0 +1,37 @@
+diff --git a/VCP_IMPLEMENTATION_GUIDE_v1_1.md b/VCP_IMPLEMENTATION_GUIDE_v1_1.md
+index a6edde2..012dd7c 100644
+--- a/VCP_IMPLEMENTATION_GUIDE_v1_1.md
++++ b/VCP_IMPLEMENTATION_GUIDE_v1_1.md
+@@ -1282,19 +1282,21 @@ Frozen known values cover 0–8 leaves, including unbalanced 3-, 5-, 6-, and
+ and regressions to missing prefixes or duplicate-last trees are checked.
+ See [test/vector documentation](./tests/README.md). Passing these checks is
+ not a v1.1 certification or a VCP v1.2 conformance declaration.
+
+-**Broader conformance tooling (existing guidance):**
+-
+-```bash
+-pip install vcp-conformance-test
+-
+-# Silver tier
+-vcp-test --tier silver --version 1.1 ./implementation
+-
+-# Generate report
+-vcp-test --tier silver --version 1.1 --report ./implementation
+-```
++**Broader conformance tooling — availability correction, 11 November 2026:**
++
++The previously shown `vcp-conformance-test` package and `vcp-test` commands are
++not supplied by this repository, and their published availability and v1.1
++coverage have not been established. They are withdrawn as runnable installation
++instructions. Use the repository-local regression command above for its stated
++Merkle-example scope.
++
++The separate [VCP conformance guide](https://github.com/veritaschain/vcp-conformance-guide)
++contains a legacy v1.0 guide and runnable local fixture smoke tests. Follow its
++own README and source commands; those checks do not validate v1.1/v1.2 or
++establish certification. This guide does not provide a full v1.1 conformance
++runner or identify a verified package release.
+
+ ---
+
+ ## 12. Sidecar Deployment

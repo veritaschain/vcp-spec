@@ -1,4 +1,5 @@
 import copy
+import hashlib
 import json
 import re
 import sys
@@ -16,6 +17,34 @@ FIXTURES = ROOT / 'tests/fixtures/v1.2'
 
 
 class V12ContractTests(unittest.TestCase):
+    def test_current_specification_digests(self):
+        readme = (SPEC / 'README.md').read_text()
+        entries = re.findall(
+            r'\| \[(VCP-Specification-v1_2_(?:en|ja|zh)\.md)\]\([^)]*\) \| `([0-9a-f]{64})` \|',
+            readme,
+        )
+        self.assertEqual(len(entries), 3)
+        self.assertEqual({name for name, _ in entries},
+                         {f'VCP-Specification-v1_2_{lang}.md' for lang in ('en', 'ja', 'zh')})
+        for name, digest in entries:
+            with self.subTest(file=name):
+                self.assertEqual(hashlib.sha256((SPEC / name).read_bytes()).hexdigest(), digest)
+
+    def test_erasure_records_are_described_as_tamper_evident(self):
+        # Scope this terminology gate to the current ERASURE clause. Historical
+        # quotations and third-party product names elsewhere are not VCP claims.
+        wording = {
+            'en': ('append-only, tamper-evident', r'(?i)\bimmutable\b|tamper-proof'),
+            'ja': ('追記型・改ざん検知可能', r'改ざん不可能|不変(?:の)?イベント'),
+            'zh': ('仅追加、可检测篡改', r'不可变|防篡改'),
+        }
+        for lang, (required, prohibited) in wording.items():
+            with self.subTest(language=lang):
+                text = (SPEC / f'VCP-Specification-v1_2_{lang}.md').read_text()
+                clause = text.split('#### 3.2.2 ', 1)[1].split('#### 3.2.3 ', 1)[0]
+                self.assertIn(required, clause)
+                self.assertNotRegex(clause, prohibited)
+
     def test_schemas_and_internal_refs(self):
         for name in ('vcp-event-v1.2.json', 'vcp-event-v1.2-rc-legacy.json'):
             schema = json.loads((SPEC / name).read_text())
