@@ -14,7 +14,7 @@ and risk controls.
 
 VCP is the finance profile of the
 [Verifiable AI Provenance Framework (VAP)](https://github.com/veritaschain/vap-spec)
-and its first implementation profile. [VAP v1.2 alignment remains under review](https://github.com/veritaschain/vap-spec/blob/b5ef9316717bebe638d5eca621327b54cdda93e1/spec/v1.2/VAP_Framework_Specification.md); full conformance has not been established. Within the VAP family, the designation
+and its first implementation profile. [VAP v1.2 alignment remains under review](https://github.com/veritaschain/vap-spec/blob/1ce71a66f55d9a20728213b7c3a8bb79270ae579/spec/v1.2/VAP_Framework_Specification.md); full conformance has not been established. Within the VAP family, the designation
 "Protocol" is reserved for VCP, which defines an actual wire protocol.
 
 This repository is maintained by the

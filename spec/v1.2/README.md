@@ -112,14 +112,15 @@ is the historical GA declaration; the verified release tag is dated 2026-10-09.
 | 2026-11-02 (navigation follow-up) | Correct §6 TOC fragments in the three root v1.0 files and the §10 TOC fragment in both current-branch CHANGE-001 copies; record navigation-only edits in their histories. Normative clauses, v1.2 specification bytes and the digests below, schemas, algorithms and tagged artifacts remain unchanged. |
 | 2026-11-05 (JST) | PR [#23](https://github.com/veritaschain/vcp-spec/pull/23), merge `2dd82e2a70b7f3245ba00e851c991c035649beee` (4 November, 23:49:21 UTC), changes only the status line in each EN/JA/ZH specification and its root mirror. The specification-internal revision tables were not updated by that PR; this entry records the omission without changing those files. |
 | 2026-11-10 | Recompute the current-branch specification digests and add the missing 5 November editorial record. Expand the informative known-issue inventory and link the unadopted CP-2026-007 triage. No specification, schema, annex or tagged bytes are changed by this follow-up. |
+| 2026-11-11 | Correct the remaining Japanese and Chinese §3.2.2 descriptions of new ERASURE events to append-only, tamper-evident, matching the English text; correct the Chinese audit-trail wording, record both translation edits and update both root mirrors and digests. Add CI checks for published digests and this clause's EN/JA/ZH terminology. English normative requirements, schemas, algorithms, annex and tagged artifacts are unchanged. |
 
-SHA-256 of the current-branch v1.2 specification files, checked 10 November 2026 at commit `5b042c73adc294e503f07451a18345165341372c` (bytes last changed by PR #23):
+SHA-256 of the current-branch v1.2 specification files, checked 11 November 2026 after the translation corrections recorded above. The English bytes remain those of PR #23; the Japanese and Chinese bytes include the 11 November editorial corrections:
 
 | File | SHA-256 |
 |------|---------|
 | [VCP-Specification-v1_2_en.md](VCP-Specification-v1_2_en.md) | `fed1ef2d06bc39f06b4d642dd1b6859cb06dde427b2727a4e284aba67ce45030` |
-| [VCP-Specification-v1_2_ja.md](VCP-Specification-v1_2_ja.md) | `e711919ff87fcc59c29bef7c184cbc45d80d1c45270cf5667e554402b3784dfb` |
-| [VCP-Specification-v1_2_zh.md](VCP-Specification-v1_2_zh.md) | `d2afebd2c3e90874c579b7a06b63f332024c8983e5f0067b8e4821ff090e9716` |
+| [VCP-Specification-v1_2_ja.md](VCP-Specification-v1_2_ja.md) | `2fbdcdf0473e59b190528b466e477dbc57c59852d617d39cc65526c6dcb32bc0` |
+| [VCP-Specification-v1_2_zh.md](VCP-Specification-v1_2_zh.md) | `ea25738abdce9ccf16874eccaf47b9e660d2b07b91583907270ce90db7e85242` |
 
 The corresponding repository-root files are byte-identical mirrors.
 
@@ -230,7 +231,9 @@ provide a commit-pinned reference without creating or implying a v1.1 tag.
 
 ## Relationship to VAP
 
-VCP is the first implementation profile of the VAP family. [The current VAP status](https://github.com/veritaschain/vap-spec/blob/b5ef9316717bebe638d5eca621327b54cdda93e1/spec/v1.2/VAP_Framework_Specification.md) records VCP v1.1 and v1.2 integrity alignment under review, a mapping outstanding, and full conformance unestablished. Under VAP §1.7, that current status prevails over the historical compatibility claims in VSO-VAP-CHANGE-001 CH-11 / Annex A; the annex itself is preserved. VAP and VCP version numbers are assigned independently; matching version numbers do not establish conformance.
+VCP is the first implementation profile of the VAP family. [The VAP status checked on 11 November 2026](https://github.com/veritaschain/vap-spec/blob/1ce71a66f55d9a20728213b7c3a8bb79270ae579/spec/v1.2/VAP_Framework_Specification.md) records VCP v1.1 and v1.2 integrity alignment under review, a mapping outstanding, and full conformance unestablished. Under VAP §1.7, that current status prevails over the historical compatibility claims in VSO-VAP-CHANGE-001 CH-11 / Annex A; the annex itself is preserved. VAP and VCP version numbers are assigned independently; matching version numbers do not establish conformance.
+
+The VAP source used for the status check above is pinned to commit `1ce71a66f55d9a20728213b7c3a8bb79270ae579`, SHA-256 `a35d5e082fd4b2f9921a78b1a71df263018320375e09fa18cf81533a18a19998`. This dated reference does not rebase or adopt the separate mapping proposals.
 
 ## Relationship to v1.1
 
