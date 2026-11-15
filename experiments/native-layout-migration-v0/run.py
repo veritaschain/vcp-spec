@@ -13,7 +13,7 @@ import checker as ck
 HERE=Path(__file__).resolve().parent
 ROOT=HERE.parents[1]
 BASE='943d513fec3c0eaa7eb683120e2d82d5eb748285'
-TEST_COUNT=39
+TEST_COUNT=45
 DEPENDENCIES={'attrs':'26.1.0','cffi':'2.1.1','cryptography':'50.0.2','jsonschema':'4.26.0',
               'jsonschema-specifications':'2025.9.1','pycparser':'3.12','referencing':'0.37.0',
               'rfc8785':'0.1.4','rpds-py':'2026.9.1','typing_extensions':'4.16.0'}

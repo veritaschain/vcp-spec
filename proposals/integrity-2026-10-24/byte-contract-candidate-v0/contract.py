@@ -29,6 +29,16 @@ MAX_NS = 9223372036854775807
 MAX_COUNT = 2147483647
 ID_RE = re.compile(r"urn:vcp-research:[a-z0-9][a-z0-9:._-]{0,127}")
 DIGEST_RE = re.compile(r"sha256:[0-9a-f]{64}")
+ED25519_P = 2**255 - 19
+# The five y coordinates cover all eight points killed by multiplication by 8.
+# This is local configured-key admission, not a normative VCP signature policy.
+ED25519_SMALL_ORDER_Y = {
+    0, 1, ED25519_P - 1,
+    int.from_bytes(bytes.fromhex(
+        "26e8958fc2b227b045c3f489f2ef98f0d5dfac05d3c63339b13802886d53fc05"), "little"),
+    int.from_bytes(bytes.fromhex(
+        "c7176a703d4dd84fba3c0b760d10670f2a2053fa2c39ccc64ec7fd7792ac037a"), "little"),
+}
 
 
 class Rejected(ValueError):
@@ -214,10 +224,27 @@ def signature_bytes(value):
     return result
 
 
+def public_key_bytes(value):
+    """Admit canonical, non-small-order keys for this local experiment only.
+
+    Backend curve decoding, R/S handling and the signature equation are retained.
+    This check does not claim prime-subgroup membership or key authorization.
+    """
+    require(type(value) is str and re.fullmatch(r"[0-9a-f]{64}", value) is not None,
+            "public key hex encoding/length")
+    raw = bytes.fromhex(value)
+    encoded = int.from_bytes(raw, "little")
+    y = encoded & (2**255 - 1)
+    require(y < ED25519_P and not (y in (1, ED25519_P - 1) and encoded >> 255),
+            "noncanonical Ed25519 public key point")
+    require(y not in ED25519_SMALL_ORDER_Y, "small-order Ed25519 public key point")
+    return raw
+
+
 def raw_verify(public_key_hex, signature, message):
     try:
         sig = signature_bytes(signature)
-        Ed25519PublicKey.from_public_bytes(bytes.fromhex(public_key_hex)).verify(sig, message)
+        Ed25519PublicKey.from_public_bytes(public_key_bytes(public_key_hex)).verify(sig, message)
         return True
     except (InvalidSignature, ValueError, UnicodeError):
         return False
