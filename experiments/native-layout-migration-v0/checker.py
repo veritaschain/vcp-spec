@@ -18,6 +18,12 @@ from schema_builder import CONTRACT, SOURCE, POLICIES
 HERE=Path(__file__).resolve().parent
 MAX63=2**63-1
 MAX31=2**31-1
+ED25519_P=2**255-19
+# The five y coordinates cover all eight points killed by multiplication by 8.
+# This is local configured-key admission, not a normative VCP signature policy.
+ED25519_SMALL_ORDER_Y={0,1,ED25519_P-1,
+    int.from_bytes(bytes.fromhex('26e8958fc2b227b045c3f489f2ef98f0d5dfac05d3c63339b13802886d53fc05'),'little'),
+    int.from_bytes(bytes.fromhex('c7176a703d4dd84fba3c0b760d10670f2a2053fa2c39ccc64ec7fd7792ac037a'),'little')}
 EPOCH=datetime(1970,1,1,tzinfo=timezone.utc)
 DOMAINS={k:('VCP RESEARCH native-layout-migration v0 '+k+'\x00').encode()
          for k in ('event','event-signature','anchor-signature','plan','attestation','source')}
@@ -75,6 +81,19 @@ def same(a,b):
 def hexbytes(s):
     need(type(s) is str and len(s)%2==0 and re.fullmatch('[0-9a-f]*',s) is not None,'noncanonical hex')
     return bytes.fromhex(s)
+
+def public_key_bytes(s):
+    """Reject canonical-encoding errors and pure small-order configured keys.
+
+    Curve decoding, R/S handling and the signature equation remain with the
+    cryptography backend; this does not claim prime-subgroup membership.
+    """
+    raw=hexbytes(s);need(len(raw)==32,'public key length')
+    encoded=int.from_bytes(raw,'little');y=encoded & (2**255-1)
+    need(y<ED25519_P and not (y in (1,ED25519_P-1) and encoded>>255),
+         'noncanonical Ed25519 public key point')
+    need(y not in ED25519_SMALL_ORDER_Y,'small-order Ed25519 public key point')
+    return raw
 
 def sigbytes(s):
     raw=base64.b64decode(s,validate=True)
@@ -162,7 +181,7 @@ def context_check(c):
     for row in c['Keys'].values():
         if row is None:continue
         need(type(row) is dict and set(row)=={'KeyID','PublicKey'},'configured key fields')
-        identity(row['KeyID']);need(len(hexbytes(row['PublicKey']))==32,'public key length')
+        identity(row['KeyID']);public_key_bytes(row['PublicKey'])
     for row in c['Policies'].values():
         if row is None:continue
         need(type(row) is dict and set(row)=={'PolicyID','PolicyVersion','PolicyDigest'},'configured policy fields')
@@ -175,7 +194,7 @@ def verify_sig(role,message,signature,context,key_id=None):
     need(row is not None,'no configured '+role+' key','UNASSESSED')
     need(type(row) is dict and set(row)=={'KeyID','PublicKey'},'configured key fields')
     if key_id is not None:need(key_id==row['KeyID'],'key role/identity not selected','UNASSESSED')
-    key=hexbytes(row['PublicKey']);need(len(key)==32,'public key length')
+    key=public_key_bytes(row['PublicKey'])
     try:Ed25519PublicKey.from_public_bytes(key).verify(raw_signature,DOMAINS[role]+message)
     except InvalidSignature:raise Finding('FAIL',role+' signature does not verify')
 

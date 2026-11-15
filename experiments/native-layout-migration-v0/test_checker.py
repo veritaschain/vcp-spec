@@ -1,5 +1,6 @@
 """Counterexample and preservation controls, additional to the frozen case matrix."""
 import copy
+import base64
 import json
 import hashlib
 import unittest
@@ -10,6 +11,32 @@ from pathlib import Path
 import checker as ck
 import fixtures as fx
 from schema_builder import build
+
+SMALL_ORDER_KEYS=(
+    '0100000000000000000000000000000000000000000000000000000000000000',
+    'ecffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff7f',
+    '0000000000000000000000000000000000000000000000000000000000000000',
+    '0000000000000000000000000000000000000000000000000000000000000080',
+    '26e8958fc2b227b045c3f489f2ef98f0d5dfac05d3c63339b13802886d53fc05',
+    '26e8958fc2b227b045c3f489f2ef98f0d5dfac05d3c63339b13802886d53fc85',
+    'c7176a703d4dd84fba3c0b760d10670f2a2053fa2c39ccc64ec7fd7792ac037a',
+    'c7176a703d4dd84fba3c0b760d10670f2a2053fa2c39ccc64ec7fd7792ac03fa')
+
+def identity_forgery(role):
+    """Rebind all affected commitments; no private key signs the forged role."""
+    b,c=fx.base()
+    forged=base64.b64encode(bytes.fromhex(SMALL_ORDER_KEYS[0])+bytes(32)).decode()
+    c['Keys'][role]['PublicKey']=SMALL_ORDER_KEYS[0]
+    if role=='source':
+        for row in b['SourceArtifacts']:row['Signature']=row['RetainedSignature']=forged
+        fx.refresh_sources(b,c)
+    elif role=='event-signature':
+        for row in b['Events']:row['Signature']=forged
+        fx.attest(b,c)
+    elif role=='anchor-signature':
+        b['Anchor']['Signature']=forged;fx.attest(b,c)
+    else:b['MigrationAttestation']['Signature']=forged
+    return b,c
 
 class Controls(unittest.TestCase):
     def setUp(self):self.b,self.c=fx.base()
@@ -94,6 +121,53 @@ class Controls(unittest.TestCase):
     def test_wrong_context_key_cannot_pass(self):
         self.c['Keys']['event-signature']['PublicKey']=self.c['Keys']['source']['PublicKey']
         self.assertEqual(self.result()['checks']['cryptographic_integrity']['status'],'FAIL')
+    def test_all_small_order_configured_keys_fail_layout_for_every_role(self):
+        for role in fx.ROLES:
+            for key in SMALL_ORDER_KEYS:
+                with self.subTest(role=role,key=key):
+                    self.b,self.c=fx.base();self.c['Keys'][role]['PublicKey']=key
+                    r=self.result();self.assertEqual(r['covered_checks'],'FAIL')
+                    self.assertEqual(r['checks']['layout']['detail'],'small-order Ed25519 public key point')
+    def test_noncanonical_configured_points_fail_layout_for_every_role(self):
+        p=2**255-19
+        values=[y|(sign<<255) for y in range(p,2**255) for sign in (0,1)]
+        values += [y|(1<<255) for y in (1,p-1)]
+        for role in fx.ROLES:
+            for value in values:
+                with self.subTest(role=role,value=value):
+                    self.b,self.c=fx.base();self.c['Keys'][role]['PublicKey']=value.to_bytes(32,'little').hex()
+                    r=self.result();self.assertEqual(r['covered_checks'],'FAIL')
+                    self.assertEqual(r['checks']['layout']['detail'],'noncanonical Ed25519 public key point')
+    def test_fully_rebound_identity_forgery_is_rejected_for_every_role(self):
+        for role in fx.ROLES:
+            with self.subTest(role=role):
+                self.b,self.c=identity_forgery(role)
+                r=self.result();self.assertEqual(r['covered_checks'],'FAIL')
+                self.assertEqual(r['checks']['layout']['detail'],'small-order Ed25519 public key point')
+                self.assertEqual(r['native_conformance'],'UNASSESSED')
+                self.assertEqual(r['independent_reproduction'],'not_established')
+    def test_direct_signature_entrypoint_also_screens_configured_key(self):
+        forged=base64.b64encode(bytes.fromhex(SMALL_ORDER_KEYS[0])+bytes(32)).decode()
+        for role in fx.ROLES:
+            with self.subTest(role=role):
+                self.c['Keys'][role]['PublicKey']=SMALL_ORDER_KEYS[0]
+                with self.assertRaisesRegex(ck.Finding,'small-order Ed25519 public key point'):
+                    ck.verify_sig(role,b'arbitrary message',forged,self.c)
+    def test_identity_signature_does_not_replace_existing_strong_caller_key(self):
+        forged=base64.b64encode(bytes.fromhex(SMALL_ORDER_KEYS[0])+bytes(32)).decode()
+        for role in fx.ROLES:
+            with self.subTest(role=role):
+                with self.assertRaisesRegex(ck.Finding,'signature does not verify'):
+                    ck.verify_sig(role,b'arbitrary message',forged,self.c)
+    def test_identity_forgery_cli_returns_structured_failure(self):
+        b,c=identity_forgery('event-signature')
+        with tempfile.TemporaryDirectory() as directory:
+            bundle=Path(directory)/'bundle.json';context=Path(directory)/'context.json'
+            bundle.write_bytes(fx.rawjson(b));context.write_bytes(fx.rawjson(c))
+            result=subprocess.run([sys.executable,str(fx.HERE/'checker.py'),str(bundle),'--context',str(context)],
+                                  capture_output=True,text=True,timeout=10)
+            self.assertEqual(result.returncode,1);self.assertEqual(result.stderr,'')
+            self.assertEqual(json.loads(result.stdout)['covered_checks'],'FAIL')
     def test_policy_nonobjects_are_findings_not_crashes(self):
         for role in ('registration','numeric'):
             for value in ([],None,True,0,'policy'):

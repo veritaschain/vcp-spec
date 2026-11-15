@@ -51,7 +51,7 @@ is used by the checker. Package installation needs its normal package source.
 Do not run scripts supplied by an evaluator as part of accepting a report.
 
 The suite returns zero only when **all authored per-axis expectations**, all
-14 unit outcomes and all 39 regression controls match, without skipped or expected
+14 unit outcomes and all 45 regression controls match, without skipped or expected
 failures. Negative and unsupported cases are supposed to return FAIL/UNASSESSED;
 “suite succeeded” does not mean all evidence passed. `--verify-report` performs
 fresh execution and strict typed comparison of the **entire report**, including
@@ -75,6 +75,32 @@ bundle. Fixture keys/seeds are public test material, never production identities
 does not import its signing keys. The suite's regression controls do import the
 public fixture keys to construct deliberately re-signed adversarial examples;
 those keys never supply a verdict or production authority.
+
+### Configured-key admission hardening — 15 November 2026
+
+The checker now rejects the eight pure small-order Ed25519 public-key points,
+noncanonical field coordinates and the two invalid sign encodings of points
+whose x coordinate is zero. The check runs both when admitting the separately
+configured context and in the signature-verification entry point. This is a
+local experimental input restriction. It does not settle VCP v1.2 §6.3.1,
+change signature preimages or adopt the VAP demo's signature-input policy.
+Curve decoding, R/S handling and the signature equation still run in the
+`cryptography` backend; prime-subgroup membership is not asserted by this guard.
+
+Before this hardening, a configured identity key accepted `R = identity, S = 0`
+for arbitrary messages under Python 3.12.14 / `cryptography` 50.0.2. Fully
+rebound synthetic bundles passed all ten covered axes for each of the four
+roles (source, event, anchor and attestation), without a private key for the
+forged role. The new regression controls construct those bundles and require
+FAIL. This defect required a weak caller-selected key; changing the bundle
+alone did not replace an existing strong caller key. Context authenticity,
+signer authority and key lifecycle remain separate requirements.
+
+The 62 frozen bundle cases, 14 unit inputs, `sources.json` and retained reports
+are unchanged. Only the current implementation/test/runner hashes in
+`manifest.json` are updated for this revision. Run the new implementation on
+the same historical source checkout as above and record its new report;
+historical source or output digests must not be relabeled as this run.
 
 ## Selected candidate schema and coverage
 

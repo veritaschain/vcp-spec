@@ -134,6 +134,25 @@ base64 of 64 bytes, with no whitespace or alternate spelling. Event statement
 and signature are outside EventCommitment. Anchor signing cannot substitute for
 the event signature. This local JSON statement is not a COSE mapping.
 
+**Configured-key admission hardening, 15 November 2026:** the Python candidate
+now requires configured keys to use exactly 64 lowercase hexadecimal digits,
+canonical Ed25519 point encodings and a point outside the eight pure
+small-order points. A configured identity key previously accepted
+`R = identity, S = 0` for either statement role under Python 3.12.14 /
+`cryptography` 50.0.2. The new controls require failure without invoking the
+signature backend for rejected key encodings. A submitted statement cannot
+replace a separately selected strong key; trust-input authentication remains
+necessary even with this guard.
+
+This is a local implementation restriction, not a normative decision for
+VCP §6.3.1 or an adoption of another VAP experiment's signature policy. Backend
+curve decoding, R/S handling and the signature equation are retained; the
+guard does not establish prime-subgroup membership or signer authorization.
+The fixed data, generator, historical records and source hashes are unchanged.
+The historical byte-contract source imported by the numeric-byte-binding
+experiment remains pinned to that experiment's declared baseline; this patch
+does not rewrite or silently upgrade that baseline.
+
 The ordered tree uses RFC 6962 §2.1 / RFC 9162 §2.1.1:
 empty root `SHA256(empty)`, single leaf above, and internal node
 `SHA256(01 || left || right)` with recursive largest-power-of-two splitting.
@@ -250,6 +269,7 @@ From this folder, create an isolated environment and run:
 python3 -m venv .venv
 .venv/bin/python -m pip install -r requirements.txt
 .venv/bin/python check.py --node node
+.venv/bin/python -m unittest discover -s . -p 'test_ed25519_keys.py' -v
 ```
 
 Omit `--node node` for Python only; the output will explicitly say Node was not
@@ -263,6 +283,7 @@ source commit when reporting either success or failure.
 | contract.py | Isolated minimal candidate byte/checking functions; not imported by existing implementations |
 | generate.py | Deterministic public synthetic inputs and expected outputs; refuses an existing destination directory |
 | check.py | Compare frozen expected bytes, regenerate exactly, and exercise negative checks |
+| test_ed25519_keys.py | Local configured-key admission and forged-signature regressions, separate from the frozen data |
 | crosscheck.mjs | Separate restricted JCS encoder, incremental tree builder, recursive proof fold, signatures and BigInt numeric checks |
 | data/vectors.json | Inputs, preimages, digests, signatures, mutations, numeric and malformed JSON cases |
 | data/merkle-vectors.jsonl | One tree per line; roots and all indexed proof paths refer to the first N event digests in vectors.json |
