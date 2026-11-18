@@ -169,6 +169,27 @@ not been established. Internal synthetic results are not independent third-party
 reproduction, which remains unestablished. Current protocol requirements and
 K3 baselines, criteria and results are unchanged.
 
+#### What an implementer can check today (informative)
+
+The [SDK interpretations at the reviewed source revision](https://github.com/veritaschain/vcp-sdk/blob/0832f1d84af9b130db6a17d36c343a8abd7002a8/INTERPRETATIONS.md)
+and the [experimental byte contract](proposals/integrity-2026-10-24/byte-contract-candidate-v0/README.md)
+answer different questions. Use the following distinctions when reviewing interoperability:
+
+| Question | Reviewed SDK behavior | What is still open for the protocol |
+|---|---|---|
+| How is an odd-sized tree built? | I-1 uses the RFC split rule. A root that matches only the duplicate-node example is reported as `INDETERMINATE` for that check. | Record the precedence decision and how a verifier identifies historical constructions. A matching power-of-two example does not distinguish them. |
+| What does an event signature cover? | I-5 signs the ASCII lowercase hex of the recomputed EventHash; the root signature instead uses the 32 decoded root bytes. | Select and identify the exact message bytes for each role. The experiment's protected event and anchor statements have different preimages and cannot be used to re-verify historical signatures. |
+| Which Ed25519 public keys does a verifier accept? | I-5 requires a canonical, nonidentity prime-subgroup public key. The experiment's Python guard has a different admission rule and leaves some checks to its backend. | Specify key admission, signature acceptance and handling of an unestablished key independently of the message encoding; cross-language agreement on ordinary signatures alone does not settle these choices. |
+| What does a root signature establish about the batch? | I-6 checks count, endpoint IDs and policy against the supplied events separately; the root signature alone does not bind those fields. | Separate the signed statement, its binding to the supplied records, and an independently verified external receipt. A signed statement does not on its own prove collection completeness. |
+
+For a review, identify the selected rule set and code revision alongside each
+result. The candidate publishes [fixed byte examples](proposals/integrity-2026-10-24/byte-contract-candidate-v0/data/vectors.json)
+and [indexed tree examples](proposals/integrity-2026-10-24/byte-contract-candidate-v0/data/merkle-vectors.jsonl);
+these are first-party research fixtures, not a VCP v1.2 conformance suite.
+The [proposal register](decisions/REGISTER.md) tracks precedence (CP-002),
+errata (CP-003), the byte contract and migration (CP-004). Preserve existing
+signed bytes and release tags while these decisions are pending.
+
 The 2026-10-09 consistency correction changes pre-GA ERASURE encoding and
 registers the Annex system events. It is not technically identical to RC1.
 See [compatibility and release gates](spec/v1.2/GA-CONSISTENCY.md). The following
