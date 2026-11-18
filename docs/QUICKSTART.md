@@ -1,6 +1,6 @@
 # VeritasChain Protocol (VCP) — offline quick start
 
-**Updated 10 November 2026.** Use the first-party
+**Updated 18 November 2026.** Use the first-party
 [vcp-sdk offline core](https://github.com/veritaschain/vcp-sdk) to create and
 inspect VCP v1.2 events locally. This path needs no hosted Explorer account or
 API key. The SDK is a pre-release implementation with documented interpretations;
@@ -11,22 +11,24 @@ this is not a protocol-conformance or certification test.
 Python 3.10+ and Git are required. Installation downloads the source and its
 dependencies; event generation and the checks below run locally after installation.
 
-The SDK currently documents commit
-[`8eadded87e4f4e46d011835b2ba9a874b91c916d`](https://github.com/veritaschain/vcp-sdk/commit/8eadded87e4f4e46d011835b2ba9a874b91c916d)
-for evaluation. Its package metadata still reports `0.1.0`; identify the checkout
-by commit, not that version string. The older `v0.1.0` tag lacks later fixes.
-The packages are not published to PyPI or npm.
+Use SDK commit [`0832f1d84af9b130db6a17d36c343a8abd7002a8`](https://github.com/veritaschain/vcp-sdk/commit/0832f1d84af9b130db6a17d36c343a8abd7002a8).
+It includes the `vcp seal` checks that reject output paths pointing to the input,
+private-key file or other output. The previous installation snapshot (`8eadded87`)
+and the historical `v0.1.0` tag lack these checks. Package metadata still reports
+`0.1.0`. Record the full source commit when reporting results and use the
+[SDK installation guide](https://github.com/veritaschain/vcp-sdk/blob/4d26bac80c9ffe059c92336ffabec19b722d66f2/README.md#install)
+for installation in other languages. The packages are distributed from GitHub only.
 
 ```bash
 python -m venv .venv
 # POSIX shell; on Windows use .venv\Scripts\activate
 . .venv/bin/activate
-python -m pip install --force-reinstall "git+https://github.com/veritaschain/vcp-sdk.git@8eadded87e4f4e46d011835b2ba9a874b91c916d#subdirectory=python"
+python -m pip install --force-reinstall "git+https://github.com/veritaschain/vcp-sdk.git@0832f1d84af9b130db6a17d36c343a8abd7002a8#subdirectory=python"
 ```
 
 Before comparing evidence with another implementation, read the snapshot's
-[interpretations](https://github.com/veritaschain/vcp-sdk/blob/8eadded87e4f4e46d011835b2ba9a874b91c916d/INTERPRETATIONS.md)
-and [quick-start instructions](https://github.com/veritaschain/vcp-sdk/blob/8eadded87e4f4e46d011835b2ba9a874b91c916d/README.md#quick-start-python).
+[interpretations](https://github.com/veritaschain/vcp-sdk/blob/0832f1d84af9b130db6a17d36c343a8abd7002a8/INTERPRETATIONS.md)
+and [quick-start instructions](https://github.com/veritaschain/vcp-sdk/blob/0832f1d84af9b130db6a17d36c343a8abd7002a8/README.md#quick-start-python).
 
 ## 2. Create and inspect a local batch
 
@@ -62,7 +64,7 @@ nor sends events to a hosted API.
 
 ## 3. Further evaluation
 
-- [TypeScript quick start](https://github.com/veritaschain/vcp-sdk/blob/8eadded87e4f4e46d011835b2ba9a874b91c916d/README.md#quick-start-typescript)
+- [TypeScript quick start](https://github.com/veritaschain/vcp-sdk/blob/0832f1d84af9b130db6a17d36c343a8abd7002a8/README.md#quick-start-typescript)
   uses the same source snapshot. Preserve exact integers with the SDK parser.
 - [VCP v1.2 known issues](../spec/v1.2/README.md#known-issues-in-v12-informative)
   distinguish published requirements from unresolved technical contradictions.
