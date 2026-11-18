@@ -161,6 +161,87 @@ class ValidatorCliTests(unittest.TestCase):
                 self.assert_rejected(result, 2)
                 self.assertIn('cannot use schema', result.stderr)
 
+    def assert_custom_inputs_rejected(self, cases):
+        schema = self.write('permissive-schema.json', '{}')
+        sources = [self.write(f'local-input-{i}.json', json.dumps(event))
+                   for i, event in enumerate(cases)]
+        result = self.run_cli('--schema', schema, *sources, VALID)
+        self.assertEqual(result.returncode, 1, result.stdout + result.stderr)
+        for source in sources:
+            self.assertIn(f'{source}: INVALID:', result.stdout)
+            self.assertNotIn(f'{source}: LOCAL CHECKS PASS', result.stdout)
+        self.assertIn(f'{VALID}: LOCAL CHECKS PASS', result.stdout)
+        self.assertNotIn('Traceback', result.stdout + result.stderr)
+
+    def test_custom_schema_missing_event_envelope_does_not_abort_batch(self):
+        self.assert_custom_inputs_rejected([
+            {}, None, [], 'not an event',
+            {'Header': None}, {'Header': []}, {'Header': {}},
+            {'Header': {'EventType': []}}, {'Header': {'EventType': 1}},
+        ])
+        # A custom vocabulary remains possible; the default schema is not
+        # silently reapplied when no selected rule inspects this event type.
+        schema = self.write('custom-envelope-schema.json', '{"type":"object"}')
+        event = self.write('custom-envelope.json', json.dumps({
+            'Header': {'EventType': 'CUSTOM_REVIEW'}, 'review_note': 'local only',
+        }))
+        result = self.run_cli('--schema', schema, event)
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+        self.assertIn('cryptographic/external checks not performed', result.stdout)
+
+    def test_custom_schema_malformed_selected_rule_inputs_do_not_abort_batch(self):
+        cases = []
+        mutations = {
+            'erasure': [
+                ('Payload', None),
+                ('Payload/VCP-PRIVACY/ErasureDetails/Scope', []),
+                ('Payload/VCP-PRIVACY/ErasureDetails/Scope/AffectedEventCount', True),
+                ('Payload/VCP-PRIVACY/ErasureDetails/Scope/EventIDs', {}),
+                ('Payload/VCP-PRIVACY/ErasureDetails/Authorization', {}),
+                ('Payload/VCP-PRIVACY/ErasureDetails/CryptoShredding/DestructionTimestamp', 'later'),
+                ('Header/TimestampInt', 1.5),
+            ],
+            'checkpoint-emergency': [
+                ('Payload/VCP-RECOVERY', {}),
+                ('Payload/VCP-RECOVERY/RecoveryAction', []),
+                ('Payload/VCP-RECOVERY/RecoveryAction/EmergencyOverride', None),
+                ('Payload/VCP-RECOVERY/RecoveryAction/EmergencyOverride/IsEmergency', 'yes'),
+                ('Payload/VCP-RECOVERY/RecoveryAction/EmergencyOverride/ApprovalChain', {}),
+                ('Payload/VCP-RECOVERY/RecoveryAction/EmergencyOverride/ApprovalChain', [None]),
+                ('Payload/VCP-RECOVERY/RecoveryAction/EmergencyOverride/ApprovalChain', [{}]),
+                ('Payload/VCP-RECOVERY/RecoveryAction/EmergencyOverride/ApprovalChain',
+                 [{'ApproverRoleID': {}, 'ApprovalTimestamp': 'later'}]),
+                ('Header/TimestampInt', None),
+            ],
+            'anchor-migration': [
+                ('Payload/VCP-ANCHOR/MigrationDetails', {}),
+                ('Payload/VCP-ANCHOR/MigrationDetails/DualAnchorPeriod/StartTimestamp', 'earlier'),
+                ('Payload/VCP-ANCHOR/MigrationDetails/DualAnchorPeriod/EndTimestamp', None),
+            ],
+        }
+        for fixture, edits in mutations.items():
+            for path, replacement in edits:
+                event = json.loads((FIXTURES / f'valid/{fixture}.json').read_text())
+                target = event
+                keys = path.split('/')
+                for key in keys[:-1]:
+                    target = target[key]
+                target[keys[-1]] = replacement
+                cases.append(event)
+        self.assert_custom_inputs_rejected(cases)
+
+    def test_custom_schema_keeps_existing_local_rule_rejections(self):
+        sources = [FIXTURES / f'invalid/{name}.json' for name in (
+            'emergency-duplicate-role', 'erasure-destruction-before-authorization',
+            'migration-reversed-overlap')]
+        schema = self.write('permissive-schema.json', '{"type":"object"}')
+        result = self.run_cli('--schema', schema, *sources, VALID)
+        self.assertEqual(result.returncode, 1, result.stdout + result.stderr)
+        for source in sources:
+            self.assertIn(f'{source}: INVALID:', result.stdout)
+        self.assertIn(f'{VALID}: LOCAL CHECKS PASS', result.stdout)
+        self.assertNotIn('Traceback', result.stdout + result.stderr)
+
     def test_format_instance_data_is_not_a_schema_format_requirement(self):
         event = json.loads(self.raw)
         event['format'] = 'instance-format-label'

@@ -17,6 +17,13 @@ it does not choose a VCP numeric encoding or define cryptographic signed bytes.
 Missing dependencies for a schema's format checks produce an operational error,
 instead of silently skipping date-time or URI validation.
 
+`--schema` selects a custom schema without disabling the selected intra-event
+rules. Those rules still require a string `Header.EventType` and, for the event
+types they inspect, the fields and types needed to evaluate the rule. Missing or
+incompatible rule inputs are reported as a per-file validation failure; later
+files are still checked. This prerequisite check does not impose the entire
+default schema on custom input or establish protocol conformance.
+
 Historical compact input requires `--legacy` and the unchanged historical schema:
 
 ```bash

@@ -104,14 +104,58 @@ def errors(event, schema_path=SCHEMA, legacy=False):
     return _event_errors(event, _validator(schema_path, legacy), legacy)
 
 
+def _required_fields(value, fields, prefix=''):
+    """Check inputs used by local rules even when a custom schema omits them.
+
+    These are execution prerequisites, not a replacement event schema. Keep the
+    selected schema authoritative for other fields and its extension vocabulary.
+    """
+    failures = []
+    for path, expected in fields.items():
+        item = value
+        location = prefix
+        for name in path.split('/'):
+            if not isinstance(item, dict):
+                failures.append(f'{location or "<root>"}: local checks require an object')
+                break
+            location = f'{location}/{name}' if location else name
+            if name not in item:
+                failures.append(f'{location}: required by local checks')
+                break
+            item = item[name]
+        else:
+            if not LocalValidator.TYPE_CHECKER.is_type(item, expected):
+                failures.append(f'{location}: local checks require type {expected}')
+    return list(dict.fromkeys(failures))
+
+
 def _event_errors(event, validator, legacy):
     result = [f'{"/".join(map(str, e.absolute_path))}: {e.message}' for e in validator.iter_errors(event)]
     if result or legacy:
         return result
+    result = _required_fields(event, {'Header/EventType': 'string'})
+    if result:
+        return result
     kind = event['Header']['EventType']
     if kind == 'ERASURE':
+        detail_path = 'Payload/VCP-PRIVACY/ErasureDetails'
+        result = _required_fields(event, {
+            'Header/TimestampInt': 'integer',
+            f'{detail_path}/Scope/AffectedEventCount': 'integer',
+            f'{detail_path}/Scope/FirstAffectedEventID': 'string',
+            f'{detail_path}/Scope/LastAffectedEventID': 'string',
+            f'{detail_path}/Authorization/AuthorizationTimestamp': 'integer',
+            f'{detail_path}/CryptoShredding/DestructionTimestamp': 'integer',
+            f'{detail_path}/CryptoShredding/DestructionMethod': 'string',
+        })
+        if result:
+            return result
         d = event['Payload']['VCP-PRIVACY']['ErasureDetails']
         scope = d['Scope']
+        if 'EventIDs' in scope:
+            result = _required_fields(scope, {'EventIDs': 'array'}, f'{detail_path}/Scope')
+            if result:
+                return result
         ids = scope.get('EventIDs')
         if ids and (len(ids) != scope['AffectedEventCount'] or ids[0] != scope['FirstAffectedEventID'] or ids[-1] != scope['LastAffectedEventID']):
             result.append('Scope.EventIDs must match AffectedEventCount and first/last IDs')
@@ -122,15 +166,46 @@ def _event_errors(event, validator, legacy):
         if d['CryptoShredding']['DestructionMethod'] in ('HSM_ZEROIZE', 'CLOUD_KMS_DESTROY') and not d['CryptoShredding'].get('DestructionCertificate'):
             result.append('DestructionCertificate required for HSM/KMS evidence')
     elif kind == 'SYS_CHECKPOINT':
+        action_path = 'Payload/VCP-RECOVERY/RecoveryAction'
+        result = _required_fields(event, {action_path: 'object'})
+        if result:
+            return result
+        action = event['Payload']['VCP-RECOVERY']['RecoveryAction']
+        if 'EmergencyOverride' in action:
+            result = _required_fields(action, {'EmergencyOverride': 'object'}, action_path)
+            if result:
+                return result
         override = event['Payload']['VCP-RECOVERY']['RecoveryAction'].get('EmergencyOverride', {})
+        override_path = f'{action_path}/EmergencyOverride'
+        if 'IsEmergency' in override:
+            result = _required_fields(override, {'IsEmergency': 'boolean'}, override_path)
+            if result:
+                return result
         if override.get('IsEmergency'):
+            result = _required_fields(event, {'Header/TimestampInt': 'integer'})
+            result.extend(_required_fields(override, {'ApprovalChain': 'array'}, override_path))
+            if result:
+                return result
             approvals = override['ApprovalChain']
+            for index, approval in enumerate(approvals):
+                result.extend(_required_fields(approval, {
+                    'ApproverRoleID': 'string', 'ApprovalTimestamp': 'integer',
+                }, f'{override_path}/ApprovalChain/{index}'))
+            if result:
+                return result
             roles = [a['ApproverRoleID'] for a in approvals]
             if len(set(roles)) != len(roles):
                 result.append('Emergency approvals require distinct role identifiers (human identity must be checked externally)')
             if any(a['ApprovalTimestamp'] > event['Header']['TimestampInt'] for a in approvals):
                 result.append('Emergency approval cannot occur after checkpoint')
     elif kind == 'SYS_ANCHOR_MIGRATION':
+        period_path = 'Payload/VCP-ANCHOR/MigrationDetails/DualAnchorPeriod'
+        result = _required_fields(event, {
+            f'{period_path}/StartTimestamp': 'integer',
+            f'{period_path}/EndTimestamp': 'integer',
+        })
+        if result:
+            return result
         overlap = event['Payload']['VCP-ANCHOR']['MigrationDetails']['DualAnchorPeriod']
         if overlap['StartTimestamp'] > overlap['EndTimestamp']:
             result.append('Migration overlap start must not follow end')
