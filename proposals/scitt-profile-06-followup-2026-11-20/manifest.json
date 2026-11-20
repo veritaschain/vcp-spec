@@ -1,0 +1,20 @@
+{
+  "status": "unsubmitted and unadopted editor candidate",
+  "baseline_repository_commit": "ab5c851ce937763104204d8c4ab09197e16799f1",
+  "baseline_url": "https://www.ietf.org/archive/id/draft-kamimura-scitt-vcp-06.xml",
+  "source_sha256": {
+    "source/draft-kamimura-scitt-vcp-06.xml": "58ccf43f176e55d758f49eb21038c4742fa830a4c8d53657c1573e710ac480fe",
+    "source/bibxml/reference.RFC.9943.xml": "58e636458bffc4ce8be95d3ea2a6ba071f48f9dea9f0c2c11c91187b93e7dcdc",
+    "source/bibxml/reference.I-D.ietf-scitt-scrapi.xml": "6b523b12205550427b3fe7416551394568bb56f1c0b57dcac6ad40b8e05d40b6",
+    "source/bibxml/reference.RFC.7942.xml": "d8e1ca1228ab5422238295a3d9dfe82340c12b49075b8db99114c20551de2bcd",
+    "source/bibxml/reference.RFC.9162.xml": "313e666257b1c8776cecba5d62e34af7e050261ea52e11adb1ae5c027f9534e8",
+    "source/bibxml/reference.RFC.9942.xml": "e30cdce97a23626ef68f9a18536bb6977d1e2994c6a8843a3e9baf893e0286ea"
+  },
+  "generated_sha256": {
+    "draft-kamimura-scitt-vcp-07.xml": "f547f4b9481fcc1513921964e742b5b3ffe7400fbf0f84b92cb5f07f74e9111a",
+    "examples/header.json": "952da75ccba1a97be1f2ba9aeec6efe2be4bf0e69df96654683d361d48cbce88",
+    "examples/order.json": "fd674762eac6f83dd1e3553f9b9a1f0063aadc071c7a59a4ed4626721bf8fc47",
+    "examples/erasure.json": "67e831da12269847ccf6bfa299e96849feacd70ff8e811e2a6fe56071552ae06"
+  },
+  "scope": "Documentation, HTTP mapping and example clock consistency only; no cryptographic conformance claim"
+}

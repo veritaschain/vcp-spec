@@ -1,0 +1,43 @@
+{
+  "Header": {
+    "EventID": "019cf0d4-be3b-7000-8000-123456789abc",
+    "TimestampISO": "2026-03-15T09:30:00.123456789Z",
+    "TimestampInt": 1773567000123456789,
+    "EventType": "ORD",
+    "ActorID": "algo-momentum-001",
+    "ChainID": "chain-actor-001",
+    "SequenceNum": 42,
+    "PolicyID": "org.veritaschain.policy:gold-v1-2",
+    "SCITTAlignment": {
+      "Version": "1.2",
+      "ConformanceProfile": "VCP_SCITT",
+      "TransparencyServiceID": "ts.veritaschain.example",
+      "ReceiptFormat": "COSE_RECEIPT"
+    }
+  },
+  "Payload": {
+    "VCP-TRADE": {
+      "OrderID": "ord-2026-001",
+      "Symbol": "AAPL",
+      "Side": "BUY",
+      "Quantity": "100",
+      "Price": "185.50",
+      "OrderType": "LIMIT",
+      "TimeInForce": "DAY"
+    },
+    "VCP-GOV": {
+      "AlgoID": "momentum-v2.3",
+      "DecisionFactors": [
+        "RSI_oversold",
+        "volume_spike"
+      ],
+      "ConfidenceScore": "0.87",
+      "RiskCheckPassed": true
+    }
+  },
+  "Security": {
+    "EventHash": "sha256:a1b2c3...",
+    "PrevHash": "sha256:f6e5d4...",
+    "SignAlgo": "ED25519"
+  }
+}

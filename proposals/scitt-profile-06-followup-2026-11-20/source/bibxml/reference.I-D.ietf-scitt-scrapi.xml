@@ -1,0 +1,19 @@
+<reference anchor="I-D.ietf-scitt-scrapi" target="https://datatracker.ietf.org/doc/html/draft-ietf-scitt-scrapi-11">
+  <front>
+    <title>Supply Chain Integrity, Transparency, and Trust (SCITT) Reference APIs</title>
+    <author fullname="Henk Birkholz" initials="H." surname="Birkholz">
+      <organization>Fraunhofer SIT</organization>
+    </author>
+    <author fullname="Jon Geater" initials="J." surname="Geater">
+      <organization>Bowball Technologies Ltd</organization>
+    </author>
+    <author fullname="Antoine Delignat-Lavaud" initials="A." surname="Delignat-Lavaud">
+      <organization>Microsoft Research</organization>
+    </author>
+    <date day="26" month="June" year="2026"/>
+    <abstract>
+      <t>This document specifies a REST API with the HTTP resources, request and response messages, and error handling needed for an interoperable implementation of a SCITT Transparency Service, as defined by the Supply Chain Integrity, Transparency, and Trust (SCITT) Architecture.</t>
+    </abstract>
+  </front>
+  <seriesInfo name="Internet-Draft" value="draft-ietf-scitt-scrapi-11"/>
+</reference>

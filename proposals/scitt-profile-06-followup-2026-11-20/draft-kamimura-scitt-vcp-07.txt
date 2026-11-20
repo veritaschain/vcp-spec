@@ -1,0 +1,1960 @@
+
+
+
+
+Supply Chain Integrity, Transparency, and Trust              T. Kamimura
+Internet-Draft                       VeritasChain Standards Organization
+Intended status: Informational                          20 November 2026
+Expires: 24 May 2027
+
+
+A SCITT Profile for Verifiable Audit Trails in Algorithmic Trading: The
+                      VeritasChain Protocol (VCP)
+                      draft-kamimura-scitt-vcp-07
+
+Abstract
+
+   This document defines a profile of the SCITT (Supply Chain Integrity,
+   Transparency, and Trust) architecture for creating tamper-evident
+   audit trails of AI-driven algorithmic trading decisions and
+   executions.  The VeritasChain Protocol (VCP) applies the SCITT
+   framework to address the specific requirements of financial markets,
+   including high-precision timestamps, considerations arising from
+   recordkeeping regimes such as the EU AI Act and MiFID II, and a
+   crypto-shredding mechanism intended to support erasure obligations
+   such as those under the GDPR.  This profile specifies how VCP events
+   are encoded as SCITT Signed Statements, registered with Transparency
+   Services, and verified using COSE Receipts.  It further defines SCITT
+   conformance profiles for interoperability and an ERASURE event type
+   that records crypto-shredding operations as append-only audit events.
+   The profile makes trading records auditable and attributable after
+   the fact; it does not prevent or block any trading activity, and it
+   does not warrant the correctness of any recorded decision.
+
+About This Document
+
+   This note is to be removed before publishing as an RFC.
+
+   This is an unsubmitted editor's candidate for discussion.  The -07
+   identifier is provisional.  The published revision is -06; this file
+   is not evidence of a new IETF submission, VSO adoption or an
+   implementation-conformance result.
+
+   The latest version of this document, along with implementation
+   resources and test vectors, can be found at
+   https://github.com/veritaschain/vcp-spec.
+
+   Discussion of this document takes place on the SCITT Working Group
+   mailing list (scitt@ietf.org).
+
+
+
+
+
+
+
+Kamimura                   Expires 24 May 2027                  [Page 1]
+
+Internet-Draft                  SCITT-VCP                  November 2026
+
+
+   Proposed changes from -06 are listed in Appendix C.  The SCRAPI
+   description and examples are corrected; the six Open Issues remain
+   unresolved.  Earlier changes are recorded in the subsequent
+   appendices.
+
+Status of This Memo
+
+   This Internet-Draft is submitted in full conformance with the
+   provisions of BCP 78 and BCP 79.
+
+   Internet-Drafts are working documents of the Internet Engineering
+   Task Force (IETF).  Note that other groups may also distribute
+   working documents as Internet-Drafts.  The list of current Internet-
+   Drafts is at https://datatracker.ietf.org/drafts/current/.
+
+   Internet-Drafts are draft documents valid for a maximum of six months
+   and may be updated, replaced, or obsoleted by other documents at any
+   time.  It is inappropriate to use Internet-Drafts as reference
+   material or to cite them other than as "work in progress."
+
+   This Internet-Draft will expire on 24 May 2027.
+
+Copyright Notice
+
+   Copyright (c) 2026 IETF Trust and the persons identified as the
+   document authors.  All rights reserved.
+
+   This document is subject to BCP 78 and the IETF Trust's Legal
+   Provisions Relating to IETF Documents (https://trustee.ietf.org/
+   license-info) in effect on the date of publication of this document.
+   Please review these documents carefully, as they describe your rights
+   and restrictions with respect to this document.  Code Components
+   extracted from this document must include Revised BSD License text as
+   described in Section 4.e of the Trust Legal Provisions and are
+   provided without warranty as described in the Revised BSD License.
+
+Table of Contents
+
+   1.  Introduction  . . . . . . . . . . . . . . . . . . . . . . . .   4
+     1.1.  Requirements Language . . . . . . . . . . . . . . . . . .   4
+     1.2.  Relationship to SCITT . . . . . . . . . . . . . . . . . .   4
+     1.3.  Scope . . . . . . . . . . . . . . . . . . . . . . . . . .   5
+   2.  Terminology . . . . . . . . . . . . . . . . . . . . . . . . .   5
+     2.1.  SCITT Terminology Mapping . . . . . . . . . . . . . . . .   6
+   3.  Architecture  . . . . . . . . . . . . . . . . . . . . . . . .   7
+     3.1.  Event Flow  . . . . . . . . . . . . . . . . . . . . . . .   8
+     3.2.  Per-Actor Hash Chain (Optional) . . . . . . . . . . . . .   9
+     3.3.  Three-Layer Integrity Architecture  . . . . . . . . . . .   9
+
+
+
+Kamimura                   Expires 24 May 2027                  [Page 2]
+
+Internet-Draft                  SCITT-VCP                  November 2026
+
+
+   4.  VCP Event Schema  . . . . . . . . . . . . . . . . . . . . . .  10
+     4.1.  Header Object . . . . . . . . . . . . . . . . . . . . . .  10
+     4.2.  Payload Object  . . . . . . . . . . . . . . . . . . . . .  11
+     4.3.  Security Object . . . . . . . . . . . . . . . . . . . . .  12
+     4.4.  SCITT Alignment Object  . . . . . . . . . . . . . . . . .  13
+     4.5.  Event Types . . . . . . . . . . . . . . . . . . . . . . .  14
+   5.  Registration Policy . . . . . . . . . . . . . . . . . . . . .  16
+     5.1.  Policy Identification . . . . . . . . . . . . . . . . . .  16
+     5.2.  Validation Requirements . . . . . . . . . . . . . . . . .  16
+     5.3.  Tier-Specific Requirements  . . . . . . . . . . . . . . .  17
+     5.4.  Certification Policy Requirements . . . . . . . . . . . .  17
+   6.  Crypto-Shredding  . . . . . . . . . . . . . . . . . . . . . .  18
+     6.1.  Mechanism . . . . . . . . . . . . . . . . . . . . . . . .  18
+     6.2.  VCP-PRIVACY Module  . . . . . . . . . . . . . . . . . . .  19
+     6.3.  ERASURE Event Type  . . . . . . . . . . . . . . . . . . .  19
+   7.  SCRAPI Integration  . . . . . . . . . . . . . . . . . . . . .  22
+     7.1.  Registration (POST /entries)  . . . . . . . . . . . . . .  22
+     7.2.  Receipt Resolution (GET the Location URL) . . . . . . . .  23
+     7.3.  Receipt Verification and Statement Availability . . . . .  23
+     7.4.  External Anchor Information . . . . . . . . . . . . . . .  23
+   8.  Security Considerations . . . . . . . . . . . . . . . . . . .  23
+     8.1.  Integrity Architecture  . . . . . . . . . . . . . . . . .  23
+     8.2.  Quantum Resistance  . . . . . . . . . . . . . . . . . . .  24
+     8.3.  Timing Attacks  . . . . . . . . . . . . . . . . . . . . .  24
+     8.4.  Privacy Considerations  . . . . . . . . . . . . . . . . .  25
+     8.5.  Completeness Considerations . . . . . . . . . . . . . . .  25
+   9.  Open Issues . . . . . . . . . . . . . . . . . . . . . . . . .  25
+   10. Implementation Status . . . . . . . . . . . . . . . . . . . .  27
+   11. IANA Considerations . . . . . . . . . . . . . . . . . . . . .  28
+   12. References  . . . . . . . . . . . . . . . . . . . . . . . . .  28
+     12.1.  Normative References . . . . . . . . . . . . . . . . . .  28
+     12.2.  Informative References . . . . . . . . . . . . . . . . .  29
+   Appendix A.  Illustrative VCP Event Example . . . . . . . . . . .  30
+   Appendix B.  JSON Schema Reference  . . . . . . . . . . . . . . .  32
+   Appendix C.  Changes from draft-kamimura-scitt-vcp-06 . . . . . .  32
+   Appendix D.  Changes from draft-kamimura-scitt-vcp-05 . . . . . .  32
+   Appendix E.  Changes from draft-kamimura-scitt-vcp-04 . . . . . .  32
+   Appendix F.  Changes from draft-kamimura-scitt-vcp-03 . . . . . .  33
+   Appendix G.  Changes from draft-kamimura-scitt-vcp-02 . . . . . .  34
+   Appendix H.  Changes from draft-kamimura-scitt-vcp-01 . . . . . .  34
+   Acknowledgements  . . . . . . . . . . . . . . . . . . . . . . . .  35
+   Author's Address  . . . . . . . . . . . . . . . . . . . . . . . .  35
+
+
+
+
+
+
+
+
+
+Kamimura                   Expires 24 May 2027                  [Page 3]
+
+Internet-Draft                  SCITT-VCP                  November 2026
+
+
+1.  Introduction
+
+   The SCITT (Supply Chain Integrity, Transparency, and Trust)
+   architecture [RFC9943] provides a framework for creating tamper-
+   evident logs of digital artifacts through Transparency Services.
+   While SCITT was initially designed for software supply chain use
+   cases, its core primitives--Signed Statements, Receipts, and
+   Transparency Services--are applicable to any domain requiring
+   verifiable audit trails.
+
+   This document specifies a SCITT profile for AI-driven algorithmic
+   trading systems in financial markets.  The VeritasChain Protocol
+   (VCP) applies the SCITT architecture with domain-specific extensions:
+
+   *  A schema for encoding trading events as SCITT Signed Statements
+
+   *  Registration policies for financial audit trails
+
+   *  Conformance tiers (Silver, Gold, Platinum) with varying
+      requirements for timing precision, anchoring frequency, and key
+      protection
+
+   *  A crypto-shredding mechanism intended to support data erasure
+      obligations
+
+   *  A completeness-aware design that enables omission detection
+      through external anchoring
+
+   VCP serves as an "AI Flight Recorder" for algorithmic trading,
+   supporting post-incident reconstruction of recorded system behavior
+   with cryptographic evidence that the records were not altered after
+   commitment.  It cannot reconstruct events that were never recorded.
+
+1.1.  Requirements Language
+
+   The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
+   "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and
+   "OPTIONAL" in this document are to be interpreted as described in BCP
+   14 [RFC2119] [RFC8174] when, and only when, they appear in all
+   capitals, as shown here.
+
+1.2.  Relationship to SCITT
+
+   This document is a profile of the SCITT architecture.  It:
+
+   *  REQUIRES compliance with [RFC9943]
+
+
+
+
+
+Kamimura                   Expires 24 May 2027                  [Page 4]
+
+Internet-Draft                  SCITT-VCP                  November 2026
+
+
+   *  REQUIRES use of SCRAPI [I-D.ietf-scitt-scrapi] for Transparency
+      Service interactions
+
+   *  RECOMMENDS COSE Receipts for inclusion proofs
+
+   *  DEFINES domain-specific extensions for financial trading
+
+   This profile does not define a new SCITT protocol or new Transparency
+   Service interactions; it specifies how existing SCITT primitives are
+   applied to VCP events in the financial trading domain.  The VCP event
+   format and integrity layer are defined in [VCP-SPEC].
+
+1.3.  Scope
+
+   This document specifies:
+
+   *  VCP Event schema as SCITT Signed Statement payload
+
+   *  Registration Policy requirements for VCP Transparency Services
+
+   *  Mapping of VCP concepts to SCITT terminology
+
+   *  Three conformance tiers with specific requirements
+
+   *  Crypto-shredding mechanism to support erasure obligations
+
+   *  Three-layer integrity architecture
+
+   This document does not specify:
+
+   *  General SCITT architecture (see [RFC9943])
+
+   *  SCRAPI endpoints (see [I-D.ietf-scitt-scrapi])
+
+   *  COSE Receipt format (see [RFC9942])
+
+   *  Specific regulatory mapping (covered in companion documents)
+
+   *  A particular anchoring service (the anchor target is deployment-
+      specific; anchoring itself is REQUIRED)
+
+2.  Terminology
+
+   This document uses terminology from [RFC9943].  The following terms
+   are specific to this profile:
+
+   VCP Event  A single auditable record in the VeritasChain Protocol,
+
+
+
+
+Kamimura                   Expires 24 May 2027                  [Page 5]
+
+Internet-Draft                  SCITT-VCP                  November 2026
+
+
+      encoded as a SCITT Signed Statement.  Consists of Header, Payload,
+      and Security metadata.
+
+   VCP Issuer  An algorithmic trading system, AI model, or human
+      operator that generates VCP Events.  Corresponds to SCITT Issuer.
+
+   VCP Transparency Service  A SCITT Transparency Service configured
+      with VCP-specific Registration Policies.  Operates a VCP-compliant
+      append-only log.
+
+   VCP Receipt  A COSE Receipt issued by a VCP Transparency Service,
+      proving inclusion of a VCP Event in the log.
+
+   Actor  An entity (algorithm, human operator, or system) identified by
+      ActorID that generates VCP Events.
+
+   Crypto-Shredding  A privacy technique where encrypted payload data is
+      rendered permanently unrecoverable by destroying the encryption
+      key, while preserving the cryptographic integrity proofs (hashes
+      and Receipts).
+
+   Conformance Tier  One of three implementation levels (Silver, Gold,
+      Platinum) with increasing requirements for timing precision,
+      anchoring frequency, and key protection.
+
+   External Anchor  A cryptographic commitment (typically a Merkle root)
+      published to an external, independent system (e.g., public
+      blockchain, timestamping authority).  External anchoring makes
+      omission of events from an anchored batch, after anchoring,
+      detectable by third parties at batch granularity.
+
+   Policy Identification  A field within the VCP Event that explicitly
+      identifies the applicable Registration Policy and conformance
+      tier.
+
+2.1.  SCITT Terminology Mapping
+
+   The following table maps VCP concepts to SCITT terminology:
+
+
+
+
+
+
+
+
+
+
+
+
+
+Kamimura                   Expires 24 May 2027                  [Page 6]
+
+Internet-Draft                  SCITT-VCP                  November 2026
+
+
+   +==================+==============+================================+
+   | VCP Concept      | SCITT        | Notes                          |
+   |                  | Equivalent   |                                |
+   +==================+==============+================================+
+   | VCP Event        | Signed       | VCP Event is the payload of a  |
+   |                  | Statement    | Signed Statement               |
+   +------------------+--------------+--------------------------------+
+   | VCP Issuer       | Issuer       | Trading system or AI model     |
+   +------------------+--------------+--------------------------------+
+   | VCP Transparency | Transparency | With VCP Registration Policy   |
+   | Service          | Service      |                                |
+   +------------------+--------------+--------------------------------+
+   | VCP Receipt      | Receipt      | COSE Receipt with Merkle       |
+   |                  |              | inclusion proof                |
+   +------------------+--------------+--------------------------------+
+   | Hash Chain       | Append-only  | VCP optionally adds per-Actor  |
+   | (Optional)       | Log          | chaining                       |
+   +------------------+--------------+--------------------------------+
+   | External Anchor  | Merkle Tree  | Periodic commitment supporting |
+   |                  | Root         | completeness verification      |
+   +------------------+--------------+--------------------------------+
+
+                Table 1: VCP to SCITT Terminology Mapping
+
+3.  Architecture
+
+   VCP builds upon the SCITT architecture with domain-specific
+   extensions for financial trading:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Kamimura                   Expires 24 May 2027                  [Page 7]
+
+Internet-Draft                  SCITT-VCP                  November 2026
+
+
+     +------------------+       +-------------------------+
+     |   VCP Issuer     |       |  VCP Transparency       |
+     | (Trading System) |       |      Service            |
+     +--------+---------+       +------------+------------+
+              |                              |
+              | 1. Create VCP Event          |
+              | 2. Sign as COSE_Sign1        |
+              |                              |
+              +------ Signed Statement ----->|
+              |       (via SCRAPI)           |
+              |                              | 3. Validate against
+              |                              |    Registration Policy
+              |                              |
+              |                              | 4. Append to Log
+              |                              |
+              |<-------- VCP Receipt --------+
+              |       (COSE Receipt)         |
+              |                              |
+     +--------+---------+       +------------+------------+
+     |    Verifier      |       |   External Anchor       |
+     | (Auditor/Regul.) |       | (Timestamp/Blockchain)  |
+     +------------------+       +-------------------------+
+
+3.1.  Event Flow
+
+   1.  *Event Generation:* VCP Issuer creates a VCP Event containing
+       trading decision or execution data.
+
+   2.  *Signing:* Event is signed using COSE_Sign1 [RFC9052] with the
+       Issuer's private key.
+
+   3.  *Registration:* Signed Statement is submitted to VCP Transparency
+       Service via SCRAPI POST /entries.
+
+   4.  *Validation:* Transparency Service validates against VCP
+       Registration Policy.
+
+   5.  *Logging:* Valid statement is appended to the append-only log.
+
+   6.  *Receipt:* COSE Receipt with Merkle inclusion proof is returned
+       to Issuer.
+
+   7.  *External Anchoring:* The Merkle root MUST be periodically
+       anchored to an external system at the frequency of the applicable
+       tier (Section 5.3), making post-anchor omission detectable by
+       third parties.
+
+
+
+
+
+Kamimura                   Expires 24 May 2027                  [Page 8]
+
+Internet-Draft                  SCITT-VCP                  November 2026
+
+
+3.2.  Per-Actor Hash Chain (Optional)
+
+   VCP MAY maintain per-Actor hash chains in addition to SCITT's global
+   append-only log.  When implemented, each VCP Event includes a
+   PrevHash field containing the hash of the previous event from the
+   same Actor.  This enables efficient verification of a single Actor's
+   event sequence without downloading the entire log.
+
+   Note: Per-Actor hash chains are OPTIONAL.  External anchoring of
+   batch roots provides the primary mechanism for completeness
+   verification at batch granularity.  Hash chains serve as a
+   complementary local integrity mechanism.
+
+     Actor A:  Event_A1 --hash--> Event_A2 --hash--> Event_A3
+
+     Actor B:  Event_B1 --hash--> Event_B2
+
+     Global Log: [Event_A1, Event_B1, Event_A2, Event_B2, Event_A3, ...]
+
+3.3.  Three-Layer Integrity Architecture
+
+   VCP defines a three-layer architecture that separates concerns and
+   clarifies where each integrity property originates:
+
+        +=======+===============+===================+=============+
+        | Layer | Component     | Property          | Protocol    |
+        |       |               |                   | Requirement |
+        +=======+===============+===================+=============+
+        | Layer | Event         | Individual event  | REQUIRED    |
+        | 1     | Integrity     | authenticity via  |             |
+        |       |               | digital signature |             |
+        +-------+---------------+-------------------+-------------+
+        | Layer | Collection    | Merkle tree over  | REQUIRED    |
+        | 2     | Integrity     | event collection  |             |
+        +-------+---------------+-------------------+-------------+
+        | Layer | External      | Merkle root       | REQUIRED    |
+        | 3     | Verifiability | anchored to       |             |
+        |       |               | external system   |             |
+        +-------+---------------+-------------------+-------------+
+
+                   Table 2: VCP Three-Layer Architecture
+
+   Note: Layer 3 (External Verifiability) is REQUIRED at every tier, as
+   in VCP v1.2 [VCP-SPEC].  Revisions -02 and -03 of this document
+   described it as OPTIONAL at the protocol level; that description did
+   not match the VCP specification and is withdrawn.  Lightweight or
+   delegated anchoring mechanisms are acceptable at the Silver tier.
+
+
+
+
+Kamimura                   Expires 24 May 2027                  [Page 9]
+
+Internet-Draft                  SCITT-VCP                  November 2026
+
+
+   External anchoring makes post-anchor omission detectable: without it,
+   a log producer could rebuild a batch and publish a different Merkle
+   root.  Anchoring lets third parties check a presented root against an
+   independently recorded commitment, supporting the "Verify, Don't
+   Trust" principle.  It does not reveal events that were never included
+   in a batch.
+
+     Layer 1: Event Integrity
+     +--------+    +--------+    +--------+
+     | Event1 |    | Event2 |    | Event3 |
+     | (sig)  |    | (sig)  |    | (sig)  |
+     +---+----+    +---+----+    +---+----+
+         |            |            |
+         v            v            v
+     Layer 2: Collection Integrity (Merkle Tree)
+     +------------------------------------------+
+     |              Merkle Root                 |
+     +---------------------+--------------------+
+                           |
+                           v (REQUIRED)
+     Layer 3: External Verifiability
+     +------------------------------------------+
+     | External Anchor (Blockchain/TSA/etc.)    |
+     +------------------------------------------+
+
+4.  VCP Event Schema
+
+   A VCP Event is encoded as the payload of a SCITT Signed Statement.
+   The payload MUST be a JSON object conforming to the following schema:
+
+4.1.  Header Object
+
+   The Header contains metadata common to all VCP Events:
+
+   {
+     "Header": {
+       "EventID": "019cf0d4-be3b-7000-8000-123456789abc",
+       "TimestampISO": "2026-03-15T09:30:00.123456789Z",
+       "TimestampInt": 1773567000123456789,
+       "EventType": "ORD",
+       "ActorID": "algo-momentum-001",
+       "ChainID": "chain-actor-001",
+       "SequenceNum": 42,
+       "PolicyID": "org.veritaschain.policy:silver-v1-2"
+     }
+   }
+
+   EventID  REQUIRED.  UUID v7 [RFC9562] providing time-sortable unique
+
+
+
+Kamimura                   Expires 24 May 2027                 [Page 10]
+
+Internet-Draft                  SCITT-VCP                  November 2026
+
+
+      identification.
+
+   TimestampISO  REQUIRED.  ISO 8601 timestamp with nanosecond
+      precision.
+
+   TimestampInt  REQUIRED.  Integer timestamp in nanoseconds since Unix
+      epoch.  Values exceed 2^53, so a parser that does not preserve
+      64-bit integer precision alters them.  See Section 9 regarding
+      canonicalization.
+
+   EventType  REQUIRED.  Registered event type code (see Section 4.5).
+
+   ActorID  REQUIRED.  Identifier of the entity generating this event.
+
+   ChainID  REQUIRED.  Identifier of the per-Actor hash chain.
+
+   SequenceNum  REQUIRED.  Monotonically increasing sequence number
+      within the Actor's chain.
+
+   PolicyID  REQUIRED.  Identifier of the Registration Policy under
+      which the event is registered.  Per VCP v1.2 [VCP-SPEC], PolicyID
+      SHOULD follow the Issuer Domain + Local ID convention
+      (reverse_domain:local_identifier), for example
+      "org.veritaschain.policy:gold-v1-2".  Global uniqueness is
+      achieved through domain ownership; no central PolicyID registry is
+      operated.
+
+4.2.  Payload Object
+
+   The Payload contains domain-specific data organized into modules:
+
+   VCP-TRADE  Trading data: orders, executions, modifications,
+      cancellations.
+
+   VCP-RISK  Risk management data: exposure, limits, margin.
+
+   VCP-GOV  Governance data: algorithm parameters, decision factors,
+      operator actions.
+
+   VCP-PRIVACY  Privacy metadata: encryption keys, retention policies.
+
+
+
+
+
+
+
+
+
+
+
+Kamimura                   Expires 24 May 2027                 [Page 11]
+
+Internet-Draft                  SCITT-VCP                  November 2026
+
+
+   {
+     "Payload": {
+       "VCP-TRADE": {
+         "OrderID": "ord-2026-001",
+         "Symbol": "AAPL",
+         "Side": "BUY",
+         "Quantity": "100",
+         "Price": "185.50",
+         "OrderType": "LIMIT"
+       },
+       "VCP-GOV": {
+         "AlgoID": "momentum-v2.3",
+         "DecisionFactors": ["RSI_oversold", "volume_spike"],
+         "ConfidenceScore": "0.87"
+       }
+     }
+   }
+
+4.3.  Security Object
+
+   The Security object contains integrity and chaining information:
+
+   {
+     "Security": {
+       "EventHash": "sha256:a1b2c3d4...",
+       "PrevHash": "sha256:f6e5d4c3...",
+       "MerkleRoot": "sha256:1234abcd...",
+       "SignAlgo": "ED25519",
+       "AnchorRef": "eth:0x1234...@12345678"
+     }
+   }
+
+   EventHash  REQUIRED.  SHA-256 hash of the canonicalized Header and
+      Payload, computed using JSON Canonicalization Scheme [RFC8785].
+
+   PrevHash  OPTIONAL.  Hash of the previous event in this Actor's
+      chain.  If present, MUST match the EventHash of the preceding
+      event (except for INIT events where it is absent).
+
+   MerkleRoot  OPTIONAL in individual events.  Included in anchor (ANC)
+      events.
+
+   SignAlgo  REQUIRED.  Signature algorithm identifier.  MUST be
+      "ED25519" (default) or "DILITHIUM2", the VCP v1.2 registry value
+      for ML-DSA [FIPS-204].  DILITHIUM2 carries EXPERIMENTAL status in
+      VCP v1.2 and is intended for testing and hybrid (classical plus
+      post-quantum) deployments; it is not a certification requirement.
+
+
+
+
+Kamimura                   Expires 24 May 2027                 [Page 12]
+
+Internet-Draft                  SCITT-VCP                  November 2026
+
+
+   AnchorRef  OPTIONAL.  Reference to the anchor location (e.g.,
+      blockchain transaction ID, TSA receipt ID), populated once the
+      batch containing the event has been anchored.  See Section 9 on
+      the corresponding field in [VCP-SPEC].
+
+4.4.  SCITT Alignment Object
+
+   VCP v1.2 [VCP-SPEC] defines an OPTIONAL SCITTAlignment object carried
+   in the Header.  It makes the binding between a VCP Event and its
+   SCITT artifacts (Signed Statement, Transparency Service, Receipt)
+   explicit and machine-readable.
+
+   Field presence is governed by conformance profiles:
+
+      +================+================+==========================+
+      | Profile        | SCITTAlignment | Intended Use             |
+      +================+================+==========================+
+      | VCP_BASE       | OPTIONAL       | Standard VCP deployment  |
+      +----------------+----------------+--------------------------+
+      | VCP_SCITT      | REQUIRED       | SCITT Transparency       |
+      |                |                | Service interoperability |
+      +----------------+----------------+--------------------------+
+      | VCP_REGULATORY | RECOMMENDED    | Regulatory reporting     |
+      |                |                | scenarios                |
+      +----------------+----------------+--------------------------+
+
+              Table 3: SCITT Alignment Conformance Profiles
+
+   Implementations claiming the VCP_SCITT profile MUST include the
+   SCITTAlignment object in every registered event; this profile-based
+   approach avoids partial-implementation ambiguity.
+
+   {
+     "Header": {
+       "SCITTAlignment": {
+         "Version": "1.2",
+         "ConformanceProfile": "VCP_SCITT",
+         "StatementID": "stmt-01961e5f-5c0d-7000",
+         "TransparencyServiceID": "ts.veritaschain.example",
+         "ReceiptFormat": "COSE_RECEIPT",
+         "RegistrationPolicy": {
+           "PolicyID": "org.veritaschain.policy:gold-v1-2",
+           "Issuer": "org.veritaschain",
+           "IssuedAt": 1767225600000000000
+         }
+       }
+     }
+   }
+
+
+
+Kamimura                   Expires 24 May 2027                 [Page 13]
+
+Internet-Draft                  SCITT-VCP                  November 2026
+
+
+   Version  REQUIRED when present.  VCP specification version governing
+      the alignment semantics ("1.2").
+
+   ConformanceProfile  REQUIRED when present.  One of "VCP_BASE",
+      "VCP_SCITT", or "VCP_REGULATORY".
+
+   StatementID  OPTIONAL.  Identifier of the SCITT Signed Statement
+      carrying this event.
+
+   TransparencyServiceID  OPTIONAL.  Identifier of the Transparency
+      Service with which the event is registered.  REQUIRED under the
+      VCP_SCITT profile.
+
+   ReceiptFormat  OPTIONAL.  Receipt encoding in use; "COSE_RECEIPT"
+      designates COSE Receipts as specified by the SCITT architecture
+      [RFC9943].
+
+   RegistrationPolicy  OPTIONAL.  Structured reference to the
+      Registration Policy (PolicyID, Issuer, IssuedAt) mirroring the
+      Header-level PolicyID.
+
+4.5.  Event Types
+
+    +=======================+==============+==========================+
+    | Code                  |Name          | Description              |
+    +=======================+==============+==========================+
+    | INIT                  |Initialization| Chain initialization, no |
+    |                       |              | PrevHash                 |
+    +-----------------------+--------------+--------------------------+
+    | SIG                   |Signal        | Trading signal generated |
+    +-----------------------+--------------+--------------------------+
+    | ORD                   |Order         | Order submitted          |
+    +-----------------------+--------------+--------------------------+
+    | ACK                   |Acknowledgment| Order acknowledged by    |
+    |                       |              | venue                    |
+    +-----------------------+--------------+--------------------------+
+    | EXE                   |Execution     | Order executed (fill)    |
+    +-----------------------+--------------+--------------------------+
+    | CXL                   |Cancellation  | Order cancelled          |
+    +-----------------------+--------------+--------------------------+
+    | MOD                   |Modification  | Order modified           |
+    +-----------------------+--------------+--------------------------+
+    | RSK                   |Risk          | Risk event or limit      |
+    |                       |              | breach                   |
+    +-----------------------+--------------+--------------------------+
+    | ERR                   |Error         | System error             |
+    +-----------------------+--------------+--------------------------+
+    | ERR_*                 |Error subtypes| ERR_CONN, ERR_AUTH,      |
+
+
+
+Kamimura                   Expires 24 May 2027                 [Page 14]
+
+Internet-Draft                  SCITT-VCP                  November 2026
+
+
+    |                       |              | ERR_TIMEOUT, ERR_REJECT, |
+    |                       |              | ERR_PARSE, ERR_SYNC,     |
+    |                       |              | ERR_RISK, ERR_SYSTEM,    |
+    |                       |              | ERR_RECOVER              |
+    +-----------------------+--------------+--------------------------+
+    | HBT                   |Heartbeat     | Periodic liveness signal |
+    +-----------------------+--------------+--------------------------+
+    | CLS                   |Close         | Position closed          |
+    +-----------------------+--------------+--------------------------+
+    | ANC                   |Anchor        | Merkle anchor event      |
+    +-----------------------+--------------+--------------------------+
+    | ERASURE               |Erasure       | Crypto-shredding record  |
+    |                       |              | (VCP v1.2, see           |
+    |                       |              | Section 6.3)             |
+    +-----------------------+--------------+--------------------------+
+    | SYS_RECOVERY_ANNOUNCE |Recovery      | Planned CHECKPOINT       |
+    |                       |announcement  | notice (Payload.VCP-     |
+    |                       |              | RECOVERY.Announcement)   |
+    +-----------------------+--------------+--------------------------+
+    | SYS_CHECKPOINT        |Checkpoint    | Recorded chain reset     |
+    |                       |              | with authorized recovery |
+    |                       |              | action (Payload.VCP-     |
+    |                       |              | RECOVERY)                |
+    +-----------------------+--------------+--------------------------+
+    | SYS_AUDIT             |Audit         | Post-incident review     |
+    |                       |              | (Payload.VCP-            |
+    |                       |              | GOV.AuditDetails)        |
+    +-----------------------+--------------+--------------------------+
+    | SYS_ANCHOR_MIGRATION  |Anchor        | Anchor transition and    |
+    |                       |migration     | phase (Payload.VCP-      |
+    |                       |              | ANCHOR.MigrationDetails) |
+    +-----------------------+--------------+--------------------------+
+    | SYS_ANCHOR_FAILOVER   |Anchor        | Anchor failover and      |
+    |                       |failover      | queued-event inventory   |
+    |                       |              | (Payload.VCP-            |
+    |                       |              | ANCHOR.FailoverDetails)  |
+    +-----------------------+--------------+--------------------------+
+
+                          Table 4: VCP Event Types
+
+   The five SYS_* codes were registered by the VCP v1.2 release; their
+   structured payload locations and runtime requirements are defined in
+   the normative annex of [VCP-SPEC].  Validators written against pre-
+   release v1.2 artifacts need updating to accept them.
+
+
+
+
+
+
+
+Kamimura                   Expires 24 May 2027                 [Page 15]
+
+Internet-Draft                  SCITT-VCP                  November 2026
+
+
+5.  Registration Policy
+
+   A VCP Transparency Service MUST enforce a Registration Policy that
+   validates incoming Signed Statements.
+
+5.1.  Policy Identification
+
+   The PolicyID field MUST be explicitly included in the VCP Event
+   Header.  The Transparency Service MUST validate the registration
+   request against the referenced Registration Policy and MUST NOT
+   infer, select, or substitute a policy on its own.
+
+   PolicyID values SHOULD follow the Issuer Domain + Local ID convention
+   defined in VCP v1.2 [VCP-SPEC]: the reverse DNS notation of the
+   Issuer's domain, a colon, and an issuer-defined local identifier.
+   Examples:
+
+   *  org.veritaschain.policy:silver-v1-2
+
+   *  org.veritaschain.policy:gold-v1-2
+
+   *  org.veritaschain.policy:platinum-v1-2
+
+   Uniqueness derives from domain ownership; no central PolicyID
+   registry is operated.  Organizations without a domain MAY use a
+   "local:" prefix at the cost of weaker uniqueness.
+
+   Conformance tiers (Silver, Gold, Platinum) represent additional
+   verification depth and operational requirements applied on top of the
+   same core Registration Policy, and do not define separate or
+   incompatible registration policies.
+
+5.2.  Validation Requirements
+
+   The Registration Policy MUST verify:
+
+   1.  *Schema Compliance:* Payload conforms to VCP Event schema.
+
+   2.  *PolicyID Present:* Header contains a valid PolicyID field.
+
+   3.  *Signature Validity:* COSE_Sign1 signature is valid for the
+       registered Issuer public key.
+
+   4.  *Timestamp Validity:* TimestampInt is within acceptable bounds
+       (not in future, not too old).
+
+   5.  *Chain Integrity (if PrevHash present):* PrevHash matches the
+       hash of the most recent event from this Actor.
+
+
+
+Kamimura                   Expires 24 May 2027                 [Page 16]
+
+Internet-Draft                  SCITT-VCP                  November 2026
+
+
+   6.  *Sequence Monotonicity:* SequenceNum is exactly one greater than
+       the previous event's SequenceNum.
+
+5.3.  Tier-Specific Requirements
+
+   This specification distinguishes timestamp resolution from clock
+   accuracy.  Nanosecond-resolution timestamps represent the storage
+   format capability, while actual clock accuracy is explicitly recorded
+   and enforced per tier.
+
+     +====================+=============+=============+==============+
+     | Requirement        | Silver      | Gold        | Platinum     |
+     +====================+=============+=============+==============+
+     | Timestamp          | Millisecond | Microsecond | Nanosecond   |
+     | Resolution         |             |             |              |
+     +--------------------+-------------+-------------+--------------+
+     | Clock              | Best-effort | NTP (<1ms)  | PTPv2 (<1    |
+     | Synchronization    |             |             | microsecond) |
+     +--------------------+-------------+-------------+--------------+
+     | External Anchoring | Every 24    | Every hour  | Every 10     |
+     | (REQUIRED)         | hours       |             | minutes      |
+     +--------------------+-------------+-------------+--------------+
+     | Signature          | Ed25519     | Ed25519     | Ed25519 +    |
+     | Algorithm          |             |             | Dilithium    |
+     |                    |             |             | (OPTIONAL)   |
+     +--------------------+-------------+-------------+--------------+
+     | Key Storage        | Software    | Software/   | HSM Required |
+     |                    |             | HSM         |              |
+     +--------------------+-------------+-------------+--------------+
+     | PrevHash Chain     | OPTIONAL    | OPTIONAL    | RECOMMENDED  |
+     +--------------------+-------------+-------------+--------------+
+
+                   Table 5: Conformance Tier Requirements
+
+   Note: Silver tier is NOT intended for regulatory-grade algorithmic
+   trading systems subject to MiFID II RTS 25, SEC Rule 17a-4, or
+   equivalent clock synchronization requirements.  Silver tier is
+   appropriate for development, testing, backtesting analysis, and non-
+   regulated trading scenarios.
+
+5.4.  Certification Policy Requirements
+
+   This document does not mandate a specific external anchoring service;
+   it requires anchoring at the frequency of each tier.  Each
+   AnchorRecord binds the batch Merkle root, event count, first and last
+   event identifiers, and PolicyID (see Section 9 on the scope of the
+   AnchorRecord signature).  Implementations retain local copies of all
+   AnchorRecords and document an anchor continuity plan, as defined in
+
+
+
+Kamimura                   Expires 24 May 2027                 [Page 17]
+
+Internet-Draft                  SCITT-VCP                  November 2026
+
+
+   [VCP-SPEC].
+
+   Certification programs may impose requirements beyond this profile,
+   such as multiple independent anchors.  Certification requirements are
+   defined separately from this document and may evolve independently of
+   it.  Implementations may conform to this profile without obtaining
+   certification.
+
+   Acceptable anchor targets include:
+
+   *  Trusted timestamping authorities (TSA) per [RFC3161]
+
+   *  SCITT Transparency Services, with COSE Receipts per [RFC9942]
+
+   *  Public blockchains (e.g., Bitcoin, Ethereum)
+
+   *  Public timestamping services and attested databases, at the tiers
+      where [VCP-SPEC] permits them
+
+   A time-stamping authority attests existence time; by itself it does
+   not show that the same root was presented to every verifier.
+
+6.  Crypto-Shredding
+
+   VCP supports crypto-shredding as a technical mechanism that can
+   support erasure obligations while preserving audit trail integrity.
+   It renders protected plaintext irrecoverable without invalidating
+   cryptographic proofs.  Whether it satisfies a specific legal
+   obligation is not determined by this document.
+
+6.1.  Mechanism
+
+   1.  *Encryption:* Sensitive payload fields are encrypted with a per-
+       record or per-subject Data Encryption Key (DEK).
+
+   2.  *Key Storage:* DEK is stored separately, indexed by SubjectID.
+
+   3.  *Hashing:* EventHash is computed over the encrypted payload,
+       preserving integrity.
+
+   4.  *Shredding:* Upon erasure request, DEK is destroyed.  Encrypted
+       data becomes unrecoverable.
+
+   5.  *Verification:* Receipt and hash chain remain valid--verifiers
+       can confirm event existence and ordering without accessing
+       decrypted content.
+
+
+
+
+
+Kamimura                   Expires 24 May 2027                 [Page 18]
+
+Internet-Draft                  SCITT-VCP                  November 2026
+
+
+6.2.  VCP-PRIVACY Module
+
+   {
+     "VCP-PRIVACY": {
+       "EncryptedFields": ["VCP-TRADE.ClientID", "VCP-TRADE.AccountID"],
+       "KeyID": "dek-2026-001-subject-12345",
+       "Algorithm": "AES-256-GCM",
+       "RetentionPolicy": "GDPR-5Y"
+     }
+   }
+
+6.3.  ERASURE Event Type
+
+   VCP v1.2 [VCP-SPEC] defines the ERASURE event type to reconcile
+   erasure obligations (such as GDPR Article 17) with append-only,
+   tamper-evident audit trails.  An ERASURE event does not delete or
+   rewrite any prior event.  It records, as a new append-only event,
+   that the plaintext of specified protected fields has been rendered
+   irrecoverable through crypto-shredding (destruction of the Data
+   Encryption Key), while the EventHash, Merkle inclusion, and external
+   anchor of the target events remain verifiable.
+
+   In the VCP v1.2 release, an ERASURE event MUST carry its details in
+   Payload.VCP-PRIVACY.ErasureDetails, with the seven REQUIRED members
+   below.  ErasureDetails at the event root or directly under Payload is
+   invalid.  The flat ERASURE fields described in -03 of this document
+   (ErasureTargetEventIDs, ErasureReason, KeyDestructionProof,
+   RetentionExemption, OperatorID) reflected pre-release artifacts and
+   are not a v1.2 encoding.  Historical signed data is not rewritten.
+   The normative annex of [VCP-SPEC] states how pre-release records are
+   handled; it defines no lossless automatic conversion to the v1.2
+   encoding.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Kamimura                   Expires 24 May 2027                 [Page 19]
+
+Internet-Draft                  SCITT-VCP                  November 2026
+
+
+   +==================+===============================================+
+   | Member           | Content                                       |
+   +==================+===============================================+
+   | Version          | The literal "1.2"                             |
+   +------------------+-----------------------------------------------+
+   | TargetIdentifier | Type (ACCOUNT, SESSION or EVENT_RANGE),       |
+   |                  | salted SHA-256 Hash, and Salt                 |
+   +------------------+-----------------------------------------------+
+   | Scope            | AffectedEventCount, FirstAffectedEventID,     |
+   |                  | LastAffectedEventID and AffectedFields;       |
+   |                  | EventIDs MAY enumerate the exact affected set |
+   +------------------+-----------------------------------------------+
+   | Reason           | Code, Description, LegalBasis and a SHA-256   |
+   |                  | RequestReferenceHash                          |
+   +------------------+-----------------------------------------------+
+   | Authorization    | Authorizing role, signature, nanosecond       |
+   |                  | timestamp and DPO notification                |
+   +------------------+-----------------------------------------------+
+   | CryptoShredding  | SHA-256 hash of the key identifier, key       |
+   |                  | algorithm, destruction method and nanosecond  |
+   |                  | destruction timestamp                         |
+   +------------------+-----------------------------------------------+
+   | Verification     | PreErasureEventHash and PostErasureChainHash  |
+   +------------------+-----------------------------------------------+
+
+              Table 6: ErasureDetails Members (all REQUIRED)
+
+   Reason codes are GDPR_ART_17_1A, GDPR_ART_17_1B, GDPR_ART_17_1C,
+   GDPR_ART_17_1D, RETENTION_EXPIRED, SUBJECT_REQUEST, COURT_ORDER and
+   ERROR_CORRECTION.  Destruction methods are HSM_ZEROIZE, SECURE_DELETE
+   and CLOUD_KMS_DESTROY.  Authorization MUST precede or equal
+   destruction, which MUST precede or equal the ERASURE event timestamp.
+   The ERASURE event's own Merkle inclusion proof is detached (Evidence
+   Pack or Receipt), not embedded in its hashed payload.  Schema
+   validation checks the structure of this evidence, not the truth of
+   the destruction.
+
+   The following abbreviated example follows the structure of the
+   release fixture; hashes, signatures and certificates are
+   placeholders:
+
+   {
+     "Header": {
+       "EventID": "01a11df5-a400-7000-8000-000000000001",
+       "TimestampISO": "2026-10-09T00:00:00Z",
+       "TimestampInt": 1791504000000000000,
+       "EventType": "ERASURE",
+       "ActorID": "operator-example",
+
+
+
+Kamimura                   Expires 24 May 2027                 [Page 20]
+
+Internet-Draft                  SCITT-VCP                  November 2026
+
+
+       "ChainID": "chain-example",
+       "SequenceNum": 1,
+       "PolicyID": "org.example:fixture"
+     },
+     "Payload": {
+       "VCP-PRIVACY": {
+         "ErasureDetails": {
+           "Version": "1.2",
+           "TargetIdentifier": {
+             "Type": "ACCOUNT",
+             "Hash":
+     "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+             "Salt": "example-salt"
+           },
+           "Scope": {
+             "AffectedEventCount": 1,
+             "FirstAffectedEventID":
+     "019eaf10-0000-7000-8000-000000000002",
+             "LastAffectedEventID":
+     "019eaf10-0000-7000-8000-000000000002",
+             "AffectedFields": [
+               "ClientID"
+             ]
+           },
+           "Reason": {
+             "Code": "SUBJECT_REQUEST",
+             "Description": "Data subject request",
+             "LegalBasis": "Applicable erasure obligation",
+             "RequestReferenceHash":
+     "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+           },
+           "Authorization": {
+             "AuthorizedByRoleID": "privacy-role",
+             "AuthorizerSignature": "...",
+             "AuthorizationTimestamp": 1791503999999998000,
+             "DPONotified": true
+           },
+           "CryptoShredding": {
+             "KeyIDHash":
+     "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+             "KeyAlgorithm": "AES-256-GCM",
+             "DestructionMethod": "CLOUD_KMS_DESTROY",
+             "DestructionTimestamp": 1791503999999999000,
+             "DestructionCertificate": "..."
+           },
+           "Verification": {
+             "PreErasureEventHash": "sha256:eeee...",
+             "PostErasureChainHash": "sha256:ffff..."
+
+
+
+Kamimura                   Expires 24 May 2027                 [Page 21]
+
+Internet-Draft                  SCITT-VCP                  November 2026
+
+
+           }
+         }
+       }
+     },
+     "Security": {
+       "EventHash": "sha256:aaaa...",
+       "SignAlgo": "ED25519"
+     }
+   }
+
+   ERASURE provides a technical mechanism that supports erasure
+   obligations; it is not a legal determination.  Whether crypto-
+   shredding qualifies as erasure under a given regime is jurisdiction-
+   and case-dependent.  Deployments subject to reproduction-oriented
+   recordkeeping rules (such as SEC Rule 17a-4 audit-trail controls)
+   should note that once a DEK is destroyed the original plaintext is,
+   by design, not re-creatable.  Where a retention duty prevents
+   deletion, a successful ERASURE event is not emitted for data that
+   remains decryptable.  The legal basis and any retention override
+   recorded with an erasure require verification outside the event
+   schema [VCP-SPEC].
+
+7.  SCRAPI Integration
+
+   VCP Transparency Services MUST implement SCRAPI
+   [I-D.ietf-scitt-scrapi].  The descriptions below follow revision -11
+   of that API; they do not define alternative SCRAPI resources.
+
+7.1.  Registration (POST /entries)
+
+   A client submits a COSE_Sign1 Signed Statement carrying the VCP event
+   to the registration resource defined in Section 2.3 of
+   [I-D.ietf-scitt-scrapi].  The Transparency Service applies its
+   Registration Policy before further processing.
+
+   POST /entries HTTP/1.1
+   Host: vcp-ts.example.com
+   Accept: application/cbor
+   Accept: application/cose
+   Content-Type: application/cose
+
+   <COSE_Sign1 containing VCP Event payload>
+
+   A successful synchronous registration returns the Receipt in a 201
+   response.  An accepted asynchronous registration returns 202 while
+   the Receipt is pending.  In both cases the Location header identifies
+   the Receipt resource.  A 202 response is not evidence that
+   registration is complete or that a Receipt has been issued.
+
+
+
+Kamimura                   Expires 24 May 2027                 [Page 22]
+
+Internet-Draft                  SCITT-VCP                  November 2026
+
+
+7.2.  Receipt Resolution (GET the Location URL)
+
+   The client follows the Location URL returned by registration, for
+   example /entries/{EntryID}, as defined in Section 2.4 of
+   [I-D.ietf-scitt-scrapi].  This resource returns a Receipt, not the
+   original VCP event.  A 200 response carries the COSE Receipt; 204
+   indicates that registration is still pending; 404 indicates that no
+   Receipt exists, including a failed registration.  Polling and error
+   handling follow SCRAPI.
+
+   This profile defines no derivation of EntryID from Header.EventID.
+   The client uses the service-provided Location instead of synthesizing
+   a Receipt URL from an event identifier.
+
+7.3.  Receipt Verification and Statement Availability
+
+   The Receipt resource is the Location URL described above; this
+   profile does not append a /receipt suffix.  Obtaining a Receipt is
+   separate from verifying it against the candidate Signed Statement and
+   the trusted service context.  The unresolved context questions are
+   recorded in Section 9, item 6.
+
+   The original Signed Statement and any detached payload are supplied
+   to a verifier through the applicable evidence-distribution or
+   artifact-repository mechanism.  The SCRAPI Receipt resource does not
+   provide an event-download API.
+
+7.4.  External Anchor Information
+
+   External anchor evidence, such as a blockchain reference or timestamp
+   token, is made available through the deployment's documented
+   evidence-distribution mechanism.  This profile does not define GET
+   /anchors/{anchor_id} as a SCRAPI resource.  A deployment-specific
+   anchor-status API is outside this profile; its response is not by
+   itself verification of the anchor.
+
+8.  Security Considerations
+
+8.1.  Integrity Architecture
+
+   VCP's three-layer architecture provides defense in depth:
+
+   *  *Layer 1 (Event Integrity):* Digital signatures on individual
+      events make forgery without the signing key detectable.
+
+   *  *Layer 2 (Collection Integrity):* Merkle trees enable efficient
+      proof of inclusion.
+
+
+
+
+Kamimura                   Expires 24 May 2027                 [Page 23]
+
+Internet-Draft                  SCITT-VCP                  November 2026
+
+
+   *  *Layer 3 (External Verifiability):* External anchoring makes post-
+      anchor omission detectable by enabling third parties to check
+      presented Merkle roots against independent records.
+
+   The optional per-Actor hash chain provides additional local integrity
+   checks but is not required for external verifiability.
+
+   Mitigations against key compromise:
+
+   *  Frequent Merkle anchoring to external append-only stores
+
+   *  HSM-based key storage (Platinum tier requirement)
+
+   *  Key lifecycle management under the deployment's documented policy.
+      This profile does not define a ROTATE event or a key-rotation
+      protocol.
+
+8.2.  Quantum Resistance
+
+   Ed25519 signatures are vulnerable to attacks by cryptographically
+   relevant quantum computers.  VCP provides crypto-agility to address
+   future threats:
+
+   *  SignAlgo field enables algorithm negotiation and migration
+
+   *  The DILITHIUM2 registry value (ML-DSA [FIPS-204]) holds
+      EXPERIMENTAL status in VCP v1.2: available for testing and hybrid
+      (classical plus post-quantum) deployments, with Ed25519 remaining
+      the default and no certification requirement attached
+
+   *  Hash chain integrity based on SHA-256 provides approximately
+      128-bit post-quantum security against Grover's algorithm
+
+   Implementers requiring post-quantum assurance SHOULD monitor CFRG and
+   PQUIP working group outputs for updated guidance on algorithm
+   selection and migration timelines.
+
+8.3.  Timing Attacks
+
+   Clock manipulation can enable backdating of events.  Mitigations:
+
+   *  Compare the UUID v7 millisecond timestamp with TimestampInt at
+      millisecond precision.  Neither producer-supplied value is an
+      independent attestation of the event time.
+
+   *  Transparency Service enforces timestamp bounds
+
+   *  Platinum tier requires PTPv2 synchronization
+
+
+
+Kamimura                   Expires 24 May 2027                 [Page 24]
+
+Internet-Draft                  SCITT-VCP                  November 2026
+
+
+   *  External anchoring provides independent timestamp attestation
+
+8.4.  Privacy Considerations
+
+   VCP Events may contain sensitive trading information.  Operators
+   SHOULD:
+
+   *  Use crypto-shredding for personal data subject to GDPR
+
+   *  Implement access controls on Transparency Service queries
+
+   *  Consider encrypted payloads for highly sensitive data
+
+8.5.  Completeness Considerations
+
+   SCITT provides inclusion proofs but does not by itself establish
+   completeness (i.e., that no events have been omitted).  VCP adds the
+   following:
+
+   *  Sequence numbers enable detection of gaps within an Actor's chain
+
+   *  External anchoring of batch roots, with AnchorRecords binding
+      event count, first and last event identifiers and PolicyID,
+      enables third-party detection of omission after anchoring
+
+   *  Heartbeat events (HBT) provide liveness signals that support
+      detection of extended omission periods
+
+   These mechanisms make omission detectable at batch granularity and
+   within the anchoring window; they do not establish that every event
+   that occurred was recorded.  An event that was never recorded is
+   detectable only through another record that implies it, such as an
+   order without a corresponding acknowledgment or a counterparty
+   record.  The completeness window implied by the tier's anchoring
+   frequency should be disclosed when records are presented.
+
+9.  Open Issues
+
+   A comparison of the VCP v1.2 integrity layer with the VAP v1.2
+   framework requirements, published as an unadopted research
+   observation record [VCP-VAP-OBS], identified items 1 to 5 below.
+   Item 6 was added in revision -06.  None of them is resolved by this
+   candidate.
+
+   1.  Local batch Merkle construction.  [VCP-SPEC] requires Merkle tree
+       construction to follow RFC 6962, but its reference code
+       duplicates an odd node, which yields roots that differ from those
+       of [RFC9162] for batch sizes that are not a power of two, and its
+
+
+
+Kamimura                   Expires 24 May 2027                 [Page 25]
+
+Internet-Draft                  SCITT-VCP                  November 2026
+
+
+       audit path generation omits that node.  Which construction
+       governs, and how roots already computed with the reference code
+       are treated, is not decided by this revision.  The question
+       concerns local batch trees only: inclusion in a SCITT
+       Transparency Service's log is shown by COSE Receipts [RFC9942]
+       under the verifiable data structure that the Transparency Service
+       uses.
+
+   2.  AnchorRecord signature scope.  The reference signing procedure
+       signs the Merkle root bytes only, so the event count, endpoints
+       and PolicyID carried in the AnchorRecord are not covered by that
+       signature.  The signed bytes of the AnchorRecord remain to be
+       defined.
+
+   3.  Integer timestamps.  TimestampInt and other nanosecond values are
+       JSON integers that can exceed 2^53, whereas [RFC8785] requires
+       numbers to be expressible as IEEE 754 doubles and recommends
+       encoding larger integers as strings.  Values that are not exactly
+       representable as a double, such as the TimestampInt
+       1773567000123456789 in Appendix A, cannot be canonicalized by RFC
+       8785 without changing them.
+
+   4.  EventHash notation.  Examples and fixtures write EventHash with a
+       "sha256:" prefix, while the reference computation yields a bare
+       hexadecimal digest.
+
+   5.  Security object fields.  This document names the anchor reference
+       AnchorRef, lists MerkleRoot as OPTIONAL in individual events, and
+       has no MerkleIndex.  In [VCP-SPEC], the specification text names
+       the field AnchorReference and lists AnchorReference, MerkleRoot
+       and MerkleIndex as REQUIRED from VCP v1.1, whereas the v1.2 JSON
+       schema accepts both AnchorRef and AnchorReference and treats the
+       three fields as VC-Certified requirements enforced by
+       Registration Policy rather than as protocol-level requirements.
+       The canonical name and the requirement level are not decided by
+       this revision, and the fields here are unchanged.
+
+   6.  Receipt verification context.  Receipt resolution in Section 7.2
+       is separate from verification; Section 8.5 builds on inclusion.
+       For the RFC9162_SHA256 verifiable data structure, a Receipt of
+       inclusion signs the Merkle tree root as its payload, under a
+       protected header that identifies the signature algorithm and the
+       verifiable data structure; the tree size and leaf index are
+       carried in the unprotected header, and verification applies the
+       inclusion proof to the bytes of a candidate entry (Section 5.2.1
+       of [RFC9942]).  [RFC9943] leaves the specific verifiable data
+       structure to the Transparency Service (Section 5.1.3), and
+       [RFC9942] notes that leaf construction can differ by data
+
+
+
+Kamimura                   Expires 24 May 2027                 [Page 26]
+
+Internet-Draft                  SCITT-VCP                  November 2026
+
+
+       structure (Section 4).  This profile does not yet state (a) which
+       bytes form the entry for a registered VCP Signed Statement and
+       how a verifier learns that rule for a given Transparency Service,
+       (b) which Receipt-signing key a verifier is expected to trust for
+       that service, or (c) what a verifier checks when an argument
+       depends on a statement's position in the log or on the log's
+       size, as omission reasoning can.  Because the tree size and leaf
+       index are outside the signed protected header, they are
+       authenticated only through recomputation of the signed root;
+       whether that suffices for such arguments, or whether a signed
+       tree head or consistency proof under a trusted log key is also
+       required, is not decided by this revision.  The hackathon report
+       presented to the SCITT Working Group at IETF 127 names the same
+       three points as rules that verifying Receipts across operators
+       currently needs out of band [SCITT-IETF127].
+
+   Since -05, VSO's change-proposal register has listed proposed
+   identifiers for change proposals on items 1 to 5 [VCP-CP-REGISTER]:
+   VCP-CP-2026-003 proposes errata notices for items 1 to 3; VCP-CP-
+   2026-004 proposes a byte contract and migration that covers items 1
+   to 4, with the numeric-field inventory VCP-CP-2026-005 as an input;
+   item 5 depends on VCP-CP-2026-002 (precedence among the normative
+   annex, the specification text, the JSON schema and examples) and VCP-
+   CP-2026-006 (native field layout).  The interim change-control
+   procedure under which these proposals would be decided, VCP-CP-
+   2026-001, was itself under public review when this revision was
+   prepared, and the identifiers take effect only if that procedure is
+   accepted.  All of these proposals are unadopted.  This document will
+   follow their outcome and does not anticipate it.
+
+10.  Implementation Status
+
+   Note to the RFC Editor: please remove this section before
+   publication.
+
+   This section records the status of known implementations at the time
+   of posting, following [RFC7942].  The listing of any individual
+   implementation here does not imply endorsement by the IETF, and the
+   information presented here has not been verified by the IETF.  Other
+   implementations may exist.
+
+   *  There are no known external implementations of this profile or of
+      VCP.
+
+   *  VSO publishes first-party implementations: VCP-RTA, a reference
+      implementation of VCP v1.1 event logging at the Silver tier, and
+      proof-of-concept repositories for cTrader, FIX, Interactive
+      Brokers, Nasdaq and Cloudflare.  VCP-RTA does not produce
+
+
+
+Kamimura                   Expires 24 May 2027                 [Page 27]
+
+Internet-Draft                  SCITT-VCP                  November 2026
+
+
+      COSE_Sign1 Signed Statements or register them with a Transparency
+      Service, and it does not implement VCP v1.2.  The proof-of-concept
+      repositories have not been assessed against this profile.
+
+   *  VSO also publishes a first-party, pre-release offline library for
+      VCP v1.2 events in Python, TypeScript and MQL5 [VCP-SDK].  It
+      computes canonical hashes, RFC 6962 Merkle roots and inclusion and
+      consistency proofs, Ed25519 event and root signatures, and reports
+      verification results as valid, invalid or indeterminate.  It does
+      not read COSE or SCITT envelopes, so it does not implement this
+      profile, and it has not been assessed against it.  Where VCP v1.2
+      is ambiguous, including item 1 of Section 9, the library records
+      its own reading; those readings are not VSO change-control
+      decisions.
+
+   *  No Evidence Pack produced under VCP has been accepted in any
+      regulatory, judicial, or audit proceeding.
+
+11.  IANA Considerations
+
+   This document has no IANA actions at this time.
+
+   Future versions of this specification may request:
+
+   *  Registration of media type "application/vcp+json"
+
+   *  Establishment of a VCP Event Type registry
+
+   *  COSE algorithm identifiers for VCP-specific extensions
+
+12.  References
+
+12.1.  Normative References
+
+   [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
+              Requirement Levels", BCP 14, RFC 2119, March 1997,
+              <https://www.rfc-editor.org/rfc/rfc2119>.
+
+   [RFC8174]  Leiba, B., "Ambiguity of Uppercase vs Lowercase in RFC
+              2119 Key Words", BCP 14, RFC 8174, May 2017,
+              <https://www.rfc-editor.org/rfc/rfc8174>.
+
+   [RFC8785]  Rundgren, A., "JSON Canonicalization Scheme (JCS)",
+              RFC 8785, June 2020,
+              <https://www.rfc-editor.org/rfc/rfc8785>.
+
+
+
+
+
+
+Kamimura                   Expires 24 May 2027                 [Page 28]
+
+Internet-Draft                  SCITT-VCP                  November 2026
+
+
+   [RFC9052]  Schaad, J., "CBOR Object Signing and Encryption (COSE)",
+              RFC 9052, August 2022,
+              <https://www.rfc-editor.org/rfc/rfc9052>.
+
+   [RFC9562]  Davis, K., "Universally Unique IDentifiers (UUIDs)",
+              RFC 9562, May 2024,
+              <https://www.rfc-editor.org/rfc/rfc9562>.
+
+   [RFC9943]  Birkholz, H., Delignat-Lavaud, A., Fournet, C., Deshpande,
+              Y., and S. Lasker, "An Architecture for Trustworthy and
+              Transparent Digital Supply Chains", RFC 9943,
+              DOI 10.17487/RFC9943, June 2026,
+              <https://www.rfc-editor.org/info/rfc9943>.
+
+   [I-D.ietf-scitt-scrapi]
+              Birkholz, H., Geater, J., and A. Delignat-Lavaud, "Supply
+              Chain Integrity, Transparency, and Trust (SCITT) Reference
+              APIs", Work in Progress, Internet-Draft, draft-ietf-scitt-
+              scrapi-11, 26 June 2026,
+              <https://datatracker.ietf.org/doc/html/draft-ietf-scitt-
+              scrapi-11>.
+
+   [VCP-SPEC] VeritasChain Standards Organization, "VeritasChain
+              Protocol (VCP) Specification, Version 1.2, with normative
+              annex VSO-SPEC-CHANGE-001", October 2026,
+              <https://github.com/veritaschain/vcp-
+              spec/tree/v1.2.0/spec/v1.2>.  Release tag v1.2.0 (GA
+              consistency correction of 2026-10-09).
+
+12.2.  Informative References
+
+   [RFC3161]  Adams, C., "Internet X.509 Public Key Infrastructure Time-
+              Stamp Protocol (TSP)", RFC 3161, August 2001,
+              <https://www.rfc-editor.org/rfc/rfc3161>.
+
+   [RFC6962]  Laurie, B., "Certificate Transparency", RFC 6962, June
+              2013, <https://www.rfc-editor.org/rfc/rfc6962>.
+
+   [RFC7942]  Sheffer, Y. and A. Farrel, "Improving Awareness of Running
+              Code: The Implementation Status Section", BCP 205,
+              RFC 7942, DOI 10.17487/RFC7942, July 2016,
+              <https://www.rfc-editor.org/info/rfc7942>.
+
+   [RFC9162]  Laurie, B., Messeri, E., and R. Stradling, "Certificate
+              Transparency Version 2.0", RFC 9162, DOI 10.17487/RFC9162,
+              December 2021, <https://www.rfc-editor.org/info/rfc9162>.
+
+
+
+
+
+Kamimura                   Expires 24 May 2027                 [Page 29]
+
+Internet-Draft                  SCITT-VCP                  November 2026
+
+
+   [RFC9942]  Steele, O., Birkholz, H., Delignat-Lavaud, A., and C.
+              Fournet, "CBOR Object Signing and Encryption (COSE)
+              Receipts", RFC 9942, DOI 10.17487/RFC9942, June 2026,
+              <https://www.rfc-editor.org/info/rfc9942>.
+
+   [VCP-VAP-OBS]
+              VeritasChain Standards Organization, "VCP v1.2 / VAP v1.2
+              integrity-layer observations (research observation,
+              unadopted)", October 2026,
+              <https://github.com/veritaschain/vap-
+              spec/blob/9fa5fbc68075079b4599e16940e9078db976cd59/
+              experiments/vcp-v1.2-integrity-alignment/README.md>.
+
+   [VCP-CP-REGISTER]
+              VeritasChain Standards Organization, "VCP change-proposal
+              register (provisional identifiers; all proposals
+              unadopted)", November 2026,
+              <https://github.com/veritaschain/vcp-
+              spec/blob/ab5c851ce937763104204d8c4ab09197e16799f1/
+              decisions/REGISTER.md>.
+
+   [VCP-SDK]  VeritasChain Co., Ltd., "VCP SDK: offline core for
+              VeritasChain Protocol v1.2 (first-party, pre-release)",
+              November 2026, <https://github.com/veritaschain/vcp-
+              sdk/tree/a81806d5f6fd8ab7b6a4a60fa2530ba07abb2940>.
+
+   [SCITT-IETF127]
+              IETF SCITT Working Group, "SCITT Working Group session,
+              IETF 127: hackathon results and takeaways", November 2026,
+              <https://datatracker.ietf.org/meeting/127/materials/
+              slides-127-scitt-ietf-127-scitt-working-group-sf-00>.
+              Meeting materials slides-127-scitt-ietf-127-scitt-working-
+              group-sf-00, PDF pages 30 and 31.
+
+   [FIPS-204] National Institute of Standards and Technology, "Module-
+              Lattice-Based Digital Signature Standard (ML-DSA)", NIST
+              FIPS 204, August 2024,
+              <https://csrc.nist.gov/pubs/fips/204/final>.
+
+Appendix A.  Illustrative VCP Event Example
+
+   The following JSON illustrates the VCP v1.2 event structure before
+   COSE_Sign1 wrapping.  Hashes are placeholders: this is not a
+   signature, Receipt or conformance test vector.  The integer
+   canonicalization issue in Section 9 remains unresolved.
+
+
+
+
+
+
+Kamimura                   Expires 24 May 2027                 [Page 30]
+
+Internet-Draft                  SCITT-VCP                  November 2026
+
+
+   {
+     "Header": {
+       "EventID": "019cf0d4-be3b-7000-8000-123456789abc",
+       "TimestampISO": "2026-03-15T09:30:00.123456789Z",
+       "TimestampInt": 1773567000123456789,
+       "EventType": "ORD",
+       "ActorID": "algo-momentum-001",
+       "ChainID": "chain-actor-001",
+       "SequenceNum": 42,
+       "PolicyID": "org.veritaschain.policy:gold-v1-2",
+       "SCITTAlignment": {
+         "Version": "1.2",
+         "ConformanceProfile": "VCP_SCITT",
+         "TransparencyServiceID": "ts.veritaschain.example",
+         "ReceiptFormat": "COSE_RECEIPT"
+       }
+     },
+     "Payload": {
+       "VCP-TRADE": {
+         "OrderID": "ord-2026-001",
+         "Symbol": "AAPL",
+         "Side": "BUY",
+         "Quantity": "100",
+         "Price": "185.50",
+         "OrderType": "LIMIT",
+         "TimeInForce": "DAY"
+       },
+       "VCP-GOV": {
+         "AlgoID": "momentum-v2.3",
+         "DecisionFactors": [
+           "RSI_oversold",
+           "volume_spike"
+         ],
+         "ConfidenceScore": "0.87",
+         "RiskCheckPassed": true
+       }
+     },
+     "Security": {
+       "EventHash": "sha256:a1b2c3...",
+       "PrevHash": "sha256:f6e5d4...",
+       "SignAlgo": "ED25519"
+     }
+   }
+
+   Note: PrevHash is OPTIONAL.  AnchorRef is populated once the batch
+   containing the event has been anchored.  Numeric values other than
+   the integer Header fields are encoded as strings.
+
+
+
+
+Kamimura                   Expires 24 May 2027                 [Page 31]
+
+Internet-Draft                  SCITT-VCP                  November 2026
+
+
+Appendix B.  JSON Schema Reference
+
+   The complete JSON Schema for VCP Events is available at:
+
+   https://veritaschain.org/schema/vcp-event-v1.2.json
+
+Appendix C.  Changes from draft-kamimura-scitt-vcp-06
+
+   *  Corrected the SCRAPI description to match the cited revision -11:
+      service-provided Receipt Location, synchronous and asynchronous
+      registration, and Receipt resolution without a /receipt suffix.
+
+   *  Removed the unsupported EventID-to-EntryID derivation and the
+      description of an anchor-status endpoint as part of SCRAPI.
+
+   *  Made the Header and ERASURE example timestamps and UUIDv7
+      millisecond timestamps consistent.  Marked the Appendix A hashes
+      as illustrative placeholders; the integer/JCS issue remains open.
+
+   *  Removed the reference to an undefined ROTATE event.  No event type
+      or key-rotation protocol is introduced.
+
+   *  All six integrity and Receipt-context issues remain open.  This
+      candidate does not adopt any VSO change proposal or change the VCP
+      v1.2 specification, schema or existing signed records.
+
+Appendix D.  Changes from draft-kamimura-scitt-vcp-05
+
+   *  Added Open Issue 6, receipt verification context: the entry bytes
+      for a registered VCP Signed Statement, the Receipt-signing key to
+      trust, and the authentication of tree size and leaf index, which
+      an RFC9162_SHA256 Receipt carries outside its signed protected
+      header
+
+   *  Recorded the proposed identifiers of VSO change proposals on Open
+      Issues 1 to 5, all unadopted, and that the interim change-control
+      procedure for deciding them is itself under review
+
+   *  Implementation Status: added VSO's first-party, pre-release VCP
+      v1.2 offline library, which does not implement this profile
+
+   *  No requirement, field, event type, algorithm or example is changed
+
+Appendix E.  Changes from draft-kamimura-scitt-vcp-04
+
+
+
+
+
+
+
+Kamimura                   Expires 24 May 2027                 [Page 32]
+
+Internet-Draft                  SCITT-VCP                  November 2026
+
+
+   *  Corrected Open Issue 5: -04 stated that VCP-SPEC makes
+      AnchorReference, MerkleRoot and MerkleIndex REQUIRED.  The
+      specification text does so, but the VCP v1.2 JSON schema accepts
+      AnchorRef as well and treats the three fields as certification
+      requirements
+
+   *  Editorial: removed the submissionType attribute (the existing
+      versions have no stream on the Datatracker), stated the document
+      date, and replaced non-ASCII characters
+
+Appendix F.  Changes from draft-kamimura-scitt-vcp-03
+
+   *  External anchoring is REQUIRED at every tier, matching VCP v1.2;
+      the -02/-03 description of anchoring as OPTIONAL at the protocol
+      level is withdrawn
+
+   *  Tier table aligned with VCP v1.2: anchoring every 24 hours, hour
+      and 10 minutes; clock synchronization best-effort, NTP (<1ms) and
+      PTPv2 (<1 microsecond)
+
+   *  ERASURE rewritten to the released Payload.VCP-
+      PRIVACY.ErasureDetails encoding with seven REQUIRED members,
+      reason codes and destruction methods; the pre-release flat fields
+      are identified as not a v1.2 encoding
+
+   *  Added the ERR_* subtypes and the five SYS_* event types registered
+      by the VCP v1.2 release
+
+   *  Replaced draft-ietf-scitt-architecture with RFC 9943; updated the
+      SCRAPI reference; added RFC 9942 and RFC 9162
+
+   *  Added Open Issues (Merkle construction, AnchorRecord signature
+      scope, integer timestamps, EventHash notation) and an
+      Implementation Status section (RFC 7942)
+
+   *  Replaced "immutable" with "append-only" and qualified completeness
+      and integrity statements; numeric example values encoded as
+      strings
+
+   *  VCP-SPEC reference pinned to the v1.2.0 release tag and moved to
+      the normative references
+
+
+
+
+
+
+
+
+
+
+Kamimura                   Expires 24 May 2027                 [Page 33]
+
+Internet-Draft                  SCITT-VCP                  November 2026
+
+
+   *  Removed the VC-Certified tier list of -03, whose anchoring
+      frequencies (including per-minute anchoring at Platinum) did not
+      match VCP v1.2.  This also removes the -03 statement that Platinum
+      certification REQUIRES multiple independent anchors with
+      geographic distribution, and the statement that implementations
+      MAY be protocol-compliant without certification; the latter is
+      restated without BCP 14 keywords
+
+   *  The AnchorRef requirement level (OPTIONAL) is unchanged; the
+      difference from the VCP-SPEC field name and level is recorded as
+      an open issue
+
+   *  Removed statements that the profile is compatible with GDPR or
+      provides privacy compliance; whether crypto-shredding satisfies a
+      legal obligation is not determined by this document
+
+Appendix G.  Changes from draft-kamimura-scitt-vcp-02
+
+   This section summarizes the changes from version -02 to -03.  All
+   changes align this profile with VCP Specification v1.2 [VCP-SPEC].
+
+   *  Added the SCITT Alignment Object as an OPTIONAL Header extension,
+      together with the VCP_BASE, VCP_SCITT, and VCP_REGULATORY
+      conformance profiles (Section 4.4)
+
+   *  Added the ERASURE event type, which records crypto-shredding
+      operations as audit events (Section 6.3), and registered it in the
+      event type table
+
+   *  Corrected the post-quantum SignAlgo value: -02 listed
+      "DILITHIUM3", which does not exist in the VCP SignAlgo registry;
+      the registry value is "DILITHIUM2" (ML-DSA, FIPS 204), holding
+      EXPERIMENTAL status in v1.2
+
+   *  Migrated PolicyID examples from the provisional "urn:vcp:policy"
+      form to the Issuer Domain + Local ID convention defined in VCP
+      v1.2, and removed the corresponding URN-namespace item from IANA
+      Considerations
+
+   *  Updated the complete event example (Appendix A) and the JSON
+      Schema reference (Appendix B) to v1.2
+
+Appendix H.  Changes from draft-kamimura-scitt-vcp-01
+
+   This section summarizes the changes from version -01 to -02:
+
+   *  Updated title to explicitly indicate this is a SCITT profile
+
+
+
+
+Kamimura                   Expires 24 May 2027                 [Page 34]
+
+Internet-Draft                  SCITT-VCP                  November 2026
+
+
+   *  Updated to align with VCP Specification v1.1
+
+   *  Clarified that external anchoring is a certification policy
+      requirement, not a protocol-level mandate (new Section 5.4)
+
+   *  PrevHash changed from REQUIRED to OPTIONAL
+
+   *  Added Three-Layer Architecture section (Section 3.3)
+
+   *  Added PolicyID as a REQUIRED field in the Header
+
+   *  Added Completeness Considerations section (Section 8.5)
+
+   *  Clarified that this profile does not define a new protocol
+
+   *  Removed unused informative references
+
+Acknowledgements
+
+   The authors thank the members of the VeritasChain Standards
+   Organization Technical Committee for their contributions to this
+   specification.  This work builds upon the SCITT architecture
+   developed by the IETF SCITT Working Group, and the Certificate
+   Transparency work in [RFC6962].
+
+   Special thanks to the SCITT WG participants who provided feedback on
+   draft-kamimura-scitt-vcp-01, which informed the improvements in this
+   version.
+
+Author's Address
+
+   TOKACHI KAMIMURA
+   VeritasChain Standards Organization
+   Japan
+   Email: kamimura@veritaschain.org
+   URI:   https://veritaschain.org
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Kamimura                   Expires 24 May 2027                 [Page 35]
