@@ -103,7 +103,8 @@ never recorded are outside its reach.
 
 VCP produces evidence relevant to regimes such as:
 
-- MiFID II — Art. 17 with RTS 6 (algorithmic trading) and RTS 25 (clock synchronisation)
+- MiFID II — Art. 17 with RTS 6 (algorithmic trading)
+- EU clock-synchronisation rules — Delegated Regulation (EU) 2025/1155, Articles 11–16, which replaced MiFID II RTS 25 (Delegated Regulation (EU) 2017/574) on 2 March 2026
 - EU AI Act — Article 12 record-keeping, Article 14 human oversight
 - GDPR — Article 17 erasure (crypto-shredding may support, and does not determine, compliance)
 - SEC CAT (Rule 613) and similar global regimes
