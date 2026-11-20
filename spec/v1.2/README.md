@@ -223,6 +223,13 @@ Recorded 2026-11-10 (static source review at `5b042c73adc294e503f07451a183451653
 | §6.3.3 anchor-target and attested-database tables; Annex §8.8 | RFC 3161 protocol support and legally qualified time-stamp status are distinct. The table limits TSA applicability to Platinum/Gold while the Silver options include FreeTSA, leaving the TSA/PUBLIC_SERVICE classification to clarify. A named database plus SOC 2 does not by itself document the required cryptographic integrity mechanism. The cost table headed Gold mixes ten-minute, hourly and daily frequencies. Target classification, qualification evidence and cost assumptions need separate review; no service is certified or rejected by this notice. |
 | §6.1.1, §6.4.1, §7.1 | The example adds `Security.MerkleRoot`, `MerkleIndex` and `AnchorReference` after batch closure. These fields are outside the defined EventHash preimage; the SDK's I-5/I-6 interpretation signs EventHash and checks selected batch bindings separately. The specification needs to distinguish immutable captured/committed material from later evidence attachment, specify completion states and authenticate attachment associations. The anchor interval is not proof that all event content remains mutable, and append-only storage alone does not authenticate those attachments. |
 
+Recorded 2026-11-20 (static source review at `6a198986a25f6841b6440f35d64896f6ef262148`; informative, no requirement changed):
+
+| Location | Issue |
+|----------|-------|
+| §2.2.3 NOTE; §8.1.1 table; §8.1.2; §9.1.3 NOTE on HCH-002; §12 References (Regulations) | The text cites MiFID II RTS 25 (Delegated Regulation (EU) 2017/574) as the clock-synchronisation rule. That regulation was repealed with effect from 2 March 2026; business-clock synchronisation is now set by [Delegated Regulation (EU) 2025/1155](https://eur-lex.europa.eu/eli/reg_del/2025/1155/oj), Articles 11–16. The §8.1.2 example and its accuracy comparison have not been re-checked against the replacement text |
+| Annex §2.4 NOTE | The note says VSO will publish updates at `https://veritaschain.org/anchor-recommendations`. No page is published at that address |
+
 See the [CP-2026-007 triage draft](../../proposals/v1.2.1-errata-triage-2026-11-10/README.md)
 for candidate classes, dependencies and evidence still needed. Its proposed
 PATCH scope does not pre-classify byte, schema or signing changes as PATCH.
