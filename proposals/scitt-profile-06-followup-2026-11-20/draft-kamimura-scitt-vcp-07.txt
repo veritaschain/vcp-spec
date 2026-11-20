@@ -150,7 +150,7 @@ Internet-Draft                  SCITT-VCP                  November 2026
    Appendix B.  JSON Schema Reference  . . . . . . . . . . . . . . .  32
    Appendix C.  Changes from draft-kamimura-scitt-vcp-06 . . . . . .  32
    Appendix D.  Changes from draft-kamimura-scitt-vcp-05 . . . . . .  32
-   Appendix E.  Changes from draft-kamimura-scitt-vcp-04 . . . . . .  32
+   Appendix E.  Changes from draft-kamimura-scitt-vcp-04 . . . . . .  33
    Appendix F.  Changes from draft-kamimura-scitt-vcp-03 . . . . . .  33
    Appendix G.  Changes from draft-kamimura-scitt-vcp-02 . . . . . .  34
    Appendix H.  Changes from draft-kamimura-scitt-vcp-01 . . . . . .  34
@@ -1760,6 +1760,10 @@ Appendix C.  Changes from draft-kamimura-scitt-vcp-06
    *  Removed the reference to an undefined ROTATE event.  No event type
       or key-rotation protocol is introduced.
 
+   *  Removed the acknowledgement of a VeritasChain Standards
+      Organization Technical Committee.  No membership or decision
+      record of such a committee has been published.
+
    *  All six integrity and Receipt-context issues remain open.  This
       candidate does not adopt any VSO change proposal or change the VCP
       v1.2 specification, schema or existing signed records.
@@ -1781,10 +1785,6 @@ Appendix D.  Changes from draft-kamimura-scitt-vcp-05
 
    *  No requirement, field, event type, algorithm or example is changed
 
-Appendix E.  Changes from draft-kamimura-scitt-vcp-04
-
-
-
 
 
 
@@ -1793,6 +1793,8 @@ Kamimura                   Expires 24 May 2027                 [Page 32]
 
 Internet-Draft                  SCITT-VCP                  November 2026
 
+
+Appendix E.  Changes from draft-kamimura-scitt-vcp-04
 
    *  Corrected Open Issue 5: -04 stated that VCP-SPEC makes
       AnchorReference, MerkleRoot and MerkleIndex REQUIRED.  The
@@ -1836,12 +1838,10 @@ Appendix F.  Changes from draft-kamimura-scitt-vcp-03
    *  VCP-SPEC reference pinned to the v1.2.0 release tag and moved to
       the normative references
 
-
-
-
-
-
-
+   *  Removed the VC-Certified tier list of -03, whose anchoring
+      frequencies (including per-minute anchoring at Platinum) did not
+      match VCP v1.2.  This also removes the -03 statement that Platinum
+      certification REQUIRES multiple independent anchors with
 
 
 
@@ -1850,10 +1850,6 @@ Kamimura                   Expires 24 May 2027                 [Page 33]
 Internet-Draft                  SCITT-VCP                  November 2026
 
 
-   *  Removed the VC-Certified tier list of -03, whose anchoring
-      frequencies (including per-minute anchoring at Platinum) did not
-      match VCP v1.2.  This also removes the -03 statement that Platinum
-      certification REQUIRES multiple independent anchors with
       geographic distribution, and the statement that implementations
       MAY be protocol-compliant without certification; the latter is
       restated without BCP 14 keywords
@@ -1898,6 +1894,10 @@ Appendix H.  Changes from draft-kamimura-scitt-vcp-01
 
    *  Updated title to explicitly indicate this is a SCITT profile
 
+   *  Updated to align with VCP Specification v1.1
+
+   *  Clarified that external anchoring is a certification policy
+      requirement, not a protocol-level mandate (new Section 5.4)
 
 
 
@@ -1905,11 +1905,6 @@ Kamimura                   Expires 24 May 2027                 [Page 34]
 
 Internet-Draft                  SCITT-VCP                  November 2026
 
-
-   *  Updated to align with VCP Specification v1.1
-
-   *  Clarified that external anchoring is a certification policy
-      requirement, not a protocol-level mandate (new Section 5.4)
 
    *  PrevHash changed from REQUIRED to OPTIONAL
 
@@ -1925,11 +1920,9 @@ Internet-Draft                  SCITT-VCP                  November 2026
 
 Acknowledgements
 
-   The authors thank the members of the VeritasChain Standards
-   Organization Technical Committee for their contributions to this
-   specification.  This work builds upon the SCITT architecture
-   developed by the IETF SCITT Working Group, and the Certificate
-   Transparency work in [RFC6962].
+   This work builds upon the SCITT architecture developed by the IETF
+   SCITT Working Group, and the Certificate Transparency work in
+   [RFC6962].
 
    Special thanks to the SCITT WG participants who provided feedback on
    draft-kamimura-scitt-vcp-01, which informed the improvements in this
@@ -1942,6 +1935,13 @@ Author's Address
    Japan
    Email: kamimura@veritaschain.org
    URI:   https://veritaschain.org
+
+
+
+
+
+
+
 
 
 

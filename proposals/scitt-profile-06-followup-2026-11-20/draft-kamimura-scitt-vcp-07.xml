@@ -1586,6 +1586,9 @@ Content-Type: application/cose
         illustrative placeholders; the integer/JCS issue remains open.</li>
         <li>Removed the reference to an undefined ROTATE event. No event
         type or key-rotation protocol is introduced.</li>
+        <li>Removed the acknowledgement of a VeritasChain Standards
+        Organization Technical Committee. No membership or decision
+        record of such a committee has been published.</li>
         <li>All six integrity and Receipt-context issues remain open.
         This candidate does not adopt any VSO change proposal or change
         the VCP v1.2 specification, schema or existing signed records.</li>
@@ -1714,9 +1717,7 @@ Content-Type: application/cose
     <!-- ===== Acknowledgements ===== -->
     <section anchor="acknowledgements" numbered="false">
       <name>Acknowledgements</name>
-      <t>The authors thank the members of the VeritasChain Standards
-      Organization Technical Committee for their contributions to
-      this specification. This work builds upon the SCITT architecture
+      <t>This work builds upon the SCITT architecture
       developed by the IETF SCITT Working Group, and the Certificate
       Transparency work in <xref target="RFC6962"/>.</t>
       <t>Special thanks to the SCITT WG participants who provided feedback
