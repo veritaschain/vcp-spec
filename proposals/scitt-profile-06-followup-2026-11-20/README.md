@@ -45,6 +45,7 @@ do not silently advance the SCRAPI reference beyond **-11**.
 | §8.1 | The text refers to a `ROTATE` event absent from the canonical enum. | Refer to documented deployment key lifecycle management and state that no ROTATE event/protocol is defined. No enum is added. |
 | §8.3 | The timestamp comparison did not explain differing units. | Compare UUID time and integer time at millisecond precision; neither is an independent time attestation. |
 | Appendix A | A placeholder example was described as complete and ready to wrap. | Label it illustrative, explicitly identifying placeholders and the still-open integer/JCS issue. |
+| Acknowledgements | -06 thanks "the members of the VeritasChain Standards Organization Technical Committee". No membership or decision record of such a committee has been published ([known issues](../../spec/v1.2/README.md#known-issues-in-v12-informative), [VCP-DR-2026-001](../../decisions/VCP-DR-2026-001.md)). The published -06 cannot be changed. | Remove that sentence; the acknowledgement of the SCITT Working Group and Certificate Transparency work is kept. Added 21 November 2026. |
 | §9 and change history | References would become stale after the API/example correction. | Update section references and the displayed example integer, preserving all six open questions. Add proposed changes from -06. |
 
 For the ORD example the fixed ISO value is

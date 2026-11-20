@@ -230,6 +230,12 @@ Recorded 2026-11-20 (static source review at `6a198986a25f6841b6440f35d64896f6ef
 | §2.2.3 NOTE; §8.1.1 table; §8.1.2; §9.1.3 NOTE on HCH-002; §12 References (Regulations) | The text cites MiFID II RTS 25 (Delegated Regulation (EU) 2017/574) as the clock-synchronisation rule. That regulation was repealed with effect from 2 March 2026; business-clock synchronisation is now set by [Delegated Regulation (EU) 2025/1155](https://eur-lex.europa.eu/eli/reg_del/2025/1155/oj), Articles 11–16. The §8.1.2 example and its accuracy comparison have not been re-checked against the replacement text |
 | Annex §2.4 NOTE | The note says VSO will publish updates at `https://veritaschain.org/anchor-recommendations`. No page is published at that address |
 
+Recorded 2026-11-21 (static source review at `f7c9c2dd88f2e01841966a0743ad3f407e350322`; informative, no requirement changed):
+
+| Location | Issue |
+|----------|-------|
+| [draft-kamimura-scitt-vcp-06](https://www.ietf.org/archive/id/draft-kamimura-scitt-vcp-06.txt), Acknowledgements | The published Internet-Draft thanks "the members of the VeritasChain Standards Organization Technical Committee". No membership or decision record of a VCP Technical Committee has been published (see the Revision History entry above). A posted revision cannot be changed; the [unsubmitted -07 editor candidate](../../proposals/scitt-profile-06-followup-2026-11-20/README.md) removes the sentence |
+
 See the [CP-2026-007 triage draft](../../proposals/v1.2.1-errata-triage-2026-11-10/README.md)
 for candidate classes, dependencies and evidence still needed. Its proposed
 PATCH scope does not pre-classify byte, schema or signing changes as PATCH.

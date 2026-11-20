@@ -102,6 +102,9 @@ CHANGES = '''    <section anchor="appendix-changes-06">
         illustrative placeholders; the integer/JCS issue remains open.</li>
         <li>Removed the reference to an undefined ROTATE event. No event
         type or key-rotation protocol is introduced.</li>
+        <li>Removed the acknowledgement of a VeritasChain Standards
+        Organization Technical Committee. No membership or decision
+        record of such a committee has been published.</li>
         <li>All six integrity and Receipt-context issues remain open.
         This candidate does not adopt any VSO change proposal or change
         the VCP v1.2 specification, schema or existing signed records.</li>
@@ -240,6 +243,13 @@ def build():
       unresolved.</t>''')
     for name, anchor in (("header", "schema-header"), ("order", "appendix-example"), ("erasure", "erasure-event")):
         candidate = insert_json(candidate, anchor, examples[name])
+    # No Technical Committee membership or decision record has been published
+    # (spec/v1.2/README.md known issues; decisions/VCP-DR-2026-001.md).
+    candidate = replace_once(candidate,
+        '''      <t>The authors thank the members of the VeritasChain Standards
+      Organization Technical Committee for their contributions to
+      this specification. This work builds upon the SCITT architecture''',
+        '''      <t>This work builds upon the SCITT architecture''')
     candidate = replace_once(candidate, '    <section anchor="appendix-changes-05">',
         CHANGES + '    <section anchor="appendix-changes-05">')
 
