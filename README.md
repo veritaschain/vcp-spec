@@ -132,7 +132,13 @@ VCP produces evidence relevant to regimes such as:
 
 | Body | Document | Status |
 |------|----------|--------|
-| IETF | [`draft-kamimura-scitt-vcp-05`](https://datatracker.ietf.org/doc/draft-kamimura-scitt-vcp/) (posted 2026-10-24) | Individual Internet-Draft, active. Not adopted by any IETF Working Group; no standing in the IETF standards process |
+| IETF | [`draft-kamimura-scitt-vcp-06`](https://datatracker.ietf.org/doc/draft-kamimura-scitt-vcp/) (document date 2026-11-20; Datatracker updated 2026-11-19; expires 2027-05-24) | Individual Internet-Draft, active. Not adopted by any IETF Working Group; no standing in the IETF standards process |
+
+Revision -06 records Receipt verification context as an additional open issue and
+does not change requirements. The [unsubmitted next-revision editor candidate](proposals/scitt-profile-06-followup-2026-11-20/README.md)
+corrects SCRAPI descriptions and illustrative examples; its provisional -07 label
+does not establish a new IETF posting. [Receipt-context intake #37](https://github.com/veritaschain/vcp-spec/issues/37)
+tracks proposed experiment/decision work without adopting new verification rules.
 
 The SCITT architecture and COSE Receipts that VCP v1.2 aligns with (opt-in) are
 now published as **RFC 9943** and **RFC 9942** (June 2026).
@@ -200,7 +206,7 @@ in the normative annex, is in
 - **Superseded references.** §12 cites `draft-ietf-scitt-architecture` and
   `draft-ietf-cose-merkle-tree-proofs`; these are now **RFC 9943** and
   **RFC 9942**. §12 also cites `draft-kamimura-scitt-vcp` under a former
-  title; the current revision is -05 (2026-10-24).
+  title; the current revision is -06 (document date 2026-11-20).
 - **Security field names and levels.** §6.4 names the anchor reference
   `AnchorReference`, and §6.4.1 lists it with `MerkleRoot` and `MerkleIndex`
   as REQUIRED from v1.1. The v1.2 schema treats the three as VC-Certified

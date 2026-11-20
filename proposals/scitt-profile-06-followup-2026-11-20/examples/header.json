@@ -1,0 +1,12 @@
+{
+  "Header": {
+    "EventID": "019cf0d4-be3b-7000-8000-123456789abc",
+    "TimestampISO": "2026-03-15T09:30:00.123456789Z",
+    "TimestampInt": 1773567000123456789,
+    "EventType": "ORD",
+    "ActorID": "algo-momentum-001",
+    "ChainID": "chain-actor-001",
+    "SequenceNum": 42,
+    "PolicyID": "org.veritaschain.policy:silver-v1-2"
+  }
+}

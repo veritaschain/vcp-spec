@@ -14,3 +14,4 @@ jobs:
           cache-dependency-path: requirements-test.txt
       - run: python -m pip install -r requirements-test.txt
       - run: python -m unittest discover -s tests -v
+      - run: python proposals/scitt-profile-06-followup-2026-11-20/generate_candidate.py --check
