@@ -6,11 +6,11 @@
   "network": "disabled",
   "source": {
     "path": "draft-kamimura-scitt-vcp-07.xml",
-    "sha256": "10832e815a8f1e6e2013a51ee520f11ccbe64ea9df97956cecca7ad1d4331874"
+    "sha256": "1154d92458134754ef41024df999f52974a419efcedb06ab2cfc2e6e1c519d7e"
   },
   "output": {
     "path": "draft-kamimura-scitt-vcp-07.txt",
-    "sha256": "8c1a64abc570ab45126bd287a5f788bca56dad3faf20ae3606ba0cbbc64b3b46"
+    "sha256": "311034c243ff188d8edfd4801f305719cb7b841534bdd7dffb61a224a878a8fa"
   },
   "warning": "The inherited XML omits submissionType; xml2rfc uses its rendering default. No stream assertion was added to the candidate XML."
 }
