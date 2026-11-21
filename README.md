@@ -338,8 +338,9 @@ https://github.com/veritaschain/vcp-rta-reference
 This implementation is provided for demonstration and testing purposes only
 and does **not** imply certification or regulatory approval. It targets VCP
 v1.1; it is not a v1.2 verifier. It is a
-first-party implementation: VSO and VeritasChain Co., Ltd. share a founder, and
-a first-party implementation is not independent validation.
+first-party implementation: VSO is a specification initiative operated by
+VeritasChain Co., Ltd., and a first-party implementation is not independent
+validation.
 
 An offline core library for v1.2, [vcp-sdk](https://github.com/veritaschain/vcp-sdk),
 is available as unreleased development source for Python, TypeScript and MQL5;

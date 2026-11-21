@@ -105,6 +105,11 @@ CHANGES = '''    <section anchor="appendix-changes-06">
         <li>Removed the acknowledgement of a VeritasChain Standards
         Organization Technical Committee. No membership or decision
         record of such a committee has been published.</li>
+        <li>Named the regulation that replaced MiFID II RTS 25 in the
+        Silver tier note. Commission Delegated Regulation (EU) 2017/574
+        (RTS 25) was repealed with effect from 2 March 2026; business-clock
+        synchronisation is set by Commission Delegated Regulation (EU)
+        2025/1155, Articles 11 to 16. No tier requirement changes.</li>
         <li>All six integrity and Receipt-context issues remain open.
         This candidate does not adopt any VSO change proposal or change
         the VCP v1.2 specification, schema or existing signed records.</li>
@@ -250,6 +255,17 @@ def build():
       Organization Technical Committee for their contributions to
       this specification. This work builds upon the SCITT architecture''',
         '''      <t>This work builds upon the SCITT architecture''')
+    # RTS 25 (Delegated Regulation (EU) 2017/574) was repealed from 2 March
+    # 2026 by Delegated Regulation (EU) 2025/1155, Article 25. The published
+    # -06 cannot be changed (spec/v1.2/README.md known issues).
+    candidate = replace_once(candidate,
+        '''        trading systems subject to MiFID II RTS 25, SEC Rule 17a-4, or
+        equivalent clock synchronization requirements. Silver tier is''',
+        '''        trading systems subject to the EU business-clock synchronisation
+        rules (Commission Delegated Regulation (EU) 2025/1155, Articles 11
+        to 16, which replaced MiFID II RTS 25 on 2 March 2026), SEC Rule
+        17a-4, or equivalent clock synchronization requirements. Silver
+        tier is''')
     candidate = replace_once(candidate, '    <section anchor="appendix-changes-05">',
         CHANGES + '    <section anchor="appendix-changes-05">')
 
