@@ -163,7 +163,7 @@ The tagged v1.2 text is unchanged. The current-branch copies correct the status 
 | Location | Issue |
 |----------|-------|
 | §12 References | `draft-ietf-scitt-architecture` and `draft-ietf-cose-merkle-tree-proofs` are now **RFC 9943** and **RFC 9942** (June 2026) |
-| §12 References | `draft-kamimura-scitt-vcp` is cited under a former title, "SCITT Profile for Financial Trading Audit Trails — VCP". The current title is "A SCITT Profile for Verifiable Audit Trails in Algorithmic Trading: The VeritasChain Protocol (VCP)" (revision -06, document date 2026-11-20); it remains an individual Internet-Draft with no IETF standing |
+| §12 References | `draft-kamimura-scitt-vcp` is cited under a former title, "SCITT Profile for Financial Trading Audit Trails — VCP". The current title is "A SCITT Profile for Verifiable Audit Trails in Algorithmic Trading: The VeritasChain Protocol (VCP)" (revision -07, document date 2026-11-24); it remains an individual Internet-Draft with no IETF standing |
 | §6.4, §6.4.1; `vcp-event-v1.2.json` | §6.4 names the anchor reference `AnchorReference`, and §6.4.1 lists `AnchorReference`, `MerkleRoot` and `MerkleIndex` as REQUIRED from v1.1. The v1.2 schema requires only `EventHash` and `SignAlgo` in `Security`, describes the three fields as VC-Certified requirements enforced by Registration Policy, and also accepts `AnchorRef`, the field name used by draft-kamimura-scitt-vcp. Whether the three fields are protocol or certification requirements, and which name is canonical, is to be settled in the next revision |
 | §6.3.3 Attested Database Examples; Annex §2.4, §8.8 | AWS QLDB reached end of support on 2025-07-31 |
 | §6.3.1 table | DILITHIUM2 / FALCON512 still shown as "Future (reserved)", while §1.4 and §1.5.1 give their v1.2 status as EXPERIMENTAL; §1.5.1 prevails |
@@ -234,7 +234,7 @@ Recorded 2026-11-21 (static source review at `f7c9c2dd88f2e01841966a0743ad3f407e
 
 | Location | Issue |
 |----------|-------|
-| [draft-kamimura-scitt-vcp-06](https://www.ietf.org/archive/id/draft-kamimura-scitt-vcp-06.txt), Acknowledgements | The published Internet-Draft thanks "the members of the VeritasChain Standards Organization Technical Committee". No membership or decision record of a VCP Technical Committee has been published (see the Revision History entry above). A posted revision cannot be changed; the [unsubmitted -07 editor candidate](../../proposals/scitt-profile-06-followup-2026-11-20/README.md) removes the sentence |
+| [draft-kamimura-scitt-vcp-06](https://www.ietf.org/archive/id/draft-kamimura-scitt-vcp-06.txt), Acknowledgements | Revision -06 thanks "the members of the VeritasChain Standards Organization Technical Committee". No membership or decision record of a VCP Technical Committee has been published (see the Revision History entry above). A posted revision cannot be changed; [revision -07](https://www.ietf.org/archive/id/draft-kamimura-scitt-vcp-07.txt), posted 2026-11-24, removes the sentence |
 
 See the [CP-2026-007 triage draft](../../proposals/v1.2.1-errata-triage-2026-11-10/README.md)
 for candidate classes, dependencies and evidence still needed. Its proposed

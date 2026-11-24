@@ -1,16 +1,18 @@
 {
-  "status": "unsubmitted editor candidate; text rendering only",
+  "status": "text rendering of the posted -07 XML; byte-identical to the text archived by the IETF on 24 November 2026",
   "renderer": "xml2rfc",
   "renderer_version": "3.35.0",
   "format": "text",
   "network": "disabled",
   "source": {
     "path": "draft-kamimura-scitt-vcp-07.xml",
-    "sha256": "efe2adfe59eb5926ed4779d3909a1ae9a54e507e503843a58e0f1c51602f3467"
+    "sha256": "078e1ac6c3dcbd9c0d2930655443e4729dce373da68bbb05f6e76b1f117e2bd3",
+    "archive_url": "https://www.ietf.org/archive/id/draft-kamimura-scitt-vcp-07.xml"
   },
   "output": {
     "path": "draft-kamimura-scitt-vcp-07.txt",
-    "sha256": "2d48d42954decaf8cc5f154378f7b2b92d38aa73f14f3d5b9cae4402b4915eea"
+    "sha256": "9c96f008cfef43173947ade282277642fee974c8492e6a70e37cb600a7c600df",
+    "archive_url": "https://www.ietf.org/archive/id/draft-kamimura-scitt-vcp-07.txt"
   },
-  "warning": "The inherited XML omits submissionType; xml2rfc uses its rendering default. No stream assertion was added to the candidate XML."
+  "warning": "The inherited XML omits submissionType; xml2rfc uses its rendering default. No stream assertion was added to the XML."
 }

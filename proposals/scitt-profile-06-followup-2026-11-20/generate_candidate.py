@@ -1,8 +1,12 @@
 #!/usr/bin/env python3
-"""Rebuild an unsubmitted I-D candidate from the preserved official -06 XML.
+"""Rebuild draft-kamimura-scitt-vcp-07 from the preserved official -06 XML.
 
-This generates documentation examples, not signed evidence or a conformance
-implementation. All integer arithmetic is exact; no JCS choice is made here.
+The output is byte-identical to the XML posted to the IETF Datatracker on
+24 November 2026 (submission 173128); the build fails if it is not. A posted
+revision cannot be changed, so later corrections belong in a new revision, not
+here. This generates documentation examples, not signed evidence or a
+conformance implementation. All integer arithmetic is exact; no JCS choice is
+made here.
 """
 
 import argparse
@@ -17,6 +21,12 @@ ROOT = Path(__file__).resolve().parent
 BASE_NAME = "draft-kamimura-scitt-vcp-06.xml"
 CANDIDATE_NAME = "draft-kamimura-scitt-vcp-07.xml"
 BASE_SHA256 = "58ccf43f176e55d758f49eb21038c4742fa830a4c8d53657c1573e710ac480fe"
+# Document date of the posted revision.
+DOC_DATE = (2026, "November", 24)
+# SHA-256 of https://www.ietf.org/archive/id/draft-kamimura-scitt-vcp-07.xml,
+# fetched after posting on 24 November 2026.
+POSTED_XML_SHA256 = "078e1ac6c3dcbd9c0d2930655443e4729dce373da68bbb05f6e76b1f117e2bd3"
+POSTED_URL = "https://www.ietf.org/archive/id/" + CANDIDATE_NAME
 ORDER_NS = 1773567000123456789  # 2026-03-15T09:30:00.123456789Z
 ERASURE_NS = 1791504000000000000  # 2026-10-09T00:00:00Z
 
@@ -120,8 +130,15 @@ CHANGES = '''    <section anchor="appendix-changes-06">
         under discussion on the SCITT list.</li>
         <li>Noted in Open Issue 2 that the Completeness Considerations rely
         on the AnchorRecord fields its signature does not cover.</li>
+        <li>Recorded in Open Issue 6 that the profile does not yet state
+        what a verifier reports when the entry rule or the trusted service
+        and keys are missing, unknown or contradictory, and added a
+        reference to the intake record that tracks the remaining parts of
+        item 6.</li>
+        <li>Acknowledged the SCITT list comments that led to the changes to
+        the Completeness Considerations and Open Issue 6.</li>
         <li>Items 1 to 5 and the remaining parts of item 6 stay open.
-        This candidate does not adopt any VSO change proposal or change
+        This revision does not adopt any VSO change proposal or change
         the VCP v1.2 specification, schema or existing signed records.</li>
       </ul>
     </section>
@@ -137,10 +154,11 @@ COMPLETENESS_RECEIPTS = '''        frequency should be disclosed when records ar
         RFC9162_SHA256 a Receipt of inclusion establishes neither: the tree
         size and leaf index are outside the signed protected header, and
         the same inclusion path can recompute the signed root under more
-        than one tree size. VCP takes the order of events from their
-        sequence numbers; Relying Parties cannot assume that log order
-        matches issuance order unless the Registration Policy advertises
-        it (Section 9.1 of <xref target="RFC9943"/>). The AnchorRecord
+        than one tree size <xref target="SCITT-LIST-OI6"/>. VCP takes the
+        order of events from their sequence numbers; Relying Parties
+        cannot assume that log order matches issuance order unless the
+        Registration Policy advertises it (Section 9.1 of
+        <xref target="RFC9943"/>). The AnchorRecord
         fields listed above are not yet covered by the AnchorRecord
         signature; see item 2 of <xref target="open-issues"/>.</t>
       </section>'''
@@ -164,13 +182,17 @@ OPEN_ISSUE_6_REST = '''This
         fixed together with the service identity in (b) rather than
         selected by the Receipt. Revision -06 also left open (c), what a
         verifier checks when an argument depends on a statement's position
-        in the log or on the log's size. This candidate settles (c) by
+        in the log or on the log's size. This revision settles (c) by
         stating in <xref target="security-completeness"/> that the profile
         relies on Receipts for inclusion only. A future claim resting on
         position or size would need further evidence under the trusted
         service key, such as a signed checkpoint whose root equals the one
         recomputed from the Receipt, together with every entry in the range
-        and consistency between the tree heads compared. The hackathon
+        and consistency between the tree heads compared. This profile
+        also does not yet state what a verifier reports when the context
+        in (a) or (b) is missing, unknown or contradictory. Parts (a) and
+        (b) are tracked in an intake record <xref target="VCP-ISSUE-37"/>;
+        it adopts no change. The hackathon
         report presented to the SCITT Working Group at IETF 127 names the
         same points as rules that verifying Receipts across operators
         currently needs out of band <xref target="SCITT-IETF127"/>.</li>'''
@@ -185,7 +207,6 @@ NEW_REFERENCES = '''        <reference anchor="CCF-PROFILE" target="https://data
             <date day="22" month="October" year="2026"/>
           </front>
           <seriesInfo name="Internet-Draft" value="draft-ietf-scitt-receipts-ccf-profile-06"/>
-          <annotation>Work in progress.</annotation>
         </reference>
 
         <reference anchor="SCITT-LIST-OI6" target="https://mailarchive.ietf.org/arch/msg/scitt/nQPyS-vfZfywHe9_TcqcrgY5Tw4/">
@@ -197,6 +218,17 @@ NEW_REFERENCES = '''        <reference anchor="CCF-PROFILE" target="https://data
             <date day="24" month="November" year="2026"/>
           </front>
           <annotation>Message to the SCITT Working Group mailing list.</annotation>
+        </reference>
+
+        <reference anchor="VCP-ISSUE-37" target="https://github.com/veritaschain/vcp-spec/issues/37">
+          <front>
+            <title>SCITT -06 Receipt verification context and interoperability plan</title>
+            <author>
+              <organization>VeritasChain Standards Organization</organization>
+            </author>
+            <date month="November" year="2026"/>
+          </front>
+          <annotation>Issue 37 in the vcp-spec repository. Intake record; no change is adopted.</annotation>
         </reference>
 
         <reference anchor="SCITT-IETF127"'''
@@ -293,19 +325,15 @@ def build():
     candidate = replace_once(candidate, 'value="draft-kamimura-scitt-vcp-06"',
                              'value="draft-kamimura-scitt-vcp-07"')
     candidate = replace_once(candidate, '  Internet-Draft: draft-kamimura-scitt-vcp-06',
-                             '  Unsubmitted editor candidate: draft-kamimura-scitt-vcp-07')
+                             '  Internet-Draft: draft-kamimura-scitt-vcp-07')
+    candidate = replace_once(candidate, '<date year="2026" month="November" day="20"/>',
+                             '<date year="%d" month="%s" day="%d"/>' % DOC_DATE)
     candidate = replace_once(candidate,
         '  Changes from -05: see Appendix "Changes from draft-kamimura-scitt-vcp-05".',
         '  Changes from -06: see Appendix "Changes from draft-kamimura-scitt-vcp-06".')
-    candidate = replace_once(candidate, '      <name>About This Document</name>',
-        '''      <name>About This Document</name>
-      <t>This is an unsubmitted editor's candidate for discussion. The -07
-      identifier is provisional. The published revision is -06; this file
-      is not evidence of a new IETF submission, VSO adoption or an
-      implementation-conformance result.</t>''')
     start = candidate.index('      <t>Changes from -05 are listed in')
     end = candidate.index('</t>', start) + 4
-    candidate = candidate[:start] + '''      <t>Proposed changes from -06 are listed in
+    candidate = candidate[:start] + '''      <t>Changes from -06 are listed in
       <xref target="appendix-changes-06"/>. The SCRAPI description and
       examples are corrected, and the part of Open Issue 6 on log position
       and size is settled by relying on Receipts for inclusion only. Items
@@ -324,7 +352,7 @@ def build():
           independent attestation of the event time.</li>''')
     candidate = replace_once(candidate,
         '      Item 6 is added in this revision.  None of them is resolved by this\n      revision.',
-        '      Item 6 was added in revision -06. This candidate settles its part\n      on log position and size and leaves its other parts open; items 1\n      to 5 are not resolved by this candidate.')
+        '      Item 6 was added in revision -06. This revision settles its part\n      on log position and size and leaves its other parts open; items 1\n      to 5 are not resolved by this revision.')
     candidate = replace_once(candidate,
         '        <li>Receipt verification context.  <xref target="scrapi-receipt"/>\n        describes a Receipt as containing the Merkle inclusion proof, and\n        <xref target="security-completeness"/> builds on inclusion.  For the',
         '        <li>Receipt verification context. Receipt resolution in\n        <xref target="scrapi-retrieval"/> is separate from verification;\n        <xref target="security-completeness"/> builds on inclusion. For the')
@@ -367,6 +395,16 @@ def build():
       Organization Technical Committee for their contributions to
       this specification. This work builds upon the SCITT architecture''',
         '''      <t>This work builds upon the SCITT architecture''')
+    # Comments on the SCITT list, 24 November 2026 (issue #37).
+    candidate = replace_once(candidate,
+        '''      on draft-kamimura-scitt-vcp-01, which informed the improvements in
+      this version.</t>''',
+        '''      on draft-kamimura-scitt-vcp-01, which informed the improvements in
+      this version.</t>
+      <t>The changes to the Completeness Considerations and to Open
+      Issue 6 in revision -07 follow comments by Bassem Kudsi on the SCITT
+      mailing list <xref target="SCITT-LIST-OI6"/>. This acknowledgement
+      does not imply endorsement of this profile.</t>''')
     # RTS 25 (Delegated Regulation (EU) 2017/574) was repealed from 2 March
     # 2026 by Delegated Regulation (EU) 2025/1155, Article 25. The published
     # -06 cannot be changed (spec/v1.2/README.md known issues).
@@ -395,11 +433,14 @@ def build():
         candidate = candidate.replace(match.group(0), ET.tostring(element, encoding="unicode"), 1)
         source_digests[path.relative_to(ROOT).as_posix()] = hashlib.sha256(data).hexdigest()
     ET.fromstring(candidate)
+    if hashlib.sha256(candidate.encode()).hexdigest() != POSTED_XML_SHA256:
+        raise ValueError("generated XML differs from the posted -07 revision")
     outputs = {CANDIDATE_NAME: candidate}
     outputs.update({"examples/" + name + ".json": json_text(value)
                     for name, value in examples.items()})
     manifest = {
-        "status": "unsubmitted and unadopted editor candidate",
+        "status": "posted as draft-kamimura-scitt-vcp-07 on 24 November 2026 (Datatracker submission 173128); the generated XML is byte-identical to the archived revision; no VCP change adopted",
+        "posted_url": POSTED_URL,
         "baseline_repository_commit": "ab5c851ce937763104204d8c4ab09197e16799f1",
         "baseline_url": "https://www.ietf.org/archive/id/" + BASE_NAME,
         "source_sha256": source_digests,
@@ -423,7 +464,7 @@ def main():
         else:
             path.parent.mkdir(parents=True, exist_ok=True)
             path.write_bytes(text.encode())
-    print(("Checked" if args.check else "Generated") + f" {len(outputs)} candidate artifacts; no protocol validation performed.")
+    print(("Checked" if args.check else "Generated") + f" {len(outputs)} artifacts; no protocol validation performed.")
 
 
 if __name__ == "__main__":

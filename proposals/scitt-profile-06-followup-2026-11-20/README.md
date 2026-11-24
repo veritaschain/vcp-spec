@@ -1,22 +1,31 @@
-# SCITT-VCP -06 follow-up: editor candidate and Receipt-context intake
+# SCITT-VCP -06 follow-up: source of the posted -07 and Receipt-context intake
 
-**Status: unsubmitted, unadopted editor candidate.** Prepared 20 November 2026.
-The `-07` filename and document identifier are provisional. The published IETF
-revision is **-06**, whose document date is 20 November 2026 and whose Datatracker
-metadata was updated on 19 November. Merging this directory does not submit an
-Internet-Draft or adopt a VCP requirement.
+**Status: posted.** [`draft-kamimura-scitt-vcp-07`](https://datatracker.ietf.org/doc/html/draft-kamimura-scitt-vcp-07)
+was posted to the IETF Datatracker on 24 November 2026 (submission 173128;
+document record dated 2026-11-24T02:34:46Z; document date 24 November 2026;
+expires 28 May 2027; 38 pages). It is an individual Internet-Draft, not adopted
+by any IETF Working Group. The XML and text in this directory are byte-identical
+to the [archived XML](https://www.ietf.org/archive/id/draft-kamimura-scitt-vcp-07.xml)
+and [archived text](https://www.ietf.org/archive/id/draft-kamimura-scitt-vcp-07.txt)
+(SHA-256 `078e1ac6c3dcbd9c0d2930655443e4729dce373da68bbb05f6e76b1f117e2bd3` and
+`9c96f008cfef43173947ade282277642fee974c8492e6a70e37cb600a7c600df`). A posted
+revision cannot be withdrawn or edited; corrections go into a later revision.
+Posting adopts no VCP requirement.
 
-This package gives the editor a complete, reproducible candidate based on the
-actual official -06 XML. It corrects the API description and illustrative examples;
-Receipt verification context remains an open design question tracked in
-[issue #37](https://github.com/veritaschain/vcp-spec/issues/37).
+The package is reproducible from the actual official -06 XML. It began on
+20 November 2026 as an editor candidate; the candidate notice was removed and the
+date set on 24 November. It corrects the API description and illustrative
+examples and settles the log position and size part of Open Issue 6. The entry
+rule and the trusted service and keys remain open design questions tracked in
+[issue #37](https://github.com/veritaschain/vcp-spec/issues/37), which the draft
+now cites.
 
 ## Review artifacts
 
 | Artifact | Purpose |
 |---|---|
-| [Candidate XML](draft-kamimura-scitt-vcp-07.xml) | Full proposed source, with an explicit unsubmitted-candidate notice. |
-| [Rendered candidate](draft-kamimura-scitt-vcp-07.txt) | Text rendered with xml2rfc 3.35.0 for review. |
+| [Posted XML](draft-kamimura-scitt-vcp-07.xml) | Full source as posted. The generator refuses to produce different bytes. |
+| [Rendered text](draft-kamimura-scitt-vcp-07.txt) | Text rendered with xml2rfc 3.35.0. It matches the text the Datatracker rendered from the XML. |
 | [Preserved -06 XML](source/draft-kamimura-scitt-vcp-06.xml) | Byte-for-byte official source used by the generator. |
 | [Manifest](manifest.json) | SHA-256 of the baseline source, saved bibliography and generated XML/JSON. |
 | [Render record](rendered-manifest.json) | Pinned renderer version and the exact XML/TXT digests for the reviewed rendering. |
@@ -32,12 +41,14 @@ Its SHA-256 is
 `58ccf43f176e55d758f49eb21038c4742fa830a4c8d53657c1573e710ac480fe`.
 The source retains its original IETF Trust notice. Bibliographic snapshots in
 `source/bibxml/` came from the URLs in that official source; their digests are in
-the manifest. The candidate embeds those snapshots so generation and rendering
-do not silently advance the SCRAPI reference beyond **-11**.
+the manifest. The XML embeds those snapshots so generation and rendering
+do not silently advance the SCRAPI reference beyond **-11**. On 24 November 2026
+the Datatracker still listed SCRAPI -11 (RFC Editor queue) and CCF profile -06
+(IESG Evaluation) as the latest revisions.
 
-## Proposed changes
+## Changes from -06
 
-| Location in -06 | Problem | Candidate change |
+| Location in -06 | Problem | Change in -07 |
 |---|---|---|
 | §7.1 | Successful registration was described only as immediately returning a Receipt. | Describe SCRAPI -11's 201/202 paths and the service-provided Receipt `Location`; pending is not completion. |
 | §7.2–7.3 | `/entries/{entry_id}` was described as returning the VCP event and `/entries/{entry_id}/receipt` as returning its Receipt; EntryID was said to derive from EventID. | Follow the Receipt `Location` from registration. Explain SCRAPI's 200/204/404 resolution states. Remove both the invented derivation and `/receipt` suffix. Original statement/payload distribution is separate. |
@@ -50,6 +61,9 @@ do not silently advance the SCRAPI reference beyond **-11**.
 | §5.3, note under Table 5 | The note names MiFID II RTS 25 as a clock-synchronisation rule. Delegated Regulation (EU) 2017/574 (RTS 25) was repealed with effect from 2 March 2026 by [Delegated Regulation (EU) 2025/1155](https://eur-lex.europa.eu/eli/reg_del/2025/1155/oj), Article 25 ([known issues](../../spec/v1.2/README.md#known-issues-in-v12-informative)). The published -06 cannot be changed. | Name Delegated Regulation (EU) 2025/1155, Articles 11 to 16, and say that it replaced RTS 25. No tier requirement changes. |
 | §9 and change history | References would become stale after the API/example correction. | Update section references and the displayed example integer. Add proposed changes from -06. |
 | §8.5, §9 items 2 and 6 | -06 left open (item 6(c)) what a verifier checks when an argument depends on log position or size, although -06 rests no claim on either. On the SCITT list ([24 November 2026](https://mailarchive.ietf.org/arch/msg/scitt/nQPyS-vfZfywHe9_TcqcrgY5Tw4/)) it was shown that an RFC9162_SHA256 Receipt of inclusion establishes neither. | §8.5 states that the profile relies on Receipts for inclusion only. Item 6 keeps (a) the entry rule, with the CCF profile's rule recorded as a candidate, and (b) the trusted service and keys. Item 2 notes that §8.5 relies on the AnchorRecord fields its signature does not cover. No VCP requirement changes. Added 24 November 2026. |
+| §9 item 6, references | The intake record for the remaining parts of item 6 ([issue #37](https://github.com/veritaschain/vcp-spec/issues/37)) was not cited, and its fourth question (what follows when the needed context is absent, unknown or contradictory) was not recorded in the draft. | Item 6 states that the profile does not yet say what a verifier reports in that case, and cites the issue as an intake record that adopts no change. §8.5 cites the list message for the tree-size observation. Added 24 November 2026. |
+| Front note, §9, Appendix C | The candidate notice, the provisional -07 label and the "this candidate" wording described an unsubmitted file. | Removed the notice; the document date is 24 November 2026 and the text says "this revision". Added 24 November 2026. |
+| Acknowledgements | The comments that led to the §8.5 and item 6 changes were cited but not acknowledged. | Acknowledge Bassem Kudsi's comments on the SCITT list, with a statement that this does not imply endorsement. The name is as signed in his [15 November 2026 message](https://mailarchive.ietf.org/arch/msg/scitt/sKNL7T_CRu1YX-_rLPRYnyRcixg/). Added 24 November 2026. |
 
 For the ORD example the fixed ISO value is
 `2026-03-15T09:30:00.123456789Z`, and the correct integer is
@@ -76,27 +90,37 @@ python -m unittest discover -s tests -v
 ```
 
 Run the generator without `--check` to rebuild the XML, example JSON and manifest.
+The document date is the `DOC_DATE` constant in the generator. The generator
+compares its XML with the digest of the posted revision and fails on any
+difference.
 It checks the official source digest, uses exact integer arithmetic and refuses a
 SCRAPI bibliography snapshot other than -11. The tests cover the known mismatches,
 float/boolean timestamps, wrong UUID version, erasure-time ordering, schema shape,
 unchanged rejection of ROTATE and agreement between the XML and JSON artifacts.
 Existing contract CI discovers these tests and checks generated-artifact drift.
 
-To render the candidate using the separately pinned documentation tool:
+To render the text using the separately pinned documentation tool:
 
 ```sh
 python -m pip install -r proposals/scitt-profile-06-followup-2026-11-20/requirements-render.txt
 xml2rfc proposals/scitt-profile-06-followup-2026-11-20/draft-kamimura-scitt-vcp-07.xml --text --no-network --out proposals/scitt-profile-06-followup-2026-11-20/draft-kamimura-scitt-vcp-07.txt
 ```
 
-The render record binds the reviewed text to the exact candidate XML. After an
-intentional candidate/render update, record both new digests after checking the
-render. The regression suite rejects a stale XML or TXT digest in that record.
+The render record binds the reviewed text to the exact XML. After an intentional
+update, record both new digests after checking the render. The regression suite
+rejects a stale XML or TXT digest in that record, and a candidate notice or a
+document date that differs from `DOC_DATE`.
 
 xml2rfc warns that the inherited source has no `submissionType` and uses its
-rendering default. No stream assertion is added to this candidate's XML. That
-rendering warning is not evidence of IETF adoption. The document's cover notice
-identifies it as unsubmitted.
+rendering default, as it did for -06. No stream assertion is added to the XML.
+That rendering warning is not evidence of IETF adoption.
+
+Submission checks on the rendered text, 24 November 2026 (idnits 2.17.1 through
+the IETF author-tools service): submission-check mode reported no nits; the full
+check reported 0 errors, 0 flaws, 1 warning (three lines with FQDNs outside the
+RFC 2606 example names) and 1 comment (the informative reference to RFC 6962,
+which RFC 9162 obsoletes). The same warning and comment are reported for the
+earlier candidate text on `main`.
 
 ## Review and publication boundary
 
@@ -107,10 +131,12 @@ or review start is assigned by this package. The proposed procedure and preceden
 reviews in [#26](https://github.com/veritaschain/vcp-spec/issues/26) and
 [#27](https://github.com/veritaschain/vcp-spec/issues/27) keep their existing clocks.
 
-Before an IETF submission, the editor needs to review the candidate against -06,
-confirm the next available revision/date, replace its unsubmitted-candidate notice
-with the intended submission note, render it and perform the submission checks.
-An actual Datatracker posting must be verified before any page calls -07 current.
+The steps listed here before 24 November are done: the text was reviewed against
+-06, -07 was confirmed as the next revision (the Datatracker listed 00 to 06), the
+candidate notice was removed, the date was set, the text was rendered and
+checked, the XML was uploaded, and the author confirmed the posting. The posting
+was verified against the Datatracker document record and the archived files
+before this page called -07 current.
 Normative VCP changes arising from Receipt-context work require separate review,
 classification, vectors and migration analysis under the applicable procedure.
 
