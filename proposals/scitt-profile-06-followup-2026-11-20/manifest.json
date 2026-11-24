@@ -11,7 +11,7 @@
     "source/bibxml/reference.RFC.9942.xml": "e30cdce97a23626ef68f9a18536bb6977d1e2994c6a8843a3e9baf893e0286ea"
   },
   "generated_sha256": {
-    "draft-kamimura-scitt-vcp-07.xml": "1154d92458134754ef41024df999f52974a419efcedb06ab2cfc2e6e1c519d7e",
+    "draft-kamimura-scitt-vcp-07.xml": "efe2adfe59eb5926ed4779d3909a1ae9a54e507e503843a58e0f1c51602f3467",
     "examples/header.json": "952da75ccba1a97be1f2ba9aeec6efe2be4bf0e69df96654683d361d48cbce88",
     "examples/order.json": "fd674762eac6f83dd1e3553f9b9a1f0063aadc071c7a59a4ed4626721bf8fc47",
     "examples/erasure.json": "67e831da12269847ccf6bfa299e96849feacd70ff8e811e2a6fe56071552ae06"

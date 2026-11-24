@@ -110,13 +110,104 @@ CHANGES = '''    <section anchor="appendix-changes-06">
         (RTS 25) was repealed with effect from 2 March 2026; business-clock
         synchronisation is set by Commission Delegated Regulation (EU)
         2025/1155, Articles 11 to 16. No tier requirement changes.</li>
-        <li>All six integrity and Receipt-context issues remain open.
+        <li>Stated in the Completeness Considerations that this profile
+        relies on Receipts for inclusion only and draws no conclusion from
+        the tree size or leaf index a Receipt carries. This settles the
+        part of Open Issue 6 on log position and size. No VCP requirement
+        changes; -06 already rested no claim on them.</li>
+        <li>Narrowed Open Issue 6 to the entry rule and the trusted service
+        and keys, and recorded the CCF profile's entry rule as a candidate
+        under discussion on the SCITT list.</li>
+        <li>Noted in Open Issue 2 that the Completeness Considerations rely
+        on the AnchorRecord fields its signature does not cover.</li>
+        <li>Items 1 to 5 and the remaining parts of item 6 stay open.
         This candidate does not adopt any VSO change proposal or change
         the VCP v1.2 specification, schema or existing signed records.</li>
       </ul>
     </section>
 
 '''
+
+COMPLETENESS_RECEIPTS = '''        frequency should be disclosed when records are presented.</t>
+        <t>This profile relies on COSE Receipts <xref target="RFC9942"/>
+        for inclusion only. It draws no conclusion about a Signed
+        Statement's position in a Transparency Service's log, or about the
+        log's size, from the tree size or leaf index that a Receipt
+        carries, and none of the mechanisms above depends on them. For
+        RFC9162_SHA256 a Receipt of inclusion establishes neither: the tree
+        size and leaf index are outside the signed protected header, and
+        the same inclusion path can recompute the signed root under more
+        than one tree size. VCP takes the order of events from their
+        sequence numbers; Relying Parties cannot assume that log order
+        matches issuance order unless the Registration Policy advertises
+        it (Section 9.1 of <xref target="RFC9943"/>). The AnchorRecord
+        fields listed above are not yet covered by the AnchorRecord
+        signature; see item 2 of <xref target="open-issues"/>.</t>
+      </section>'''
+
+OPEN_ISSUE_6_REST = '''This
+        profile does not yet state (a) which bytes form the entry for a
+        registered VCP Signed Statement and how a verifier learns that rule
+        for a given Transparency Service, or (b) which Transparency Service
+        a verifier is expected to trust and how it obtains the Receipt
+        verification keys that service used, including those for earlier
+        Receipts. Section 4 of <xref target="RFC9943"/> allows the key to
+        change between Receipts, and key discovery (Section 2.1 of
+        <xref target="I-D.ietf-scitt-scrapi"/>) does not by itself decide
+        which service is trusted. For (a), the entry rule of the CCF
+        profile <xref target="CCF-PROFILE"/> (Sections 2.2 and 3.2: the
+        Signed Statement as registered, with tag 18 retained and an empty
+        unprotected header, its digest computed by the verifier) is a
+        candidate under discussion <xref target="SCITT-LIST-OI6"/>. Under
+        RFC9162_SHA256 the vds value in the protected header does not
+        identify an entry rule, so a rule stated by this profile would be
+        fixed together with the service identity in (b) rather than
+        selected by the Receipt. Revision -06 also left open (c), what a
+        verifier checks when an argument depends on a statement's position
+        in the log or on the log's size. This candidate settles (c) by
+        stating in <xref target="security-completeness"/> that the profile
+        relies on Receipts for inclusion only. A future claim resting on
+        position or size would need further evidence under the trusted
+        service key, such as a signed checkpoint whose root equals the one
+        recomputed from the Receipt, together with every entry in the range
+        and consistency between the tree heads compared. The hackathon
+        report presented to the SCITT Working Group at IETF 127 names the
+        same points as rules that verifying Receipts across operators
+        currently needs out of band <xref target="SCITT-IETF127"/>.</li>'''
+
+NEW_REFERENCES = '''        <reference anchor="CCF-PROFILE" target="https://datatracker.ietf.org/doc/html/draft-ietf-scitt-receipts-ccf-profile-06">
+          <front>
+            <title>CCF Profile for COSE Receipts</title>
+            <author initials="H." surname="Birkholz" fullname="Henk Birkholz"/>
+            <author initials="A." surname="Delignat-Lavaud" fullname="Antoine Delignat-Lavaud"/>
+            <author initials="C." surname="Fournet" fullname="Cedric Fournet"/>
+            <author initials="A." surname="Chamayou" fullname="Amaury Chamayou"/>
+            <date day="22" month="October" year="2026"/>
+          </front>
+          <seriesInfo name="Internet-Draft" value="draft-ietf-scitt-receipts-ccf-profile-06"/>
+          <annotation>Work in progress.</annotation>
+        </reference>
+
+        <reference anchor="SCITT-LIST-OI6" target="https://mailarchive.ietf.org/arch/msg/scitt/nQPyS-vfZfywHe9_TcqcrgY5Tw4/">
+          <front>
+            <title>Re: draft-kamimura-scitt-vcp-06: open issue on what a verifier needs besides the Receipt</title>
+            <author initials="B." surname="Kudsi" fullname="Bassem Kudsi">
+              <organization>AugmentEV</organization>
+            </author>
+            <date day="24" month="November" year="2026"/>
+          </front>
+          <annotation>Message to the SCITT Working Group mailing list.</annotation>
+        </reference>
+
+        <reference anchor="SCITT-IETF127"'''
+
+
+def replace_between(text, start_marker, end_marker, new):
+    if text.count(start_marker) != 1 or text.count(end_marker) != 1:
+        raise ValueError("baseline text changed: " + start_marker[:60])
+    start = text.index(start_marker)
+    end = text.index(end_marker, start) + len(end_marker)
+    return text[:start] + new + text[end:]
 
 
 def replace_once(text, old, new):
@@ -216,8 +307,10 @@ def build():
     end = candidate.index('</t>', start) + 4
     candidate = candidate[:start] + '''      <t>Proposed changes from -06 are listed in
       <xref target="appendix-changes-06"/>. The SCRAPI description and
-      examples are corrected; the six Open Issues remain unresolved.
-      Earlier changes are recorded in the subsequent appendices.</t>''' + candidate[end:]
+      examples are corrected, and the part of Open Issue 6 on log position
+      and size is settled by relying on Receipts for inclusion only. Items
+      1 to 5 and the rest of item 6 remain unresolved. Earlier changes are
+      recorded in the subsequent appendices.</t>''' + candidate[end:]
     candidate = replace_section(candidate, "scrapi-integration", SCRAPI)
     candidate = replace_once(candidate,
         '<li>Key rotation with explicit ROTATE events</li>',
@@ -231,10 +324,29 @@ def build():
           independent attestation of the event time.</li>''')
     candidate = replace_once(candidate,
         '      Item 6 is added in this revision.  None of them is resolved by this\n      revision.',
-        '      Item 6 was added in revision -06. None of them is resolved by\n      this candidate.')
+        '      Item 6 was added in revision -06. This candidate settles its part\n      on log position and size and leaves its other parts open; items 1\n      to 5 are not resolved by this candidate.')
     candidate = replace_once(candidate,
         '        <li>Receipt verification context.  <xref target="scrapi-receipt"/>\n        describes a Receipt as containing the Merkle inclusion proof, and\n        <xref target="security-completeness"/> builds on inclusion.  For the',
         '        <li>Receipt verification context. Receipt resolution in\n        <xref target="scrapi-retrieval"/> is separate from verification;\n        <xref target="security-completeness"/> builds on inclusion. For the')
+    # Open Issue 6 after the SCITT list reply of 24 November 2026: part (c)
+    # is settled by relying on Receipts for inclusion only (Section 8.5);
+    # (a) and (b) stay open, with the CCF entry rule recorded as a candidate.
+    candidate = replace_between(candidate,
+        'This\n        profile does not yet state (a) which bytes form the entry for a',
+        'currently needs out of band <xref target="SCITT-IETF127"/>.</li>',
+        OPEN_ISSUE_6_REST)
+    candidate = replace_once(candidate,
+        '        signature.  The signed bytes of the AnchorRecord remain to be\n        defined.</li>',
+        '''        signature.  The signed bytes of the AnchorRecord remain to be
+        defined. <xref target="security-completeness"/> relies on these
+        fields for omission detection after anchoring. One direction under
+        consideration is to register the AnchorRecord itself as a Signed
+        Statement whose payload carries them, so that the Issuer's
+        signature covers them; it is not adopted.</li>''')
+    candidate = replace_once(candidate,
+        '        frequency should be disclosed when records are presented.</t>\n      </section>',
+        COMPLETENESS_RECEIPTS)
+    candidate = replace_once(candidate, '        <reference anchor="SCITT-IETF127"', NEW_REFERENCES)
     candidate = replace_once(candidate, '        1742034600123456789 in <xref target="appendix-example"/>, cannot be',
         '        1773567000123456789 in <xref target="appendix-example"/>, cannot be')
     candidate = replace_once(candidate, '<name>Complete VCP Event Example</name>',

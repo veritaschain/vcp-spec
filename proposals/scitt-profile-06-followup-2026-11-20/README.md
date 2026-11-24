@@ -21,7 +21,8 @@ Receipt verification context remains an open design question tracked in
 | [Manifest](manifest.json) | SHA-256 of the baseline source, saved bibliography and generated XML/JSON. |
 | [Render record](rendered-manifest.json) | Pinned renderer version and the exact XML/TXT digests for the reviewed rendering. |
 | [Example JSON](examples/) | Header, ORD and ERASURE illustrations with consistent clocks. Hashes, signatures and certificates remain synthetic placeholders. |
-| [Receipt context test plan](receipt-context-test-plan.md) | Questions, candidate cases and evidence required before selecting new rules. No test result is asserted for this plan. |
+| [Receipt context test plan](receipt-context-test-plan.md) | Questions, candidate cases and evidence required before selecting new rules, and inputs received from the SCITT list. No Receipt test result is asserted for this plan. |
+| [Position check](receipt_position_check.py) | First-party RFC 9162 tree arithmetic behind the tree-size result reported on the SCITT list; regression in `tests/test_scitt_receipt_position.py`. Not a Receipt implementation. |
 
 Source baseline: `veritaschain/vcp-spec` commit
 `ab5c851ce937763104204d8c4ab09197e16799f1`.
@@ -47,7 +48,8 @@ do not silently advance the SCRAPI reference beyond **-11**.
 | Appendix A | A placeholder example was described as complete and ready to wrap. | Label it illustrative, explicitly identifying placeholders and the still-open integer/JCS issue. |
 | Acknowledgements | -06 thanks "the members of the VeritasChain Standards Organization Technical Committee". No membership or decision record of such a committee has been published ([known issues](../../spec/v1.2/README.md#known-issues-in-v12-informative), [VCP-DR-2026-001](../../decisions/VCP-DR-2026-001.md)). The published -06 cannot be changed. | Remove that sentence; the acknowledgement of the SCITT Working Group and Certificate Transparency work is kept. Added 21 November 2026. |
 | §5.3, note under Table 5 | The note names MiFID II RTS 25 as a clock-synchronisation rule. Delegated Regulation (EU) 2017/574 (RTS 25) was repealed with effect from 2 March 2026 by [Delegated Regulation (EU) 2025/1155](https://eur-lex.europa.eu/eli/reg_del/2025/1155/oj), Article 25 ([known issues](../../spec/v1.2/README.md#known-issues-in-v12-informative)). The published -06 cannot be changed. | Name Delegated Regulation (EU) 2025/1155, Articles 11 to 16, and say that it replaced RTS 25. No tier requirement changes. |
-| §9 and change history | References would become stale after the API/example correction. | Update section references and the displayed example integer, preserving all six open questions. Add proposed changes from -06. |
+| §9 and change history | References would become stale after the API/example correction. | Update section references and the displayed example integer. Add proposed changes from -06. |
+| §8.5, §9 items 2 and 6 | -06 left open (item 6(c)) what a verifier checks when an argument depends on log position or size, although -06 rests no claim on either. On the SCITT list ([24 November 2026](https://mailarchive.ietf.org/arch/msg/scitt/nQPyS-vfZfywHe9_TcqcrgY5Tw4/)) it was shown that an RFC9162_SHA256 Receipt of inclusion establishes neither. | §8.5 states that the profile relies on Receipts for inclusion only. Item 6 keeps (a) the entry rule, with the CCF profile's rule recorded as a candidate, and (b) the trusted service and keys. Item 2 notes that §8.5 relies on the AnchorRecord fields its signature does not cover. No VCP requirement changes. Added 24 November 2026. |
 
 For the ORD example the fixed ISO value is
 `2026-03-15T09:30:00.123456789Z`, and the correct integer is
