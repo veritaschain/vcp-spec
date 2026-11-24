@@ -63,7 +63,7 @@ protected header: their role in recomputing the signed root must be assessed.
 
 Reply on the SCITT list from Bassem Kudsi (AugmentEV), [24 November 2026](https://mailarchive.ietf.org/arch/msg/scitt/nQPyS-vfZfywHe9_TcqcrgY5Tw4/),
 answering the editor's two questions of [20 November](https://mailarchive.ietf.org/arch/msg/scitt/NEkecA1SxFvwENEoeFpaAdyLwYA/).
-Recorded as input, not as adopted rules. The editor replied on the list the same day.
+Recorded as input, not as adopted rules. The editor [replied](https://mailarchive.ietf.org/arch/msg/scitt/yMiDSTt_kA3z2v2S0Ca9ZQa0gGQ/) the same day.
 
 | Point | Input | Status here |
 |---|---|---|
