@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="rfc2629.xslt" ?>
 <!--
-  Unsubmitted editor candidate: draft-kamimura-scitt-vcp-07
+  Internet-Draft: draft-kamimura-scitt-vcp-07
   Title: A SCITT Profile for Verifiable Audit Trails in Algorithmic Trading
   Author: TOKACHI KAMIMURA
   Organization: VeritasChain Standards Organization (VSO)
@@ -37,7 +37,7 @@
       </address>
     </author>
 
-    <date year="2026" month="November" day="20"/>
+    <date year="2026" month="November" day="24"/>
 
     <area>Security</area>
     <workgroup>Supply Chain Integrity, Transparency, and Trust</workgroup>
@@ -73,16 +73,12 @@
 
     <note removeInRFC="true">
       <name>About This Document</name>
-      <t>This is an unsubmitted editor's candidate for discussion. The -07
-      identifier is provisional. The published revision is -06; this file
-      is not evidence of a new IETF submission, VSO adoption or an
-      implementation-conformance result.</t>
       <t>The latest version of this document, along with implementation
       resources and test vectors, can be found at
       <eref target="https://github.com/veritaschain/vcp-spec"/>.</t>
       <t>Discussion of this document takes place on the SCITT Working
       Group mailing list (scitt@ietf.org).</t>
-      <t>Proposed changes from -06 are listed in
+      <t>Changes from -06 are listed in
       <xref target="appendix-changes-06"/>. The SCRAPI description and
       examples are corrected, and the part of Open Issue 6 on log position
       and size is settled by relying on Receipts for inclusion only. Items
@@ -1209,10 +1205,11 @@ Content-Type: application/cose
         RFC9162_SHA256 a Receipt of inclusion establishes neither: the tree
         size and leaf index are outside the signed protected header, and
         the same inclusion path can recompute the signed root under more
-        than one tree size. VCP takes the order of events from their
-        sequence numbers; Relying Parties cannot assume that log order
-        matches issuance order unless the Registration Policy advertises
-        it (Section 9.1 of <xref target="RFC9943"/>). The AnchorRecord
+        than one tree size <xref target="SCITT-LIST-OI6"/>. VCP takes the
+        order of events from their sequence numbers; Relying Parties
+        cannot assume that log order matches issuance order unless the
+        Registration Policy advertises it (Section 9.1 of
+        <xref target="RFC9943"/>). The AnchorRecord
         fields listed above are not yet covered by the AnchorRecord
         signature; see item 2 of <xref target="open-issues"/>.</t>
       </section>
@@ -1223,9 +1220,9 @@ Content-Type: application/cose
       <t>A comparison of the VCP v1.2 integrity layer with the VAP v1.2
       framework requirements, published as an unadopted research observation
       record <xref target="VCP-VAP-OBS"/>, identified items 1 to 5 below.
-      Item 6 was added in revision -06. This candidate settles its part
+      Item 6 was added in revision -06. This revision settles its part
       on log position and size and leaves its other parts open; items 1
-      to 5 are not resolved by this candidate.</t>
+      to 5 are not resolved by this revision.</t>
       <ol>
         <li>Local batch Merkle construction.  <xref target="VCP-SPEC"/>
         requires Merkle tree construction to follow RFC 6962, but its
@@ -1299,13 +1296,17 @@ Content-Type: application/cose
         fixed together with the service identity in (b) rather than
         selected by the Receipt. Revision -06 also left open (c), what a
         verifier checks when an argument depends on a statement's position
-        in the log or on the log's size. This candidate settles (c) by
+        in the log or on the log's size. This revision settles (c) by
         stating in <xref target="security-completeness"/> that the profile
         relies on Receipts for inclusion only. A future claim resting on
         position or size would need further evidence under the trusted
         service key, such as a signed checkpoint whose root equals the one
         recomputed from the Receipt, together with every entry in the range
-        and consistency between the tree heads compared. The hackathon
+        and consistency between the tree heads compared. This profile
+        also does not yet state what a verifier reports when the context
+        in (a) or (b) is missing, unknown or contradictory. Parts (a) and
+        (b) are tracked in an intake record <xref target="VCP-ISSUE-37"/>;
+        it adopts no change. The hackathon
         report presented to the SCITT Working Group at IETF 127 names the
         same points as rules that verifying Receipts across operators
         currently needs out of band <xref target="SCITT-IETF127"/>.</li>
@@ -1529,7 +1530,6 @@ Content-Type: application/cose
             <date day="22" month="October" year="2026"/>
           </front>
           <seriesInfo name="Internet-Draft" value="draft-ietf-scitt-receipts-ccf-profile-06"/>
-          <annotation>Work in progress.</annotation>
         </reference>
 
         <reference anchor="SCITT-LIST-OI6" target="https://mailarchive.ietf.org/arch/msg/scitt/nQPyS-vfZfywHe9_TcqcrgY5Tw4/">
@@ -1541,6 +1541,17 @@ Content-Type: application/cose
             <date day="24" month="November" year="2026"/>
           </front>
           <annotation>Message to the SCITT Working Group mailing list.</annotation>
+        </reference>
+
+        <reference anchor="VCP-ISSUE-37" target="https://github.com/veritaschain/vcp-spec/issues/37">
+          <front>
+            <title>SCITT -06 Receipt verification context and interoperability plan</title>
+            <author>
+              <organization>VeritasChain Standards Organization</organization>
+            </author>
+            <date month="November" year="2026"/>
+          </front>
+          <annotation>Issue 37 in the vcp-spec repository. Intake record; no change is adopted.</annotation>
         </reference>
 
         <reference anchor="SCITT-IETF127" target="https://datatracker.ietf.org/meeting/127/materials/slides-127-scitt-ietf-127-scitt-working-group-sf-00">
@@ -1666,8 +1677,15 @@ Content-Type: application/cose
         under discussion on the SCITT list.</li>
         <li>Noted in Open Issue 2 that the Completeness Considerations rely
         on the AnchorRecord fields its signature does not cover.</li>
+        <li>Recorded in Open Issue 6 that the profile does not yet state
+        what a verifier reports when the entry rule or the trusted service
+        and keys are missing, unknown or contradictory, and added a
+        reference to the intake record that tracks the remaining parts of
+        item 6.</li>
+        <li>Acknowledged the SCITT list comments that led to the changes to
+        the Completeness Considerations and Open Issue 6.</li>
         <li>Items 1 to 5 and the remaining parts of item 6 stay open.
-        This candidate does not adopt any VSO change proposal or change
+        This revision does not adopt any VSO change proposal or change
         the VCP v1.2 specification, schema or existing signed records.</li>
       </ul>
     </section>
@@ -1800,6 +1818,10 @@ Content-Type: application/cose
       <t>Special thanks to the SCITT WG participants who provided feedback
       on draft-kamimura-scitt-vcp-01, which informed the improvements in
       this version.</t>
+      <t>The changes to the Completeness Considerations and to Open
+      Issue 6 in revision -07 follow comments by Bassem Kudsi on the SCITT
+      mailing list <xref target="SCITT-LIST-OI6"/>. This acknowledgement
+      does not imply endorsement of this profile.</t>
     </section>
   </back>
 </rfc>

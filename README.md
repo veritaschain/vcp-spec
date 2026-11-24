@@ -136,10 +136,11 @@ VCP produces evidence relevant to regimes such as:
 | IETF | [`draft-kamimura-scitt-vcp-06`](https://datatracker.ietf.org/doc/draft-kamimura-scitt-vcp/) (document date 2026-11-20; Datatracker updated 2026-11-19; expires 2027-05-24) | Individual Internet-Draft, active. Not adopted by any IETF Working Group; no standing in the IETF standards process |
 
 Revision -06 records Receipt verification context as an additional open issue and
-does not change requirements. The [unsubmitted next-revision editor candidate](proposals/scitt-profile-06-followup-2026-11-20/README.md)
-corrects SCRAPI descriptions and illustrative examples, and states that the profile
-relies on Receipts for inclusion only (no conclusion from a Receipt's tree size or
-leaf index); its provisional -07 label does not establish a new IETF posting.
+does not change requirements. The [-07 submission version](proposals/scitt-profile-06-followup-2026-11-20/README.md),
+prepared on 2026-11-24, corrects SCRAPI descriptions and illustrative examples, and
+states that the profile relies on Receipts for inclusion only (no conclusion from a
+Receipt's tree size or leaf index). It was not posted when this was written; the
+Datatracker link above shows the current revision.
 [Receipt-context intake #37](https://github.com/veritaschain/vcp-spec/issues/37)
 tracks the remaining entry-rule and trusted-service questions without adopting new
 verification rules.

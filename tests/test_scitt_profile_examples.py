@@ -76,6 +76,21 @@ class ScittCandidateExamples(unittest.TestCase):
             node = tree.find(".//section[@anchor='" + anchor + "']/sourcecode[@type='json']")
             self.assertEqual(json.loads(node.text), self.event(name))
 
+    def test_submission_xml_has_no_candidate_notice_and_the_generator_date(self):
+        spec = importlib.util.spec_from_file_location("scitt_generate", PROPOSAL / "generate_candidate.py")
+        generator = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(generator)
+        text = (PROPOSAL / "draft-kamimura-scitt-vcp-07.xml").read_text()
+        for phrase in ("Unsubmitted", "unsubmitted", "provisional. The published", "This candidate", "this candidate"):
+            self.assertNotIn(phrase, text)
+        root = ET.fromstring(text)
+        self.assertEqual(root.get("docName"), "draft-kamimura-scitt-vcp-07")
+        date = root.find("front/date")
+        self.assertEqual((int(date.get("year")), date.get("month"), int(date.get("day"))), generator.DOC_DATE)
+        rendered = (PROPOSAL / "draft-kamimura-scitt-vcp-07.txt").read_text()
+        self.assertIn("%d %s %d" % (generator.DOC_DATE[2], generator.DOC_DATE[1], generator.DOC_DATE[0]), rendered)
+        self.assertNotIn("unsubmitted", rendered)
+
     def test_render_record_matches_both_candidate_artifacts(self):
         record = json.loads((PROPOSAL / "rendered-manifest.json").read_text())
         for key in ("source", "output"):

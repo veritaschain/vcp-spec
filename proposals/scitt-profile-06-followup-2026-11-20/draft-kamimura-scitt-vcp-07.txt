@@ -4,8 +4,8 @@
 
 Supply Chain Integrity, Transparency, and Trust              T. Kamimura
 Internet-Draft                       VeritasChain Standards Organization
-Intended status: Informational                          20 November 2026
-Expires: 24 May 2027
+Intended status: Informational                          24 November 2026
+Expires: 28 May 2027
 
 
 A SCITT Profile for Verifiable Audit Trails in Algorithmic Trading: The
@@ -35,11 +35,6 @@ About This Document
 
    This note is to be removed before publishing as an RFC.
 
-   This is an unsubmitted editor's candidate for discussion.  The -07
-   identifier is provisional.  The published revision is -06; this file
-   is not evidence of a new IETF submission, VSO adoption or an
-   implementation-conformance result.
-
    The latest version of this document, along with implementation
    resources and test vectors, can be found at
    https://github.com/veritaschain/vcp-spec.
@@ -47,20 +42,21 @@ About This Document
    Discussion of this document takes place on the SCITT Working Group
    mailing list (scitt@ietf.org).
 
-   Proposed changes from -06 are listed in Appendix C.  The SCRAPI
-   description and examples are corrected, and the part of Open Issue 6
-   on log position and size is settled by relying on Receipts for
+   Changes from -06 are listed in Appendix C.  The SCRAPI description
+   and examples are corrected, and the part of Open Issue 6 on log
+   position and size is settled by relying on Receipts for inclusion
+   only.  Items 1 to 5 and the rest of item 6 remain unresolved.
+   Earlier changes are recorded in the subsequent appendices.
 
 
 
-Kamimura                   Expires 24 May 2027                  [Page 1]
+
+
+
+Kamimura                   Expires 28 May 2027                  [Page 1]
 
 Internet-Draft                  SCITT-VCP                  November 2026
 
-
-   inclusion only.  Items 1 to 5 and the rest of item 6 remain
-   unresolved.  Earlier changes are recorded in the subsequent
-   appendices.
 
 Status of This Memo
 
@@ -77,7 +73,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 24 May 2027.
+   This Internet-Draft will expire on 28 May 2027.
 
 Copyright Notice
 
@@ -95,7 +91,7 @@ Copyright Notice
 
 Table of Contents
 
-   1.  Introduction  . . . . . . . . . . . . . . . . . . . . . . . .   4
+   1.  Introduction  . . . . . . . . . . . . . . . . . . . . . . . .   3
      1.1.  Requirements Language . . . . . . . . . . . . . . . . . .   4
      1.2.  Relationship to SCITT . . . . . . . . . . . . . . . . . .   4
      1.3.  Scope . . . . . . . . . . . . . . . . . . . . . . . . . .   5
@@ -106,18 +102,18 @@ Table of Contents
      3.2.  Per-Actor Hash Chain (Optional) . . . . . . . . . . . . .   9
      3.3.  Three-Layer Integrity Architecture  . . . . . . . . . . .   9
    4.  VCP Event Schema  . . . . . . . . . . . . . . . . . . . . . .  10
-
-
-
-Kamimura                   Expires 24 May 2027                  [Page 2]
-
-Internet-Draft                  SCITT-VCP                  November 2026
-
-
      4.1.  Header Object . . . . . . . . . . . . . . . . . . . . . .  10
      4.2.  Payload Object  . . . . . . . . . . . . . . . . . . . . .  11
      4.3.  Security Object . . . . . . . . . . . . . . . . . . . . .  12
      4.4.  SCITT Alignment Object  . . . . . . . . . . . . . . . . .  13
+
+
+
+Kamimura                   Expires 28 May 2027                  [Page 2]
+
+Internet-Draft                  SCITT-VCP                  November 2026
+
+
      4.5.  Event Types . . . . . . . . . . . . . . . . . . . . . . .  14
    5.  Registration Policy . . . . . . . . . . . . . . . . . . . . .  16
      5.1.  Policy Identification . . . . . . . . . . . . . . . . . .  16
@@ -153,22 +149,8 @@ Internet-Draft                  SCITT-VCP                  November 2026
    Appendix F.  Changes from draft-kamimura-scitt-vcp-03 . . . . . .  35
    Appendix G.  Changes from draft-kamimura-scitt-vcp-02 . . . . . .  36
    Appendix H.  Changes from draft-kamimura-scitt-vcp-01 . . . . . .  37
-   Acknowledgements  . . . . . . . . . . . . . . . . . . . . . . . .  37
-   Author's Address  . . . . . . . . . . . . . . . . . . . . . . . .  37
-
-
-
-
-
-
-
-
-
-
-Kamimura                   Expires 24 May 2027                  [Page 3]
-
-Internet-Draft                  SCITT-VCP                  November 2026
-
+   Acknowledgements  . . . . . . . . . . . . . . . . . . . . . . . .  38
+   Author's Address  . . . . . . . . . . . . . . . . . . . . . . . .  38
 
 1.  Introduction
 
@@ -179,6 +161,14 @@ Internet-Draft                  SCITT-VCP                  November 2026
    cases, its core primitives--Signed Statements, Receipts, and
    Transparency Services--are applicable to any domain requiring
    verifiable audit trails.
+
+
+
+
+Kamimura                   Expires 28 May 2027                  [Page 3]
+
+Internet-Draft                  SCITT-VCP                  November 2026
+
 
    This document specifies a SCITT profile for AI-driven algorithmic
    trading systems in financial markets.  The VeritasChain Protocol
@@ -217,15 +207,6 @@ Internet-Draft                  SCITT-VCP                  November 2026
 
    *  REQUIRES compliance with [RFC9943]
 
-
-
-
-
-Kamimura                   Expires 24 May 2027                  [Page 4]
-
-Internet-Draft                  SCITT-VCP                  November 2026
-
-
    *  REQUIRES use of SCRAPI [I-D.ietf-scitt-scrapi] for Transparency
       Service interactions
 
@@ -237,6 +218,13 @@ Internet-Draft                  SCITT-VCP                  November 2026
    Service interactions; it specifies how existing SCITT primitives are
    applied to VCP events in the financial trading domain.  The VCP event
    format and integrity layer are defined in [VCP-SPEC].
+
+
+
+Kamimura                   Expires 28 May 2027                  [Page 4]
+
+Internet-Draft                  SCITT-VCP                  November 2026
+
 
 1.3.  Scope
 
@@ -273,15 +261,6 @@ Internet-Draft                  SCITT-VCP                  November 2026
    are specific to this profile:
 
    VCP Event  A single auditable record in the VeritasChain Protocol,
-
-
-
-
-Kamimura                   Expires 24 May 2027                  [Page 5]
-
-Internet-Draft                  SCITT-VCP                  November 2026
-
-
       encoded as a SCITT Signed Statement.  Consists of Header, Payload,
       and Security metadata.
 
@@ -294,6 +273,14 @@ Internet-Draft                  SCITT-VCP                  November 2026
 
    VCP Receipt  A COSE Receipt issued by a VCP Transparency Service,
       proving inclusion of a VCP Event in the log.
+
+
+
+
+Kamimura                   Expires 28 May 2027                  [Page 5]
+
+Internet-Draft                  SCITT-VCP                  November 2026
+
 
    Actor  An entity (algorithm, human operator, or system) identified by
       ActorID that generates VCP Events.
@@ -333,7 +320,20 @@ Internet-Draft                  SCITT-VCP                  November 2026
 
 
 
-Kamimura                   Expires 24 May 2027                  [Page 6]
+
+
+
+
+
+
+
+
+
+
+
+
+
+Kamimura                   Expires 28 May 2027                  [Page 6]
 
 Internet-Draft                  SCITT-VCP                  November 2026
 
@@ -389,7 +389,7 @@ Internet-Draft                  SCITT-VCP                  November 2026
 
 
 
-Kamimura                   Expires 24 May 2027                  [Page 7]
+Kamimura                   Expires 28 May 2027                  [Page 7]
 
 Internet-Draft                  SCITT-VCP                  November 2026
 
@@ -445,7 +445,7 @@ Internet-Draft                  SCITT-VCP                  November 2026
 
 
 
-Kamimura                   Expires 24 May 2027                  [Page 8]
+Kamimura                   Expires 28 May 2027                  [Page 8]
 
 Internet-Draft                  SCITT-VCP                  November 2026
 
@@ -501,7 +501,7 @@ Internet-Draft                  SCITT-VCP                  November 2026
 
 
 
-Kamimura                   Expires 24 May 2027                  [Page 9]
+Kamimura                   Expires 28 May 2027                  [Page 9]
 
 Internet-Draft                  SCITT-VCP                  November 2026
 
@@ -557,7 +557,7 @@ Internet-Draft                  SCITT-VCP                  November 2026
 
 
 
-Kamimura                   Expires 24 May 2027                 [Page 10]
+Kamimura                   Expires 28 May 2027                 [Page 10]
 
 Internet-Draft                  SCITT-VCP                  November 2026
 
@@ -613,7 +613,7 @@ Internet-Draft                  SCITT-VCP                  November 2026
 
 
 
-Kamimura                   Expires 24 May 2027                 [Page 11]
+Kamimura                   Expires 28 May 2027                 [Page 11]
 
 Internet-Draft                  SCITT-VCP                  November 2026
 
@@ -669,7 +669,7 @@ Internet-Draft                  SCITT-VCP                  November 2026
 
 
 
-Kamimura                   Expires 24 May 2027                 [Page 12]
+Kamimura                   Expires 28 May 2027                 [Page 12]
 
 Internet-Draft                  SCITT-VCP                  November 2026
 
@@ -725,7 +725,7 @@ Internet-Draft                  SCITT-VCP                  November 2026
 
 
 
-Kamimura                   Expires 24 May 2027                 [Page 13]
+Kamimura                   Expires 28 May 2027                 [Page 13]
 
 Internet-Draft                  SCITT-VCP                  November 2026
 
@@ -781,7 +781,7 @@ Internet-Draft                  SCITT-VCP                  November 2026
 
 
 
-Kamimura                   Expires 24 May 2027                 [Page 14]
+Kamimura                   Expires 28 May 2027                 [Page 14]
 
 Internet-Draft                  SCITT-VCP                  November 2026
 
@@ -837,7 +837,7 @@ Internet-Draft                  SCITT-VCP                  November 2026
 
 
 
-Kamimura                   Expires 24 May 2027                 [Page 15]
+Kamimura                   Expires 28 May 2027                 [Page 15]
 
 Internet-Draft                  SCITT-VCP                  November 2026
 
@@ -893,7 +893,7 @@ Internet-Draft                  SCITT-VCP                  November 2026
 
 
 
-Kamimura                   Expires 24 May 2027                 [Page 16]
+Kamimura                   Expires 28 May 2027                 [Page 16]
 
 Internet-Draft                  SCITT-VCP                  November 2026
 
@@ -949,7 +949,7 @@ Internet-Draft                  SCITT-VCP                  November 2026
 
 
 
-Kamimura                   Expires 24 May 2027                 [Page 17]
+Kamimura                   Expires 28 May 2027                 [Page 17]
 
 Internet-Draft                  SCITT-VCP                  November 2026
 
@@ -1005,7 +1005,7 @@ Internet-Draft                  SCITT-VCP                  November 2026
 
 
 
-Kamimura                   Expires 24 May 2027                 [Page 18]
+Kamimura                   Expires 28 May 2027                 [Page 18]
 
 Internet-Draft                  SCITT-VCP                  November 2026
 
@@ -1061,7 +1061,7 @@ Internet-Draft                  SCITT-VCP                  November 2026
 
 
 
-Kamimura                   Expires 24 May 2027                 [Page 19]
+Kamimura                   Expires 28 May 2027                 [Page 19]
 
 Internet-Draft                  SCITT-VCP                  November 2026
 
@@ -1117,7 +1117,7 @@ Internet-Draft                  SCITT-VCP                  November 2026
 
 
 
-Kamimura                   Expires 24 May 2027                 [Page 20]
+Kamimura                   Expires 28 May 2027                 [Page 20]
 
 Internet-Draft                  SCITT-VCP                  November 2026
 
@@ -1173,7 +1173,7 @@ Internet-Draft                  SCITT-VCP                  November 2026
 
 
 
-Kamimura                   Expires 24 May 2027                 [Page 21]
+Kamimura                   Expires 28 May 2027                 [Page 21]
 
 Internet-Draft                  SCITT-VCP                  November 2026
 
@@ -1229,7 +1229,7 @@ Internet-Draft                  SCITT-VCP                  November 2026
 
 
 
-Kamimura                   Expires 24 May 2027                 [Page 22]
+Kamimura                   Expires 28 May 2027                 [Page 22]
 
 Internet-Draft                  SCITT-VCP                  November 2026
 
@@ -1285,7 +1285,7 @@ Internet-Draft                  SCITT-VCP                  November 2026
 
 
 
-Kamimura                   Expires 24 May 2027                 [Page 23]
+Kamimura                   Expires 28 May 2027                 [Page 23]
 
 Internet-Draft                  SCITT-VCP                  November 2026
 
@@ -1341,7 +1341,7 @@ Internet-Draft                  SCITT-VCP                  November 2026
 
 
 
-Kamimura                   Expires 24 May 2027                 [Page 24]
+Kamimura                   Expires 28 May 2027                 [Page 24]
 
 Internet-Draft                  SCITT-VCP                  November 2026
 
@@ -1397,7 +1397,7 @@ Internet-Draft                  SCITT-VCP                  November 2026
 
 
 
-Kamimura                   Expires 24 May 2027                 [Page 25]
+Kamimura                   Expires 28 May 2027                 [Page 25]
 
 Internet-Draft                  SCITT-VCP                  November 2026
 
@@ -1409,21 +1409,21 @@ Internet-Draft                  SCITT-VCP                  November 2026
    above depends on them.  For RFC9162_SHA256 a Receipt of inclusion
    establishes neither: the tree size and leaf index are outside the
    signed protected header, and the same inclusion path can recompute
-   the signed root under more than one tree size.  VCP takes the order
-   of events from their sequence numbers; Relying Parties cannot assume
-   that log order matches issuance order unless the Registration Policy
-   advertises it (Section 9.1 of [RFC9943]).  The AnchorRecord fields
-   listed above are not yet covered by the AnchorRecord signature; see
-   item 2 of Section 9.
+   the signed root under more than one tree size [SCITT-LIST-OI6].  VCP
+   takes the order of events from their sequence numbers; Relying
+   Parties cannot assume that log order matches issuance order unless
+   the Registration Policy advertises it (Section 9.1 of [RFC9943]).
+   The AnchorRecord fields listed above are not yet covered by the
+   AnchorRecord signature; see item 2 of Section 9.
 
 9.  Open Issues
 
    A comparison of the VCP v1.2 integrity layer with the VAP v1.2
    framework requirements, published as an unadopted research
    observation record [VCP-VAP-OBS], identified items 1 to 5 below.
-   Item 6 was added in revision -06.  This candidate settles its part on
+   Item 6 was added in revision -06.  This revision settles its part on
    log position and size and leaves its other parts open; items 1 to 5
-   are not resolved by this candidate.
+   are not resolved by this revision.
 
    1.  Local batch Merkle construction.  [VCP-SPEC] requires Merkle tree
        construction to follow RFC 6962, but its reference code
@@ -1453,7 +1453,7 @@ Internet-Draft                  SCITT-VCP                  November 2026
 
 
 
-Kamimura                   Expires 24 May 2027                 [Page 26]
+Kamimura                   Expires 28 May 2027                 [Page 26]
 
 Internet-Draft                  SCITT-VCP                  November 2026
 
@@ -1509,22 +1509,26 @@ Internet-Draft                  SCITT-VCP                  November 2026
 
 
 
-Kamimura                   Expires 24 May 2027                 [Page 27]
+Kamimura                   Expires 28 May 2027                 [Page 27]
 
 Internet-Draft                  SCITT-VCP                  November 2026
 
 
        verifier checks when an argument depends on a statement's
-       position in the log or on the log's size.  This candidate settles
+       position in the log or on the log's size.  This revision settles
        (c) by stating in Section 8.5 that the profile relies on Receipts
        for inclusion only.  A future claim resting on position or size
        would need further evidence under the trusted service key, such
        as a signed checkpoint whose root equals the one recomputed from
        the Receipt, together with every entry in the range and
-       consistency between the tree heads compared.  The hackathon
-       report presented to the SCITT Working Group at IETF 127 names the
-       same points as rules that verifying Receipts across operators
-       currently needs out of band [SCITT-IETF127].
+       consistency between the tree heads compared.  This profile also
+       does not yet state what a verifier reports when the context in
+       (a) or (b) is missing, unknown or contradictory.  Parts (a) and
+       (b) are tracked in an intake record [VCP-ISSUE-37]; it adopts no
+       change.  The hackathon report presented to the SCITT Working
+       Group at IETF 127 names the same points as rules that verifying
+       Receipts across operators currently needs out of band
+       [SCITT-IETF127].
 
    Since -05, VSO's change-proposal register has listed proposed
    identifiers for change proposals on items 1 to 5 [VCP-CP-REGISTER]:
@@ -1558,17 +1562,17 @@ Internet-Draft                  SCITT-VCP                  November 2026
       implementation of VCP v1.1 event logging at the Silver tier, and
       proof-of-concept repositories for cTrader, FIX, Interactive
       Brokers, Nasdaq and Cloudflare.  VCP-RTA does not produce
-      COSE_Sign1 Signed Statements or register them with a Transparency
-      Service, and it does not implement VCP v1.2.  The proof-of-concept
-      repositories have not been assessed against this profile.
 
 
 
-
-Kamimura                   Expires 24 May 2027                 [Page 28]
+Kamimura                   Expires 28 May 2027                 [Page 28]
 
 Internet-Draft                  SCITT-VCP                  November 2026
 
+
+      COSE_Sign1 Signed Statements or register them with a Transparency
+      Service, and it does not implement VCP v1.2.  The proof-of-concept
+      repositories have not been assessed against this profile.
 
    *  VSO also publishes a first-party, pre-release offline library for
       VCP v1.2 events in Python, TypeScript and MQL5 [VCP-SDK].  It
@@ -1612,19 +1616,19 @@ Internet-Draft                  SCITT-VCP                  November 2026
               RFC 8785, June 2020,
               <https://www.rfc-editor.org/rfc/rfc8785>.
 
-   [RFC9052]  Schaad, J., "CBOR Object Signing and Encryption (COSE)",
-              RFC 9052, August 2022,
-              <https://www.rfc-editor.org/rfc/rfc9052>.
 
 
 
 
 
-
-Kamimura                   Expires 24 May 2027                 [Page 29]
+Kamimura                   Expires 28 May 2027                 [Page 29]
 
 Internet-Draft                  SCITT-VCP                  November 2026
 
+
+   [RFC9052]  Schaad, J., "CBOR Object Signing and Encryption (COSE)",
+              RFC 9052, August 2022,
+              <https://www.rfc-editor.org/rfc/rfc9052>.
 
    [RFC9562]  Davis, K., "Universally Unique IDentifiers (UUIDs)",
               RFC 9562, May 2024,
@@ -1669,18 +1673,19 @@ Internet-Draft                  SCITT-VCP                  November 2026
               Transparency Version 2.0", RFC 9162, DOI 10.17487/RFC9162,
               December 2021, <https://www.rfc-editor.org/info/rfc9162>.
 
+
+
+
+
+Kamimura                   Expires 28 May 2027                 [Page 30]
+
+Internet-Draft                  SCITT-VCP                  November 2026
+
+
    [RFC9942]  Steele, O., Birkholz, H., Delignat-Lavaud, A., and C.
               Fournet, "CBOR Object Signing and Encryption (COSE)
               Receipts", RFC 9942, DOI 10.17487/RFC9942, June 2026,
               <https://www.rfc-editor.org/info/rfc9942>.
-
-
-
-
-Kamimura                   Expires 24 May 2027                 [Page 30]
-
-Internet-Draft                  SCITT-VCP                  November 2026
-
 
    [VCP-VAP-OBS]
               VeritasChain Standards Organization, "VCP v1.2 / VAP v1.2
@@ -1709,7 +1714,7 @@ Internet-Draft                  SCITT-VCP                  November 2026
               Progress, Internet-Draft, draft-ietf-scitt-receipts-ccf-
               profile-06, 22 October 2026,
               <https://datatracker.ietf.org/doc/html/draft-ietf-scitt-
-              receipts-ccf-profile-06>.  Work in progress.
+              receipts-ccf-profile-06>.
 
    [SCITT-LIST-OI6]
               Kudsi, B., "Re: draft-kamimura-scitt-vcp-06: open issue on
@@ -1717,6 +1722,21 @@ Internet-Draft                  SCITT-VCP                  November 2026
               2026, <https://mailarchive.ietf.org/arch/msg/scitt/nQPyS-
               vfZfywHe9_TcqcrgY5Tw4/>.  Message to the SCITT Working
               Group mailing list.
+
+   [VCP-ISSUE-37]
+              VeritasChain Standards Organization, "SCITT -06 Receipt
+              verification context and interoperability plan", November
+              2026,
+              <https://github.com/veritaschain/vcp-spec/issues/37>.
+              Issue 37 in the vcp-spec repository.  Intake record; no
+              change is adopted.
+
+
+
+Kamimura                   Expires 28 May 2027                 [Page 31]
+
+Internet-Draft                  SCITT-VCP                  November 2026
+
 
    [SCITT-IETF127]
               IETF SCITT Working Group, "SCITT Working Group session,
@@ -1730,13 +1750,6 @@ Internet-Draft                  SCITT-VCP                  November 2026
               Lattice-Based Digital Signature Standard (ML-DSA)", NIST
               FIPS 204, August 2024,
               <https://csrc.nist.gov/pubs/fips/204/final>.
-
-
-
-Kamimura                   Expires 24 May 2027                 [Page 31]
-
-Internet-Draft                  SCITT-VCP                  November 2026
-
 
 Appendix A.  Illustrative VCP Event Example
 
@@ -1776,20 +1789,7 @@ Appendix A.  Illustrative VCP Event Example
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-Kamimura                   Expires 24 May 2027                 [Page 32]
+Kamimura                   Expires 28 May 2027                 [Page 32]
 
 Internet-Draft                  SCITT-VCP                  November 2026
 
@@ -1845,7 +1845,7 @@ Internet-Draft                  SCITT-VCP                  November 2026
 
 
 
-Kamimura                   Expires 24 May 2027                 [Page 33]
+Kamimura                   Expires 28 May 2027                 [Page 33]
 
 Internet-Draft                  SCITT-VCP                  November 2026
 
@@ -1895,16 +1895,28 @@ Appendix C.  Changes from draft-kamimura-scitt-vcp-06
    *  Noted in Open Issue 2 that the Completeness Considerations rely on
       the AnchorRecord fields its signature does not cover.
 
-   *  Items 1 to 5 and the remaining parts of item 6 stay open.  This
-      candidate does not adopt any VSO change proposal or change the VCP
-      v1.2 specification, schema or existing signed records.
 
 
 
-Kamimura                   Expires 24 May 2027                 [Page 34]
+
+
+
+Kamimura                   Expires 28 May 2027                 [Page 34]
 
 Internet-Draft                  SCITT-VCP                  November 2026
 
+
+   *  Recorded in Open Issue 6 that the profile does not yet state what
+      a verifier reports when the entry rule or the trusted service and
+      keys are missing, unknown or contradictory, and added a reference
+      to the intake record that tracks the remaining parts of item 6.
+
+   *  Acknowledged the SCITT list comments that led to the changes to
+      the Completeness Considerations and Open Issue 6.
+
+   *  Items 1 to 5 and the remaining parts of item 6 stay open.  This
+      revision does not adopt any VSO change proposal or change the VCP
+      v1.2 specification, schema or existing signed records.
 
 Appendix D.  Changes from draft-kamimura-scitt-vcp-05
 
@@ -1941,6 +1953,15 @@ Appendix F.  Changes from draft-kamimura-scitt-vcp-03
       the -02/-03 description of anchoring as OPTIONAL at the protocol
       level is withdrawn
 
+
+
+
+
+Kamimura                   Expires 28 May 2027                 [Page 35]
+
+Internet-Draft                  SCITT-VCP                  November 2026
+
+
    *  Tier table aligned with VCP v1.2: anchoring every 24 hours, hour
       and 10 minutes; clock synchronization best-effort, NTP (<1ms) and
       PTPv2 (<1 microsecond)
@@ -1952,15 +1973,6 @@ Appendix F.  Changes from draft-kamimura-scitt-vcp-03
 
    *  Added the ERR_* subtypes and the five SYS_* event types registered
       by the VCP v1.2 release
-
-
-
-
-
-Kamimura                   Expires 24 May 2027                 [Page 35]
-
-Internet-Draft                  SCITT-VCP                  November 2026
-
 
    *  Replaced draft-ietf-scitt-architecture with RFC 9943; updated the
       SCRAPI reference; added RFC 9942 and RFC 9162
@@ -1997,6 +2009,15 @@ Appendix G.  Changes from draft-kamimura-scitt-vcp-02
    This section summarizes the changes from version -02 to -03.  All
    changes align this profile with VCP Specification v1.2 [VCP-SPEC].
 
+
+
+
+
+Kamimura                   Expires 28 May 2027                 [Page 36]
+
+Internet-Draft                  SCITT-VCP                  November 2026
+
+
    *  Added the SCITT Alignment Object as an OPTIONAL Header extension,
       together with the VCP_BASE, VCP_SCITT, and VCP_REGULATORY
       conformance profiles (Section 4.4)
@@ -2009,14 +2030,6 @@ Appendix G.  Changes from draft-kamimura-scitt-vcp-02
       "DILITHIUM3", which does not exist in the VCP SignAlgo registry;
       the registry value is "DILITHIUM2" (ML-DSA, FIPS 204), holding
       EXPERIMENTAL status in v1.2
-
-
-
-
-Kamimura                   Expires 24 May 2027                 [Page 36]
-
-Internet-Draft                  SCITT-VCP                  November 2026
-
 
    *  Migrated PolicyID examples from the provisional "urn:vcp:policy"
       form to the Issuer Domain + Local ID convention defined in VCP
@@ -2049,6 +2062,18 @@ Appendix H.  Changes from draft-kamimura-scitt-vcp-01
 
    *  Removed unused informative references
 
+
+
+
+
+
+
+
+Kamimura                   Expires 28 May 2027                 [Page 37]
+
+Internet-Draft                  SCITT-VCP                  November 2026
+
+
 Acknowledgements
 
    This work builds upon the SCITT architecture developed by the IETF
@@ -2058,6 +2083,11 @@ Acknowledgements
    Special thanks to the SCITT WG participants who provided feedback on
    draft-kamimura-scitt-vcp-01, which informed the improvements in this
    version.
+
+   The changes to the Completeness Considerations and to Open Issue 6 in
+   revision -07 follow comments by Bassem Kudsi on the SCITT mailing
+   list [SCITT-LIST-OI6].  This acknowledgement does not imply
+   endorsement of this profile.
 
 Author's Address
 
@@ -2069,4 +2099,30 @@ Author's Address
 
 
 
-Kamimura                   Expires 24 May 2027                 [Page 37]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Kamimura                   Expires 28 May 2027                 [Page 38]
