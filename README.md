@@ -143,6 +143,10 @@ leaf index). Neither revision changes a VCP requirement.
 [Receipt-context intake #37](https://github.com/veritaschain/vcp-spec/issues/37)
 tracks the remaining entry-rule and trusted-service questions without adopting new
 verification rules.
+Every message VSO has sent to the IETF SCITT mailing list is listed, with notes on
+wording VSO no longer uses, in the
+[SCITT mailing-list activity record](https://veritaschain.org/standardization/ietf-activity/).
+Mailing-list participation is individual participation, not Working Group adoption.
 
 The SCITT architecture and COSE Receipts that VCP v1.2 aligns with (opt-in) are
 now published as **RFC 9943** and **RFC 9942** (June 2026).
