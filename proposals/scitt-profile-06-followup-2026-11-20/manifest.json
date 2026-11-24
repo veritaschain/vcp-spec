@@ -1,5 +1,6 @@
 {
-  "status": "submission version of -07, document date 24 November 2026; not posted to the IETF Datatracker when generated; no VCP change adopted",
+  "status": "posted as draft-kamimura-scitt-vcp-07 on 24 November 2026 (Datatracker submission 173128); the generated XML is byte-identical to the archived revision; no VCP change adopted",
+  "posted_url": "https://www.ietf.org/archive/id/draft-kamimura-scitt-vcp-07.xml",
   "baseline_repository_commit": "ab5c851ce937763104204d8c4ab09197e16799f1",
   "baseline_url": "https://www.ietf.org/archive/id/draft-kamimura-scitt-vcp-06.xml",
   "source_sha256": {

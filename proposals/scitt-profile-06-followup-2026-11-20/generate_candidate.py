@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
-"""Rebuild the -07 submission version from the preserved official -06 XML.
+"""Rebuild draft-kamimura-scitt-vcp-07 from the preserved official -06 XML.
 
-The output is the XML prepared for upload to the IETF Datatracker. Generating
-or merging it does not post an Internet-Draft; a posting has to be confirmed on
-the Datatracker. This generates documentation examples, not signed evidence or
-a conformance implementation. All integer arithmetic is exact; no JCS choice is
+The output is byte-identical to the XML posted to the IETF Datatracker on
+24 November 2026 (submission 173128); the build fails if it is not. A posted
+revision cannot be changed, so later corrections belong in a new revision, not
+here. This generates documentation examples, not signed evidence or a
+conformance implementation. All integer arithmetic is exact; no JCS choice is
 made here.
 """
 
@@ -20,9 +21,12 @@ ROOT = Path(__file__).resolve().parent
 BASE_NAME = "draft-kamimura-scitt-vcp-06.xml"
 CANDIDATE_NAME = "draft-kamimura-scitt-vcp-07.xml"
 BASE_SHA256 = "58ccf43f176e55d758f49eb21038c4742fa830a4c8d53657c1573e710ac480fe"
-# Document date of the submission version. The Datatracker expects it to be
-# close to the upload date; change it here and regenerate if the upload slips.
+# Document date of the posted revision.
 DOC_DATE = (2026, "November", 24)
+# SHA-256 of https://www.ietf.org/archive/id/draft-kamimura-scitt-vcp-07.xml,
+# fetched after posting on 24 November 2026.
+POSTED_XML_SHA256 = "078e1ac6c3dcbd9c0d2930655443e4729dce373da68bbb05f6e76b1f117e2bd3"
+POSTED_URL = "https://www.ietf.org/archive/id/" + CANDIDATE_NAME
 ORDER_NS = 1773567000123456789  # 2026-03-15T09:30:00.123456789Z
 ERASURE_NS = 1791504000000000000  # 2026-10-09T00:00:00Z
 
@@ -429,11 +433,14 @@ def build():
         candidate = candidate.replace(match.group(0), ET.tostring(element, encoding="unicode"), 1)
         source_digests[path.relative_to(ROOT).as_posix()] = hashlib.sha256(data).hexdigest()
     ET.fromstring(candidate)
+    if hashlib.sha256(candidate.encode()).hexdigest() != POSTED_XML_SHA256:
+        raise ValueError("generated XML differs from the posted -07 revision")
     outputs = {CANDIDATE_NAME: candidate}
     outputs.update({"examples/" + name + ".json": json_text(value)
                     for name, value in examples.items()})
     manifest = {
-        "status": "submission version of -07, document date %d %s %d; not posted to the IETF Datatracker when generated; no VCP change adopted" % (DOC_DATE[2], DOC_DATE[1], DOC_DATE[0]),
+        "status": "posted as draft-kamimura-scitt-vcp-07 on 24 November 2026 (Datatracker submission 173128); the generated XML is byte-identical to the archived revision; no VCP change adopted",
+        "posted_url": POSTED_URL,
         "baseline_repository_commit": "ab5c851ce937763104204d8c4ab09197e16799f1",
         "baseline_url": "https://www.ietf.org/archive/id/" + BASE_NAME,
         "source_sha256": source_digests,

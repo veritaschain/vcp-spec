@@ -90,6 +90,7 @@ class ScittCandidateExamples(unittest.TestCase):
         rendered = (PROPOSAL / "draft-kamimura-scitt-vcp-07.txt").read_text()
         self.assertIn("%d %s %d" % (generator.DOC_DATE[2], generator.DOC_DATE[1], generator.DOC_DATE[0]), rendered)
         self.assertNotIn("unsubmitted", rendered)
+        self.assertEqual(hashlib.sha256(text.encode()).hexdigest(), generator.POSTED_XML_SHA256)
 
     def test_render_record_matches_both_candidate_artifacts(self):
         record = json.loads((PROPOSAL / "rendered-manifest.json").read_text())

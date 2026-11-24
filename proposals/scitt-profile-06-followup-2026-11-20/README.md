@@ -1,13 +1,16 @@
-# SCITT-VCP -06 follow-up: -07 submission version and Receipt-context intake
+# SCITT-VCP -06 follow-up: source of the posted -07 and Receipt-context intake
 
-**Status: -07 submission version, prepared 24 November 2026; not posted when this
-was written.** The XML here is the file prepared for upload to the IETF
-Datatracker, with document date 24 November 2026. When it was prepared the
-published IETF revision was **-06** (document date 20 November 2026; Datatracker
-metadata updated on 19 November). Merging this directory does not submit an
-Internet-Draft or adopt a VCP requirement. Check the
-[Datatracker](https://datatracker.ietf.org/doc/draft-kamimura-scitt-vcp/) before
-calling -07 current; a posted revision cannot be withdrawn or edited.
+**Status: posted.** [`draft-kamimura-scitt-vcp-07`](https://datatracker.ietf.org/doc/html/draft-kamimura-scitt-vcp-07)
+was posted to the IETF Datatracker on 24 November 2026 (submission 173128;
+document record dated 2026-11-24T02:34:46Z; document date 24 November 2026;
+expires 28 May 2027; 38 pages). It is an individual Internet-Draft, not adopted
+by any IETF Working Group. The XML and text in this directory are byte-identical
+to the [archived XML](https://www.ietf.org/archive/id/draft-kamimura-scitt-vcp-07.xml)
+and [archived text](https://www.ietf.org/archive/id/draft-kamimura-scitt-vcp-07.txt)
+(SHA-256 `078e1ac6c3dcbd9c0d2930655443e4729dce373da68bbb05f6e76b1f117e2bd3` and
+`9c96f008cfef43173947ade282277642fee974c8492e6a70e37cb600a7c600df`). A posted
+revision cannot be withdrawn or edited; corrections go into a later revision.
+Posting adopts no VCP requirement.
 
 The package is reproducible from the actual official -06 XML. It began on
 20 November 2026 as an editor candidate; the candidate notice was removed and the
@@ -21,8 +24,8 @@ now cites.
 
 | Artifact | Purpose |
 |---|---|
-| [Submission XML](draft-kamimura-scitt-vcp-07.xml) | Full source prepared for upload. It carries no candidate notice. |
-| [Rendered text](draft-kamimura-scitt-vcp-07.txt) | Text rendered with xml2rfc 3.35.0 for review. The Datatracker renders its own text from the XML. |
+| [Posted XML](draft-kamimura-scitt-vcp-07.xml) | Full source as posted. The generator refuses to produce different bytes. |
+| [Rendered text](draft-kamimura-scitt-vcp-07.txt) | Text rendered with xml2rfc 3.35.0. It matches the text the Datatracker rendered from the XML. |
 | [Preserved -06 XML](source/draft-kamimura-scitt-vcp-06.xml) | Byte-for-byte official source used by the generator. |
 | [Manifest](manifest.json) | SHA-256 of the baseline source, saved bibliography and generated XML/JSON. |
 | [Render record](rendered-manifest.json) | Pinned renderer version and the exact XML/TXT digests for the reviewed rendering. |
@@ -87,8 +90,9 @@ python -m unittest discover -s tests -v
 ```
 
 Run the generator without `--check` to rebuild the XML, example JSON and manifest.
-The document date is the `DOC_DATE` constant in the generator; if the upload
-slips, change it there, regenerate, render again and update the render record.
+The document date is the `DOC_DATE` constant in the generator. The generator
+compares its XML with the digest of the posted revision and fails on any
+difference.
 It checks the official source digest, uses exact integer arithmetic and refuses a
 SCRAPI bibliography snapshot other than -11. The tests cover the known mismatches,
 float/boolean timestamps, wrong UUID version, erasure-time ordering, schema shape,
@@ -129,10 +133,10 @@ reviews in [#26](https://github.com/veritaschain/vcp-spec/issues/26) and
 
 The steps listed here before 24 November are done: the text was reviewed against
 -06, -07 was confirmed as the next revision (the Datatracker listed 00 to 06), the
-candidate notice was removed, the date was set, and the text was rendered and
-checked. What remains is the upload itself, which only the author can confirm
-(the Datatracker sends a confirmation email to the author address). An actual
-Datatracker posting must be verified before any page calls -07 current.
+candidate notice was removed, the date was set, the text was rendered and
+checked, the XML was uploaded, and the author confirmed the posting. The posting
+was verified against the Datatracker document record and the archived files
+before this page called -07 current.
 Normative VCP changes arising from Receipt-context work require separate review,
 classification, vectors and migration analysis under the applicable procedure.
 
