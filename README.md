@@ -137,9 +137,12 @@ VCP produces evidence relevant to regimes such as:
 
 Revision -06 records Receipt verification context as an additional open issue and
 does not change requirements. The [unsubmitted next-revision editor candidate](proposals/scitt-profile-06-followup-2026-11-20/README.md)
-corrects SCRAPI descriptions and illustrative examples; its provisional -07 label
-does not establish a new IETF posting. [Receipt-context intake #37](https://github.com/veritaschain/vcp-spec/issues/37)
-tracks proposed experiment/decision work without adopting new verification rules.
+corrects SCRAPI descriptions and illustrative examples, and states that the profile
+relies on Receipts for inclusion only (no conclusion from a Receipt's tree size or
+leaf index); its provisional -07 label does not establish a new IETF posting.
+[Receipt-context intake #37](https://github.com/veritaschain/vcp-spec/issues/37)
+tracks the remaining entry-rule and trusted-service questions without adopting new
+verification rules.
 
 The SCITT architecture and COSE Receipts that VCP v1.2 aligns with (opt-in) are
 now published as **RFC 9943** and **RFC 9942** (June 2026).

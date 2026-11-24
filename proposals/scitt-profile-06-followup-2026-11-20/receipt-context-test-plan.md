@@ -59,6 +59,30 @@ protected header: their role in recomputing the signed root must be assessed.
   and source completeness separately. The completed experiment cannot claim
   unobserved actions were captured or that a service is certified.
 
+## Inputs received (24 November 2026)
+
+Reply on the SCITT list from Bassem Kudsi (AugmentEV), [24 November 2026](https://mailarchive.ietf.org/arch/msg/scitt/nQPyS-vfZfywHe9_TcqcrgY5Tw4/),
+answering the editor's two questions of [20 November](https://mailarchive.ietf.org/arch/msg/scitt/NEkecA1SxFvwENEoeFpaAdyLwYA/).
+Recorded as input, not as adopted rules. The editor replied on the list the same day.
+
+| Point | Input | Status here |
+|---|---|---|
+| Entry rule (a) | The rule belongs to the verifiable-data-structure profile. The [CCF profile -06](https://datatracker.ietf.org/doc/html/draft-ietf-scitt-receipts-ccf-profile-06) §§2.2, 3.2 hashes the Signed Statement as registered (tag 18 retained, empty unprotected header); the verifier computes the digest and MUST NOT take it from the Receipt. RFC 9942 §5.2.1 and the [MMR profile -00](https://datatracker.ietf.org/doc/html/draft-ietf-scitt-receipts-mmr-profile-00) §§5.1, 11.2 leave it open, so VCP would have to state it. | Candidate for (a). Open question raised by the editor: under RFC9162_SHA256 the vds value does not identify an entry rule, so the rule would be pinned with the service identity and committed to in the Registration Policy rather than selected by the Receipt. Would settle RC-05 and RC-06 if adopted. |
+| Key (b) | RFC 9943 §§3, 7.1 require a trusted service key; SCRAPI §2.1 discovers keys. RFC 9943 §4 lets the key change between Receipts, so fix the service identity, not one key. | Consistent with this plan (discovery is not the trust decision; RC-03, RC-11). Open. |
+| Position and size (c) | A Receipt of inclusion for RFC9162_SHA256 establishes neither ([reproduction](https://github.com/AugmentEV/rfc9942-receipt-position); RFC 9942 errata reports 9316 and 9317). A claim on them needs a signed checkpoint under the trusted key whose root equals the recomputed one, or a tree-size claim in the protected header; an omission argument also needs every entry in the range and consistency between heads. -06 rests no claim on them. | Settled in the -07 candidate by relying on Receipts for inclusion only (§8.5). Answers RC-07 and RC-08 for the reported cases. RC-09 and RC-10 apply only if a later claim rests on position or size. |
+| Same shape in VCP | Open Issue 2: the AnchorRecord's event count is outside its signature. | Recorded in the -07 candidate (item 2). The direction "register the AnchorRecord as a Signed Statement" is a proposal, not adopted; it belongs with the VCP-CP-2026-003/004 work. |
+
+**First-party check of the tree arithmetic.** [`receipt_position_check.py`](receipt_position_check.py),
+written from RFC 9162 §2.1 without running the reporter's code: the honest path for
+leaf 5 of 7 recomputes the same root when read with tree size 8, and with the size
+fixed no other leaf index does; for tree sizes 1 to 64, 1,984 of 2,080 (size, index)
+pairs also recompute their root under another size (sizes searched up to 255).
+This matches the reported figures. It is the same maintainer side as the editor,
+so it is not independent reproduction under this plan, and it tests tree
+arithmetic, not a Receipt or COSE implementation. The reporter's check with
+`scitt-cose` 0.5.0 is a second implementation; its maintainer's relation to the
+reporter is not recorded here.
+
 ## Intake exit criteria
 
 The tracking issue remains open until the candidate alternatives, fixed vectors,

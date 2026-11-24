@@ -47,9 +47,9 @@ About This Document
    Discussion of this document takes place on the SCITT Working Group
    mailing list (scitt@ietf.org).
 
-
-
-
+   Proposed changes from -06 are listed in Appendix C.  The SCRAPI
+   description and examples are corrected, and the part of Open Issue 6
+   on log position and size is settled by relying on Receipts for
 
 
 
@@ -58,8 +58,7 @@ Kamimura                   Expires 24 May 2027                  [Page 1]
 Internet-Draft                  SCITT-VCP                  November 2026
 
 
-   Proposed changes from -06 are listed in Appendix C.  The SCRAPI
-   description and examples are corrected; the six Open Issues remain
+   inclusion only.  Items 1 to 5 and the rest of item 6 remain
    unresolved.  Earlier changes are recorded in the subsequent
    appendices.
 
@@ -106,6 +105,7 @@ Table of Contents
      3.1.  Event Flow  . . . . . . . . . . . . . . . . . . . . . . .   8
      3.2.  Per-Actor Hash Chain (Optional) . . . . . . . . . . . . .   9
      3.3.  Three-Layer Integrity Architecture  . . . . . . . . . . .   9
+   4.  VCP Event Schema  . . . . . . . . . . . . . . . . . . . . . .  10
 
 
 
@@ -114,7 +114,6 @@ Kamimura                   Expires 24 May 2027                  [Page 2]
 Internet-Draft                  SCITT-VCP                  November 2026
 
 
-   4.  VCP Event Schema  . . . . . . . . . . . . . . . . . . . . . .  10
      4.1.  Header Object . . . . . . . . . . . . . . . . . . . . . .  10
      4.2.  Payload Object  . . . . . . . . . . . . . . . . . . . . .  11
      4.3.  Security Object . . . . . . . . . . . . . . . . . . . . .  12
@@ -140,22 +139,23 @@ Internet-Draft                  SCITT-VCP                  November 2026
      8.3.  Timing Attacks  . . . . . . . . . . . . . . . . . . . . .  24
      8.4.  Privacy Considerations  . . . . . . . . . . . . . . . . .  25
      8.5.  Completeness Considerations . . . . . . . . . . . . . . .  25
-   9.  Open Issues . . . . . . . . . . . . . . . . . . . . . . . . .  25
-   10. Implementation Status . . . . . . . . . . . . . . . . . . . .  27
-   11. IANA Considerations . . . . . . . . . . . . . . . . . . . . .  28
-   12. References  . . . . . . . . . . . . . . . . . . . . . . . . .  28
-     12.1.  Normative References . . . . . . . . . . . . . . . . . .  28
-     12.2.  Informative References . . . . . . . . . . . . . . . . .  29
-   Appendix A.  Illustrative VCP Event Example . . . . . . . . . . .  30
-   Appendix B.  JSON Schema Reference  . . . . . . . . . . . . . . .  32
-   Appendix C.  Changes from draft-kamimura-scitt-vcp-06 . . . . . .  32
-   Appendix D.  Changes from draft-kamimura-scitt-vcp-05 . . . . . .  32
-   Appendix E.  Changes from draft-kamimura-scitt-vcp-04 . . . . . .  33
-   Appendix F.  Changes from draft-kamimura-scitt-vcp-03 . . . . . .  33
-   Appendix G.  Changes from draft-kamimura-scitt-vcp-02 . . . . . .  34
-   Appendix H.  Changes from draft-kamimura-scitt-vcp-01 . . . . . .  34
-   Acknowledgements  . . . . . . . . . . . . . . . . . . . . . . . .  35
-   Author's Address  . . . . . . . . . . . . . . . . . . . . . . . .  35
+   9.  Open Issues . . . . . . . . . . . . . . . . . . . . . . . . .  26
+   10. Implementation Status . . . . . . . . . . . . . . . . . . . .  28
+   11. IANA Considerations . . . . . . . . . . . . . . . . . . . . .  29
+   12. References  . . . . . . . . . . . . . . . . . . . . . . . . .  29
+     12.1.  Normative References . . . . . . . . . . . . . . . . . .  29
+     12.2.  Informative References . . . . . . . . . . . . . . . . .  30
+   Appendix A.  Illustrative VCP Event Example . . . . . . . . . . .  32
+   Appendix B.  JSON Schema Reference  . . . . . . . . . . . . . . .  34
+   Appendix C.  Changes from draft-kamimura-scitt-vcp-06 . . . . . .  34
+   Appendix D.  Changes from draft-kamimura-scitt-vcp-05 . . . . . .  35
+   Appendix E.  Changes from draft-kamimura-scitt-vcp-04 . . . . . .  35
+   Appendix F.  Changes from draft-kamimura-scitt-vcp-03 . . . . . .  35
+   Appendix G.  Changes from draft-kamimura-scitt-vcp-02 . . . . . .  36
+   Appendix H.  Changes from draft-kamimura-scitt-vcp-01 . . . . . .  37
+   Acknowledgements  . . . . . . . . . . . . . . . . . . . . . . . .  37
+   Author's Address  . . . . . . . . . . . . . . . . . . . . . . . .  37
+
 
 
 
@@ -1382,18 +1382,18 @@ Internet-Draft                  SCITT-VCP                  November 2026
    record.  The completeness window implied by the tier's anchoring
    frequency should be disclosed when records are presented.
 
-9.  Open Issues
 
-   A comparison of the VCP v1.2 integrity layer with the VAP v1.2
-   framework requirements, published as an unadopted research
-   observation record [VCP-VAP-OBS], identified items 1 to 5 below.
-   Item 6 was added in revision -06.  None of them is resolved by this
-   candidate.
 
-   1.  Local batch Merkle construction.  [VCP-SPEC] requires Merkle tree
-       construction to follow RFC 6962, but its reference code
-       duplicates an odd node, which yields roots that differ from those
-       of [RFC9162] for batch sizes that are not a power of two, and its
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -1402,6 +1402,33 @@ Kamimura                   Expires 24 May 2027                 [Page 25]
 Internet-Draft                  SCITT-VCP                  November 2026
 
 
+   This profile relies on COSE Receipts [RFC9942] for inclusion only.
+   It draws no conclusion about a Signed Statement's position in a
+   Transparency Service's log, or about the log's size, from the tree
+   size or leaf index that a Receipt carries, and none of the mechanisms
+   above depends on them.  For RFC9162_SHA256 a Receipt of inclusion
+   establishes neither: the tree size and leaf index are outside the
+   signed protected header, and the same inclusion path can recompute
+   the signed root under more than one tree size.  VCP takes the order
+   of events from their sequence numbers; Relying Parties cannot assume
+   that log order matches issuance order unless the Registration Policy
+   advertises it (Section 9.1 of [RFC9943]).  The AnchorRecord fields
+   listed above are not yet covered by the AnchorRecord signature; see
+   item 2 of Section 9.
+
+9.  Open Issues
+
+   A comparison of the VCP v1.2 integrity layer with the VAP v1.2
+   framework requirements, published as an unadopted research
+   observation record [VCP-VAP-OBS], identified items 1 to 5 below.
+   Item 6 was added in revision -06.  This candidate settles its part on
+   log position and size and leaves its other parts open; items 1 to 5
+   are not resolved by this candidate.
+
+   1.  Local batch Merkle construction.  [VCP-SPEC] requires Merkle tree
+       construction to follow RFC 6962, but its reference code
+       duplicates an odd node, which yields roots that differ from those
+       of [RFC9162] for batch sizes that are not a power of two, and its
        audit path generation omits that node.  Which construction
        governs, and how roots already computed with the reference code
        are treated, is not decided by this revision.  The question
@@ -1414,11 +1441,23 @@ Internet-Draft                  SCITT-VCP                  November 2026
        signs the Merkle root bytes only, so the event count, endpoints
        and PolicyID carried in the AnchorRecord are not covered by that
        signature.  The signed bytes of the AnchorRecord remain to be
-       defined.
+       defined.  Section 8.5 relies on these fields for omission
+       detection after anchoring.  One direction under consideration is
+       to register the AnchorRecord itself as a Signed Statement whose
+       payload carries them, so that the Issuer's signature covers them;
+       it is not adopted.
 
    3.  Integer timestamps.  TimestampInt and other nanosecond values are
        JSON integers that can exceed 2^53, whereas [RFC8785] requires
        numbers to be expressible as IEEE 754 doubles and recommends
+
+
+
+Kamimura                   Expires 24 May 2027                 [Page 26]
+
+Internet-Draft                  SCITT-VCP                  November 2026
+
+
        encoding larger integers as strings.  Values that are not exactly
        representable as a double, such as the TimestampInt
        1773567000123456789 in Appendix A, cannot be canonicalized by RFC
@@ -1450,28 +1489,41 @@ Internet-Draft                  SCITT-VCP                  November 2026
        of [RFC9942]).  [RFC9943] leaves the specific verifiable data
        structure to the Transparency Service (Section 5.1.3), and
        [RFC9942] notes that leaf construction can differ by data
+       structure (Section 4).  This profile does not yet state (a) which
+       bytes form the entry for a registered VCP Signed Statement and
+       how a verifier learns that rule for a given Transparency Service,
+       or (b) which Transparency Service a verifier is expected to trust
+       and how it obtains the Receipt verification keys that service
+       used, including those for earlier Receipts.  Section 4 of
+       [RFC9943] allows the key to change between Receipts, and key
+       discovery (Section 2.1 of [I-D.ietf-scitt-scrapi]) does not by
+       itself decide which service is trusted.  For (a), the entry rule
+       of the CCF profile [CCF-PROFILE] (Sections 2.2 and 3.2: the
+       Signed Statement as registered, with tag 18 retained and an empty
+       unprotected header, its digest computed by the verifier) is a
+       candidate under discussion [SCITT-LIST-OI6].  Under
+       RFC9162_SHA256 the vds value in the protected header does not
+       identify an entry rule, so a rule stated by this profile would be
+       fixed together with the service identity in (b) rather than
+       selected by the Receipt.  Revision -06 also left open (c), what a
 
 
 
-Kamimura                   Expires 24 May 2027                 [Page 26]
+Kamimura                   Expires 24 May 2027                 [Page 27]
 
 Internet-Draft                  SCITT-VCP                  November 2026
 
 
-       structure (Section 4).  This profile does not yet state (a) which
-       bytes form the entry for a registered VCP Signed Statement and
-       how a verifier learns that rule for a given Transparency Service,
-       (b) which Receipt-signing key a verifier is expected to trust for
-       that service, or (c) what a verifier checks when an argument
-       depends on a statement's position in the log or on the log's
-       size, as omission reasoning can.  Because the tree size and leaf
-       index are outside the signed protected header, they are
-       authenticated only through recomputation of the signed root;
-       whether that suffices for such arguments, or whether a signed
-       tree head or consistency proof under a trusted log key is also
-       required, is not decided by this revision.  The hackathon report
-       presented to the SCITT Working Group at IETF 127 names the same
-       three points as rules that verifying Receipts across operators
+       verifier checks when an argument depends on a statement's
+       position in the log or on the log's size.  This candidate settles
+       (c) by stating in Section 8.5 that the profile relies on Receipts
+       for inclusion only.  A future claim resting on position or size
+       would need further evidence under the trusted service key, such
+       as a signed checkpoint whose root equals the one recomputed from
+       the Receipt, together with every entry in the range and
+       consistency between the tree heads compared.  The hackathon
+       report presented to the SCITT Working Group at IETF 127 names the
+       same points as rules that verifying Receipts across operators
        currently needs out of band [SCITT-IETF127].
 
    Since -05, VSO's change-proposal register has listed proposed
@@ -1506,17 +1558,17 @@ Internet-Draft                  SCITT-VCP                  November 2026
       implementation of VCP v1.1 event logging at the Silver tier, and
       proof-of-concept repositories for cTrader, FIX, Interactive
       Brokers, Nasdaq and Cloudflare.  VCP-RTA does not produce
-
-
-
-Kamimura                   Expires 24 May 2027                 [Page 27]
-
-Internet-Draft                  SCITT-VCP                  November 2026
-
-
       COSE_Sign1 Signed Statements or register them with a Transparency
       Service, and it does not implement VCP v1.2.  The proof-of-concept
       repositories have not been assessed against this profile.
+
+
+
+
+Kamimura                   Expires 24 May 2027                 [Page 28]
+
+Internet-Draft                  SCITT-VCP                  November 2026
+
 
    *  VSO also publishes a first-party, pre-release offline library for
       VCP v1.2 events in Python, TypeScript and MQL5 [VCP-SDK].  It
@@ -1560,19 +1612,19 @@ Internet-Draft                  SCITT-VCP                  November 2026
               RFC 8785, June 2020,
               <https://www.rfc-editor.org/rfc/rfc8785>.
 
-
-
-
-
-
-Kamimura                   Expires 24 May 2027                 [Page 28]
-
-Internet-Draft                  SCITT-VCP                  November 2026
-
-
    [RFC9052]  Schaad, J., "CBOR Object Signing and Encryption (COSE)",
               RFC 9052, August 2022,
               <https://www.rfc-editor.org/rfc/rfc9052>.
+
+
+
+
+
+
+Kamimura                   Expires 24 May 2027                 [Page 29]
+
+Internet-Draft                  SCITT-VCP                  November 2026
+
 
    [RFC9562]  Davis, K., "Universally Unique IDentifiers (UUIDs)",
               RFC 9562, May 2024,
@@ -1617,19 +1669,18 @@ Internet-Draft                  SCITT-VCP                  November 2026
               Transparency Version 2.0", RFC 9162, DOI 10.17487/RFC9162,
               December 2021, <https://www.rfc-editor.org/info/rfc9162>.
 
-
-
-
-
-Kamimura                   Expires 24 May 2027                 [Page 29]
-
-Internet-Draft                  SCITT-VCP                  November 2026
-
-
    [RFC9942]  Steele, O., Birkholz, H., Delignat-Lavaud, A., and C.
               Fournet, "CBOR Object Signing and Encryption (COSE)
               Receipts", RFC 9942, DOI 10.17487/RFC9942, June 2026,
               <https://www.rfc-editor.org/info/rfc9942>.
+
+
+
+
+Kamimura                   Expires 24 May 2027                 [Page 30]
+
+Internet-Draft                  SCITT-VCP                  November 2026
+
 
    [VCP-VAP-OBS]
               VeritasChain Standards Organization, "VCP v1.2 / VAP v1.2
@@ -1652,6 +1703,21 @@ Internet-Draft                  SCITT-VCP                  November 2026
               November 2026, <https://github.com/veritaschain/vcp-
               sdk/tree/a81806d5f6fd8ab7b6a4a60fa2530ba07abb2940>.
 
+   [CCF-PROFILE]
+              Birkholz, H., Delignat-Lavaud, A., Fournet, C., and A.
+              Chamayou, "CCF Profile for COSE Receipts", Work in
+              Progress, Internet-Draft, draft-ietf-scitt-receipts-ccf-
+              profile-06, 22 October 2026,
+              <https://datatracker.ietf.org/doc/html/draft-ietf-scitt-
+              receipts-ccf-profile-06>.  Work in progress.
+
+   [SCITT-LIST-OI6]
+              Kudsi, B., "Re: draft-kamimura-scitt-vcp-06: open issue on
+              what a verifier needs besides the Receipt", 24 November
+              2026, <https://mailarchive.ietf.org/arch/msg/scitt/nQPyS-
+              vfZfywHe9_TcqcrgY5Tw4/>.  Message to the SCITT Working
+              Group mailing list.
+
    [SCITT-IETF127]
               IETF SCITT Working Group, "SCITT Working Group session,
               IETF 127: hackathon results and takeaways", November 2026,
@@ -1665,6 +1731,13 @@ Internet-Draft                  SCITT-VCP                  November 2026
               FIPS 204, August 2024,
               <https://csrc.nist.gov/pubs/fips/204/final>.
 
+
+
+Kamimura                   Expires 24 May 2027                 [Page 31]
+
+Internet-Draft                  SCITT-VCP                  November 2026
+
+
 Appendix A.  Illustrative VCP Event Example
 
    The following JSON illustrates the VCP v1.2 event structure before
@@ -1677,7 +1750,46 @@ Appendix A.  Illustrative VCP Event Example
 
 
 
-Kamimura                   Expires 24 May 2027                 [Page 30]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Kamimura                   Expires 24 May 2027                 [Page 32]
 
 Internet-Draft                  SCITT-VCP                  November 2026
 
@@ -1733,7 +1845,7 @@ Internet-Draft                  SCITT-VCP                  November 2026
 
 
 
-Kamimura                   Expires 24 May 2027                 [Page 31]
+Kamimura                   Expires 24 May 2027                 [Page 33]
 
 Internet-Draft                  SCITT-VCP                  November 2026
 
@@ -1770,9 +1882,29 @@ Appendix C.  Changes from draft-kamimura-scitt-vcp-06
       synchronisation is set by Commission Delegated Regulation (EU)
       2025/1155, Articles 11 to 16.  No tier requirement changes.
 
-   *  All six integrity and Receipt-context issues remain open.  This
+   *  Stated in the Completeness Considerations that this profile relies
+      on Receipts for inclusion only and draws no conclusion from the
+      tree size or leaf index a Receipt carries.  This settles the part
+      of Open Issue 6 on log position and size.  No VCP requirement
+      changes; -06 already rested no claim on them.
+
+   *  Narrowed Open Issue 6 to the entry rule and the trusted service
+      and keys, and recorded the CCF profile's entry rule as a candidate
+      under discussion on the SCITT list.
+
+   *  Noted in Open Issue 2 that the Completeness Considerations rely on
+      the AnchorRecord fields its signature does not cover.
+
+   *  Items 1 to 5 and the remaining parts of item 6 stay open.  This
       candidate does not adopt any VSO change proposal or change the VCP
       v1.2 specification, schema or existing signed records.
+
+
+
+Kamimura                   Expires 24 May 2027                 [Page 34]
+
+Internet-Draft                  SCITT-VCP                  November 2026
+
 
 Appendix D.  Changes from draft-kamimura-scitt-vcp-05
 
@@ -1785,14 +1917,6 @@ Appendix D.  Changes from draft-kamimura-scitt-vcp-05
    *  Recorded the proposed identifiers of VSO change proposals on Open
       Issues 1 to 5, all unadopted, and that the interim change-control
       procedure for deciding them is itself under review
-
-
-
-
-Kamimura                   Expires 24 May 2027                 [Page 32]
-
-Internet-Draft                  SCITT-VCP                  November 2026
-
 
    *  Implementation Status: added VSO's first-party, pre-release VCP
       v1.2 offline library, which does not implement this profile
@@ -1829,6 +1953,15 @@ Appendix F.  Changes from draft-kamimura-scitt-vcp-03
    *  Added the ERR_* subtypes and the five SYS_* event types registered
       by the VCP v1.2 release
 
+
+
+
+
+Kamimura                   Expires 24 May 2027                 [Page 35]
+
+Internet-Draft                  SCITT-VCP                  November 2026
+
+
    *  Replaced draft-ietf-scitt-architecture with RFC 9943; updated the
       SCRAPI reference; added RFC 9942 and RFC 9162
 
@@ -1842,13 +1975,6 @@ Appendix F.  Changes from draft-kamimura-scitt-vcp-03
 
    *  VCP-SPEC reference pinned to the v1.2.0 release tag and moved to
       the normative references
-
-
-
-Kamimura                   Expires 24 May 2027                 [Page 33]
-
-Internet-Draft                  SCITT-VCP                  November 2026
-
 
    *  Removed the VC-Certified tier list of -03, whose anchoring
       frequencies (including per-minute anchoring at Platinum) did not
@@ -1884,6 +2010,14 @@ Appendix G.  Changes from draft-kamimura-scitt-vcp-02
       the registry value is "DILITHIUM2" (ML-DSA, FIPS 204), holding
       EXPERIMENTAL status in v1.2
 
+
+
+
+Kamimura                   Expires 24 May 2027                 [Page 36]
+
+Internet-Draft                  SCITT-VCP                  November 2026
+
+
    *  Migrated PolicyID examples from the provisional "urn:vcp:policy"
       form to the Issuer Domain + Local ID convention defined in VCP
       v1.2, and removed the corresponding URN-namespace item from IANA
@@ -1897,14 +2031,6 @@ Appendix H.  Changes from draft-kamimura-scitt-vcp-01
    This section summarizes the changes from version -01 to -02:
 
    *  Updated title to explicitly indicate this is a SCITT profile
-
-
-
-
-Kamimura                   Expires 24 May 2027                 [Page 34]
-
-Internet-Draft                  SCITT-VCP                  November 2026
-
 
    *  Updated to align with VCP Specification v1.1
 
@@ -1943,18 +2069,4 @@ Author's Address
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Kamimura                   Expires 24 May 2027                 [Page 35]
+Kamimura                   Expires 24 May 2027                 [Page 37]
