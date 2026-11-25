@@ -32,6 +32,7 @@ now cites.
 | [Example JSON](examples/) | Header, ORD and ERASURE illustrations with consistent clocks. Hashes, signatures and certificates remain synthetic placeholders. |
 | [Receipt context test plan](receipt-context-test-plan.md) | Questions, candidate cases and evidence required before selecting new rules, and inputs received from the SCITT list. No Receipt test result is asserted for this plan. |
 | [Position check](receipt_position_check.py) | First-party RFC 9162 tree arithmetic behind the tree-size result reported on the SCITT list; regression in `tests/test_scitt_receipt_position.py`. Not a Receipt implementation. |
+| [Receipt context candidate, 25 November](../scitt-receipt-context-2026-11-25/README.md) | Unadopted entry-byte, service/key and historical-applicability alternatives responding to the later 24 November reply; includes an unexecuted case matrix. |
 
 Source baseline: `veritaschain/vcp-spec` commit
 `ab5c851ce937763104204d8c4ab09197e16799f1`.
