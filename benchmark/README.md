@@ -22,6 +22,12 @@
 >
 > The PDF files are unchanged.
 
+> **Business-clock reference updated 27 November 2026.** Criterion 8 of
+> [SCORING.md](./SCORING.md#criterion-8-timestamp-reliability) cites the former
+> MiFID II RTS 25. Articles 11–16 of [Delegated Regulation (EU) 2025/1155](https://eur-lex.europa.eu/eli/reg_del/2025/1155/oj)
+> apply from 2 March 2026. The historical benchmark score does not assess
+> conformity with the replacement regulation.
+
 This directory contains the official **AI Decision Auditability Benchmark** published by the  
 **VeritasChain Standards Organization (VSO)**.
 

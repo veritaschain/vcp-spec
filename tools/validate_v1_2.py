@@ -7,6 +7,7 @@ from pathlib import Path
 from jsonschema import Draft202012Validator, FormatChecker
 from jsonschema.exceptions import SchemaError
 from jsonschema.validators import extend
+from referencing.exceptions import Unresolvable
 
 ROOT = Path(__file__).resolve().parents[1]
 SCHEMA = ROOT / 'spec/v1.2/vcp-event-v1.2.json'
@@ -223,20 +224,28 @@ def main():
     except (OSError, ValueError, RecursionError, SchemaError) as exc:
         parser.exit(2, f'ERROR: cannot use schema: {exc}\n')
     exit_code = 0
+    # A reference may first be evaluated by a later event. Publish the batch's
+    # results only after the schema has worked for every event that used it.
+    reports = []
     for file in args.files:
         try:
             event = load_json(file)
         except OSError as exc:
-            print(f'{file}: ERROR: {exc}')
+            reports.append(f'{file}: ERROR: {exc}')
             exit_code = 2
             continue
         except (ValueError, RecursionError) as exc:
-            print(f'{file}: INVALID INPUT: {exc}')
+            reports.append(f'{file}: INVALID INPUT: {exc}')
             exit_code = max(exit_code, 1)
             continue
-        failures = _event_errors(event, validator, args.legacy)
+        try:
+            failures = _event_errors(event, validator, args.legacy)
+        except Unresolvable as exc:
+            parser.exit(2, f'ERROR: cannot use schema: {exc}\n')
         exit_code = max(exit_code, int(bool(failures)))
-        print(f'{file}: ' + ('INVALID: ' + '; '.join(failures) if failures else 'LOCAL CHECKS PASS (cryptographic/external checks not performed)'))
+        reports.append(f'{file}: ' + ('INVALID: ' + '; '.join(failures) if failures else 'LOCAL CHECKS PASS (cryptographic/external checks not performed)'))
+    for report in reports:
+        print(report)
     return exit_code
 
 

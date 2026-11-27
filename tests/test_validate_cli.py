@@ -130,6 +130,32 @@ class ValidatorCliTests(unittest.TestCase):
             with self.subTest(schema=schema):
                 self.assert_rejected(self.run_cli('--schema', schema, VALID), 2)
 
+    def test_schema_reference_failure_is_a_configuration_error_for_the_batch(self):
+        base_event = {"Header": {"EventType": "ORD"}}
+        order = self.write("order.json", json.dumps(base_event))
+        detailed = self.write("order-with-details.json",
+                              json.dumps({**base_event, "details": {}}))
+        reference = {"$ref": "#/$defs/Details"}
+        schema = {
+            "$defs": {"Details": {"type": "object"}},
+            "properties": {"details": reference},
+        }
+        path = self.write("schema.json", json.dumps(schema))
+        result = self.run_cli("--schema", path, order, detailed)
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+        self.assertEqual(result.stdout.count("LOCAL CHECKS PASS"), 2)
+
+        # The first event can finish before the second follows the missing ref.
+        del schema["$defs"]["Details"]
+        for candidate in (reference, schema):
+            with self.subTest(candidate=candidate):
+                path = self.write("schema.json", json.dumps(candidate))
+                result = self.run_cli("--schema", path, order, detailed)
+                self.assert_rejected(result, 2)
+                self.assertEqual(result.stdout, "")
+                self.assertIn("cannot use schema", result.stderr)
+                self.assertIn("Details", result.stderr)
+
     def test_missing_format_dependencies_cannot_silently_skip_date_checks(self):
         available = {key: value for key, value in FormatChecker.checkers.items()
                      if key != 'date-time'}

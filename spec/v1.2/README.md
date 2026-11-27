@@ -62,8 +62,11 @@ GA is a **specification-level publication** status, not an implementation produc
   submission. It is not adopted by the SCITT Working Group, is not
   endorsed by the IETF, and confers no formal standing.
 - **Regulatory compliance.** VCP supports evidence generation for
-  obligations such as EU AI Act Articles 12/19/26/72 and MiFID II
-  RTS 6/25. It does not make any system compliant, is not a
+  obligations such as EU AI Act Articles 12/19/26/72 and MiFID II RTS 6.
+  For EU business-clock synchronisation, Articles 11–16 of
+  [Delegated Regulation (EU) 2025/1155](https://eur-lex.europa.eu/eli/reg_del/2025/1155/oj)
+  apply from 2 March 2026, when the former RTS 25 was repealed.
+  It does not make any system compliant, is not a
   harmonised standard, and carries no presumption of conformity.
 - **Legal certainty for ERASURE.** Crypto-shredding is a technical
   mechanism supporting erasure obligations, not a legal
