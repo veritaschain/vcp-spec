@@ -33,7 +33,7 @@ requirements for an experimental input package, not a new wire schema.
 | Service | Stable service identity and the relying party's authority for trusting it. A URL, protected issuer claim, or key identifier supplied by the presenter does not establish trust by itself. |
 | Receipt keys | Authorized public keys or certification paths, their binding to that service, permitted algorithms, rotation/retirement information, and relevant compromise or revocation evidence. Record the authority behind those bindings. |
 | VDS and entry rule | Permitted VDS, immutable rule identifier, version and exact rule-document digest. The rule identifies both the preprocessing and the bytes supplied to the VDS. |
-| Applicability | The rule/key epoch, its boundaries, and authenticated evidence connecting this particular Receipt to it. Retain earlier contexts. A date range alone is insufficient if the Receipt has no trustworthy connection to that range. |
+| Applicability | Identify the rule applicable to this service and entry, and separately the authority for the signing key of the Receipt being assessed. Retain historical contexts, epoch boundaries, and the evidence supporting each selection. A date range alone cannot establish when a Receipt was issued. |
 | Assessment | Verification time, trust-configuration version/digest, applicable policy, evidence sources, and the precise claim being assessed. |
 
 Configuration can be installed through an authenticated management channel or
@@ -103,11 +103,34 @@ for rule changes and key rotation. An archive needs evidence for the historical
 context, rather than today's key-discovery result or today's rule alone.
 
 An epoch based on time needs authenticated evidence linking the Receipt to the
-relevant interval. Possible experiment inputs include a separately trusted
-archive record that binds the Receipt digest to an epoch. Such a record adds
-its own trust assumption; it is not a mechanism already supplied by this
-profile. An unsigned event time, HTTP retrieval time, file modification time,
-or the Receipt's unprotected tree size/index cannot make that selection.
+relevant interval when the claim depends on issuance time. Compare two
+records from an archive authority explicitly trusted for historical rule
+selection. [RFC 9943 §4](https://www.rfc-editor.org/rfc/rfc9943.html#section-4)
+allows a service to issue a fresh Receipt for the same Signed Statement,
+including with a different verification key.
+
+- **Receipt-specific record.** Bind the exact Receipt digest to the service
+  and rule epoch. This identifies the archived Receipt bytes. A reissued
+  Receipt needs its own binding on this path (CX-12).
+- **Entry-specific record.** Bind the stable service identity, hash algorithm
+  and `H(E) = SHA256(E)` (using §2's preprocessing) to an identified rule
+  and epoch. The authenticated record must identify the preprocessing and
+  scope its assertion to that service and entry. Recompute `H(E)` locally
+  and compare it and the service identity with the record. This digest selects
+  an applicable rule; A1 still passes the full `E` to its VDS. A second
+  Receipt for the same statement and service can reuse the record when the
+  authority's assertion applies to both. If multiple epochs apply to that
+  entry and the record leaves the choice unresolved, report insufficient
+  context (CX-19 through CX-22).
+
+Each Receipt, including one reissued under a rotated key, still needs a valid
+proof and signature, service-to-key authorization and applicable key history.
+The entry-specific record alone establishes neither issuance time nor a
+particular Receipt's key epoch. If the relying policy needs such evidence and
+it is missing, report insufficient context. A changed entry or different service
+cannot reuse this record. An unsigned event time, HTTP retrieval time, file
+modification time or the Receipt's unprotected tree size/index cannot establish
+issuance time. Both archive paths add an external trust assumption.
 
 A closed, locally authorized list of candidate rules is another bootstrapping
 experiment. Bound the list and work performed, and record every attempted rule.

@@ -1,6 +1,7 @@
 # Candidate experiment cases
 
 **Unexecuted plan, 25 November 2026.** Refs [#37](https://github.com/veritaschain/vcp-spec/issues/37).
+Updated 27 November 2026. All 22 cases are proposed and unexecuted.
 Contract: [Receipt context candidate](README.md).
 These cases extend [RC-01 through RC-12](../scitt-profile-06-followup-2026-11-20/receipt-context-test-plan.md);
 they are neither test vectors nor passing results.
@@ -30,6 +31,10 @@ trust relationship.
 | CX-16 | Known applicable context, mutated statement/proof/signature | Rejected for the specific failed verification check; no claim of global non-inclusion | §§2, 4 / RC-04 |
 | CX-17 | Inclusion passes while no independent completeness evidence exists | Report inclusion only; source completeness and global history consistency unestablished | §4 / RC-12 |
 | CX-18 | RFC9162_SHA256 tree-size mutation still reconstructs the same signed root | Inclusion may still pass; never infer size or position from that result | §4 / RC-07, RC-08 |
+| CX-19 | An authorized archive binds service S and SHA256(E) to A1. S issues two Receipts for the same E, under K1 and K2 respectively. The record applies to both and independent context authorizes each key for its use. | Evaluate each proof and signature separately. Both can verify under A1 using the same entry-specific record; their Receipt digests differ. Record the archive authority and key evidence used for each. | §§1, 3, 4 / CX-09, CX-12 |
+| CX-20 | Present the CX-19 record for a different service, or for a different E at S. No other applicable binding is supplied. | The record does not select an epoch for that pair. Report insufficient historical context; an explicitly disallowed service is separately rejected under CX-15. | §§1, 3, 4 / CX-11, CX-15 |
+| CX-21 | The CX-19 record selects A1 for S and E, but the reissued Receipt has no independent evidence needed to establish the signing key's historical authorization under the declared policy. | Report insufficient key context; the entry binding supplies neither an issuance time nor proof of the key's applicability. | §§1, 3, 4 / CX-10, CX-14 |
+| CX-22 | The same service and E appear in two authenticated rule epochs; the entry-specific records and policy give no way to choose between them for this Receipt. | Report ambiguous context even if only one attempted rule produces a matching root. | §§1, 3, 4 / CX-11, CX-13 |
 
 Record exact input hashes, trusted-context hashes, rule/epoch selection evidence,
 derived entry and root, signature result, final report, and reason for every row.
