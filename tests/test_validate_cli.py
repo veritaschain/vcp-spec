@@ -256,6 +256,21 @@ class ValidatorCliTests(unittest.TestCase):
                 cases.append(event)
         self.assert_custom_inputs_rejected(cases)
 
+    def test_custom_schema_distinguishes_omitted_and_empty_erasure_ids(self):
+        schema = self.write('custom-schema.json', '{"type":"object"}')
+        event = json.loads((FIXTURES / 'valid/erasure.json').read_text())
+        scope = event['Payload']['VCP-PRIVACY']['ErasureDetails']['Scope']
+        del scope['EventIDs']
+        omitted = self.write('omitted.json', json.dumps(event))
+        scope['EventIDs'] = []
+        empty = self.write('empty.json', json.dumps(event))
+
+        result = self.run_cli('--schema', schema, empty, omitted)
+        self.assertEqual(result.returncode, 1, result.stdout + result.stderr)
+        self.assertIn(f'{empty}: INVALID:', result.stdout)
+        self.assertIn('Scope.EventIDs must match AffectedEventCount and first/last IDs', result.stdout)
+        self.assertIn(f'{omitted}: LOCAL CHECKS PASS', result.stdout)
+
     def test_custom_schema_keeps_existing_local_rule_rejections(self):
         sources = [FIXTURES / f'invalid/{name}.json' for name in (
             'emergency-duplicate-role', 'erasure-destruction-before-authorization',

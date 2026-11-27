@@ -157,9 +157,11 @@ def _event_errors(event, validator, legacy):
             result = _required_fields(scope, {'EventIDs': 'array'}, f'{detail_path}/Scope')
             if result:
                 return result
-        ids = scope.get('EventIDs')
-        if ids and (len(ids) != scope['AffectedEventCount'] or ids[0] != scope['FirstAffectedEventID'] or ids[-1] != scope['LastAffectedEventID']):
-            result.append('Scope.EventIDs must match AffectedEventCount and first/last IDs')
+            ids = scope['EventIDs']
+            if (not ids or len(ids) != scope['AffectedEventCount']
+                    or ids[0] != scope['FirstAffectedEventID']
+                    or ids[-1] != scope['LastAffectedEventID']):
+                result.append('Scope.EventIDs must match AffectedEventCount and first/last IDs')
         if scope['AffectedEventCount'] == 1 and scope['FirstAffectedEventID'] != scope['LastAffectedEventID']:
             result.append('Scope single-event first/last IDs must match AffectedEventCount')
         if not d['Authorization']['AuthorizationTimestamp'] <= d['CryptoShredding']['DestructionTimestamp'] <= event['Header']['TimestampInt']:
