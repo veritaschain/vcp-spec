@@ -6,9 +6,11 @@ Baseline: `draft-kamimura-scitt-vcp-07` and repository commit
 `dfed70b3ec4acce9063bb5742dd27b4948bd34ca`.
 
 This note supplies candidate contracts for the remaining entry-rule and
-service/key questions in Open Issue 6. It changes no released VCP requirement,
-assigns no change class, starts no review clock and reports no Receipt
-interoperability result. The published -07 source remains the baseline.
+service/key questions in Open Issue 6. On 27 November 2026 VSO exercised seven
+of the 22 proposed cases locally using two ordinary Receipts and the
+[fixed replay package](replay/README.md). Fifteen cases remain unexecuted.
+The published -07 source remains the baseline, and [#37](https://github.com/veritaschain/vcp-spec/issues/37)
+remains open. Adopting a requirement would require a separate change decision.
 
 ## Input and proposed next decision
 
@@ -17,10 +19,10 @@ service committed to a rule from how a verifier initially obtains that rule.
 He also identifies historical applicability as necessary when the rule is not
 carried in a Receipt. His comments are input, not approval of this candidate.
 
-The proposal is to compare an authenticated configuration path with a future
-Receipt extension. Start the experiment with the configuration path, retain
-the extension as an alternative, and keep both unadopted until their bytes and
-historical-selection behavior have reproducible vectors.
+The proposal compares an authenticated configuration path with a possible future
+Receipt extension. The first replay uses the configuration path. The extension
+and its historical-selection behavior remain to be tested. Both alternatives
+remain unadopted.
 
 ## 1. Context contract
 
@@ -185,17 +187,32 @@ on AnchorRecord coverage or the other VCP integrity questions.
 
 ## 5. Evidence, compatibility and remaining work
 
-The [case matrix](cases.md) fixes expected outcomes for proposed experiments.
-No executable verifier or cryptographic vectors accompany this note.
-Before running an interoperability comparison, produce:
+The [case matrix](cases.md) records the source of each expected outcome. The
+[replay package](replay/README.md) supplies the input bytes, separate trust
+configuration, expected outcomes, pinned dependencies and rerun commands.
+VSO ran both the [Python](replay/results/python.json) and [Go](replay/results/go.json)
+checks against the same input bytes. Each produced eight Receipt assessments
+across CX-01, CX-09, CX-10, CX-17, CX-19, CX-21 and CX-22. Five verified
+inclusion under the declared context, two lacked evidence authorizing the
+selected key, and one had ambiguous rule context. CX-19 accounts for two
+assessments: the original K1 Receipt and the K2 reissue for the same statement.
+All seven cases reuse these two Receipts.
 
-- Original synthetic statement/Receipt bytes, derived entries, public keys,
-  authenticated-context fixtures, exact applicability evidence, and SHA-256
-  manifests; keep expected outcomes separate from implementation outputs.
-- Pinned implementations and dependencies, commands, raw results and differences.
-  Identify first-party versus independently maintained implementations.
-- Compatibility analysis for both entry alternatives, historic service behavior,
-  CBOR restrictions and the additional archive evidence requirement.
+The fixture covers embedded synthetic JSON statements, the restricted encoding
+in §2 with an already-empty unprotected map, the A1 entry rule, and a two-leaf
+RFC9162_SHA256 tree. A separately trusted authority signs key-use records for
+each exact Receipt. CX-17 records the limit of the inclusion claim; the
+package supplies no independent evidence of source completeness. CX-22
+uses two signed rule records and stops at unresolved applicability, before
+comparing either candidate root. It supplies no measured outcome for an A2
+inclusion proof. The generic payloads do not exercise the -07 VCP payload and
+profile claims.
+
+The next comparison should cover the remaining cases, the compatibility of
+both entry rules with historic services and encoding variants, and the
+alternative Receipt extension. The recorded runs are first-party research
+using off-the-shelf libraries. Independent external reproduction and a
+full-profile interoperability assessment remain outstanding.
 
 The immediate review questions are whether A1 is the right first comparison,
 what evidence should select a historical rule when a Receipt is unlabelled,
@@ -207,8 +224,7 @@ Merging this note would record research only. The existing
 [proposal register](../../decisions/REGISTER.md) continue to govern their own
 subjects; this note assigns no VCP-CP identifier.
 
-Prepared with AI assistance. Source checks and any future experimental results
-must be distinguished from independent technical review.
+Prepared with AI assistance. Independent technical review remains outstanding.
 
 [reply]: https://mailarchive.ietf.org/arch/msg/scitt/qWDPe41grT_TTMYndv9kBcdjWL0/
 [architecture]: https://www.rfc-editor.org/rfc/rfc9943.html#section-3

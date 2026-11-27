@@ -1,0 +1,98 @@
+{
+  "cases": {
+    "CX-01": {
+      "K1": "verified"
+    },
+    "CX-09": {
+      "K1": "verified"
+    },
+    "CX-10": {
+      "K1": "context_insufficient_key"
+    },
+    "CX-17": {
+      "K1": "verified"
+    },
+    "CX-19": {
+      "K1": "verified",
+      "K2": "verified"
+    },
+    "CX-21": {
+      "K2": "context_insufficient_key"
+    },
+    "CX-22": {
+      "K1": "context_ambiguous_rule"
+    }
+  },
+  "details": {
+    "CX-01": {
+      "K1": {
+        "claim": "inclusion under service-signed root",
+        "key_epoch": "key-epoch-1",
+        "key_status": "retired",
+        "rule": "A1",
+        "rule_epoch": "epoch-1"
+      }
+    },
+    "CX-09": {
+      "K1": {
+        "claim": "inclusion under service-signed root",
+        "key_epoch": "key-epoch-1",
+        "key_status": "retired",
+        "rule": "A1",
+        "rule_epoch": "epoch-1"
+      }
+    },
+    "CX-10": {
+      "K1": {
+        "rule": "A1",
+        "rule_epoch": "epoch-1"
+      }
+    },
+    "CX-17": {
+      "K1": {
+        "claim": "inclusion under service-signed root",
+        "key_epoch": "key-epoch-1",
+        "key_status": "retired",
+        "rule": "A1",
+        "rule_epoch": "epoch-1"
+      }
+    },
+    "CX-19": {
+      "K1": {
+        "claim": "inclusion under service-signed root",
+        "key_epoch": "key-epoch-1",
+        "key_status": "retired",
+        "rule": "A1",
+        "rule_epoch": "epoch-1"
+      },
+      "K2": {
+        "claim": "inclusion under service-signed root",
+        "key_epoch": "key-epoch-2",
+        "key_status": "current",
+        "rule": "A1",
+        "rule_epoch": "epoch-1"
+      }
+    },
+    "CX-21": {
+      "K2": {
+        "rule": "A1",
+        "rule_epoch": "epoch-1"
+      }
+    },
+    "CX-22": {
+      "K1": {}
+    }
+  },
+  "entry_sha256": "9b93f0314b73610356144f53cb725e04772ef7eb9d8807c0aac7b2e985a1ebbc",
+  "history_consistency": "unassessed",
+  "issuance_time": "unassessed",
+  "leaf_sha256": "730d2c267414f02a35e86eb26d62f29e19b8ea19af2b69f97f5dad00409940a3",
+  "local_vcp_batch_integrity": "unassessed",
+  "position_and_size": "unassessed",
+  "receipt_sha256": {
+    "K1": "4b8ace1361eca65f11badb80008d2ea018cffec5b959d1f7a8cdf2406e0af378",
+    "K2": "e242cd6fa648a6429c2e23c0178702335b90d9b6b48d4f725194c6f39ccae531"
+  },
+  "root_sha256": "c64e66d077ff1987c94c2d2935a6a1e5fadefc19d24c28a3ca992620d62a868a",
+  "source_completeness": "unassessed"
+}
