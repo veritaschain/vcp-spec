@@ -1,0 +1,89 @@
+{
+  "archive_public_key": "e63f115568db3ee6315df22a2bd93aa1817063afbce2da7a333d88f56167d34b",
+  "issuer_public_key": "3cea83c85c9cadf1e9a275e8030e0aad3d1aecd4bfe3663051b9e60d2d0bf6ef",
+  "key_authority_public_key": "5b3b9d4e58f6566ff55f9663aa5c3e8a3dca4a85d111d24623c495422bf7779a",
+  "service": "https://transparency.example",
+  "views": {
+    "CX-01": {
+      "keys": [
+        "K1"
+      ],
+      "receipts": [
+        "K1"
+      ],
+      "rules": [
+        "A1"
+      ]
+    },
+    "CX-09": {
+      "keys": [
+        "K1",
+        "K2"
+      ],
+      "receipts": [
+        "K1"
+      ],
+      "rules": [
+        "A1"
+      ]
+    },
+    "CX-10": {
+      "keys": [
+        "K2"
+      ],
+      "receipts": [
+        "K1"
+      ],
+      "rules": [
+        "A1"
+      ]
+    },
+    "CX-17": {
+      "keys": [
+        "K1"
+      ],
+      "receipts": [
+        "K1"
+      ],
+      "rules": [
+        "A1"
+      ]
+    },
+    "CX-19": {
+      "keys": [
+        "K1",
+        "K2"
+      ],
+      "receipts": [
+        "K1",
+        "K2"
+      ],
+      "rules": [
+        "A1"
+      ]
+    },
+    "CX-21": {
+      "keys": [
+        "K1"
+      ],
+      "receipts": [
+        "K2"
+      ],
+      "rules": [
+        "A1"
+      ]
+    },
+    "CX-22": {
+      "keys": [
+        "K1"
+      ],
+      "receipts": [
+        "K1"
+      ],
+      "rules": [
+        "A1",
+        "A2"
+      ]
+    }
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "cases": {
+    "CX-01": {"K1": "verified"},
+    "CX-09": {"K1": "verified"},
+    "CX-10": {"K1": "context_insufficient_key"},
+    "CX-17": {"K1": "verified"},
+    "CX-19": {"K1": "verified", "K2": "verified"},
+    "CX-21": {"K2": "context_insufficient_key"},
+    "CX-22": {"K1": "context_ambiguous_rule"}
+  }
+}
